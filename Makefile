@@ -8,11 +8,15 @@ DEP_DIR = .dep/
 
 # Compilador y FLAGS
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
 
 # Archivos fuente y cabeceras
-SRC_FILES = src/main.cpp
-HDR_FILES = #easyfind.hpp
+SRC_FILES = src/main.cpp \
+	src/Messageprocessing.cpp \
+	src/commands/Ping.cpp
+
+HDR_FILES = inc/commands/ICommand.hpp \
+	inc/Messageprocessing.hpp
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)

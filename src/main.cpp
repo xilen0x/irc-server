@@ -1,7 +1,11 @@
 #include <iostream>
+#include "../inc/Messageprocessing.hpp"
+
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+	Messageprocessing	messageProcesing;
+
+    std::cout << "TODO Messageprocessing !" << std::endl;
     return 0;
 }
