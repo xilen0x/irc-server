@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICommand.hpp                                       :+:      :+:    :+:   */
+/*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/17 16:58:32 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 14:51:44 by apardo-m         ###   ########.fr       */
+/*   Created: 2025/01/18 14:43:35 by apardo-m          #+#    #+#             */
+/*   Updated: 2025/01/18 14:54:08 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef REPLIES_HPP
+# define REPLIES_HPP
 
-#ifndef ICOMMAND_HPP
-# define ICOMMAND_HPP
+# define CRLF "\r\n"
 
-# include "../replies.hpp"
+// COMMANDS
 
-class ICommand
-{
-	public:
-		virtual	~ICommand( void ) {};
+# define PONG(token) ("PONG 127.0.0.1 " + token + CRLF)
 
-		virtual void execute( void ) = 0;
-		virtual void execute( std::string ) = 0;
-};
+// RESPONSES
+
+// ERRORS
 
 #endif
