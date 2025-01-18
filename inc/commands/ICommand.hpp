@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 16:58:32 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/17 18:03:26 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:20:25 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class ICommand
 		virtual	~ICommand( void ) {};
 
 		virtual void execute( void ) = 0;
+		virtual void execute( std::string ) = 0;
 };
 
 #endif

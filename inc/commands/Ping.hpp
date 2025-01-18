@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:35:21 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/17 17:03:11 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:25:31 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class Ping : public ICommand
 		~Ping( void );
 
 		void execute( void ); 		
+		void execute( std::string );
 };
 
 #endif

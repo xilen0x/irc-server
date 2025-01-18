@@ -6,7 +6,7 @@ int main()
 {
 	Messageprocessing	messageProcesing;
 
-    std::cout << "Execute Messageprocessing !" << std::endl;
+    std::cout << "Executing Messageprocessing !" << std::endl;
 
 	messageProcesing.processMessage("tokenPing!!");
     return (0);

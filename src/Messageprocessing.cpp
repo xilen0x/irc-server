@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:34:11 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 14:11:39 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:33:31 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ Messageprocessing::~Messageprocessing( void )
 
 void	Messageprocessing::processMessage(std::string message)
 {
-   std::cout << "TODO processMessage(std:string message) with message = " << message << std::endl;
-   this->_commands["PING"]->execute();
+	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
+	std::cout << "----- PING test -----" << std::endl;
+	this->_commands["PING"]->execute();
+	this->_commands["PING"]->execute(message);
+	std::cout << "----- end PING test -----" << std::endl;   
 }
