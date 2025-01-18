@@ -12,11 +12,18 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
 
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
+	src/Client.cpp \
 	src/Messageprocessing.cpp \
+	src/Server.cpp \
 	src/commands/Ping.cpp
 
-HDR_FILES = inc/commands/ICommand.hpp \
-	inc/Messageprocessing.hpp
+HDR_FILES = inc/Client.hpp \
+	inc/commands/ICommand.hpp \
+	inc/Messageprocessing.hpp \
+	inc/commands/Ping.hpp \
+	inc/replies.hpp \
+	inc/Server.hpp
+	
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
