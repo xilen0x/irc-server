@@ -6,6 +6,8 @@ int main()
 {
 	Messageprocessing	messageProcesing;
 
-    std::cout << "TODO Messageprocessing !" << std::endl;
-    return 0;
+    std::cout << "Execute Messageprocessing !" << std::endl;
+
+	messageProcesing.processMessage("Hola amigo!!");
+    return (0);
 }
