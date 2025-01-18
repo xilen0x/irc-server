@@ -8,6 +8,6 @@ int main()
 
     std::cout << "Execute Messageprocessing !" << std::endl;
 
-	messageProcesing.processMessage("Hola amigo!!");
+	messageProcesing.processMessage("tokenPing!!");
     return (0);
 }
