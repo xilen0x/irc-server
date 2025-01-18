@@ -1,4 +1,4 @@
-
+#include "Server.hpp"
 
 int main()
 {
@@ -8,21 +8,22 @@ int main()
     Server server;
     
     //check conexion args
-
+    // ...
     try
     {
-        server.createSocket();
-        server.bindSocket();
-        server.listenSocket();
-        server.fillPollfd();
-        server.serverConnected();
-        server.loop();
-        server.clean();
+        server::createSocket();
+        // server.bindSocket();
+        // server.listenSocket();
+        // server.fillPollfd();
+        // server.serverConnected();
+        // server.loop();
+        // server.clean();
         
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
+        // server.clean();
     }
     return (0);
 }
