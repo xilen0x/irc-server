@@ -1,4 +1,4 @@
-#include "Server.hpp"
+#include "../inc/Server.hpp"
 
 int main()
 {
@@ -11,14 +11,7 @@ int main()
     // ...
     try
     {
-        server::createSocket();
-        // server.bindSocket();
-        // server.listenSocket();
-        // server.fillPollfd();
-        // server.serverConnected();
-        // server.loop();
-        // server.clean();
-        
+        server.runServer();        
     }
     catch(const std::exception& e)
     {

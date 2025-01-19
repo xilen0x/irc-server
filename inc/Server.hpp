@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <cstring>
+#include <unistd.h>
 
 
 class Server 
@@ -23,23 +24,25 @@ class Server
 
 		//createSocket
         void createSocket();
-		//bindSocket with port and ip
-        // void bindSocket();
+
 		//listenSocket
         void listenSocket();
+		
 		//llenar estruct pollfd 
         void fillPollfd();
-		//server connected!
-        void serverConnected();
+		
 		// loop	
         void loop();
-		//clean
-        void clean();
+		
+		// //clean
+        // void clean();
 
     public:
 		Server();
 		Server(int port, std::string password);
 		//getters and setters
 		
+
+		void runServer();
 		~Server();
 };
