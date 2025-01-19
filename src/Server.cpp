@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:46:31 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 16:41:49 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:04:32 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }
 
-Server::~Server( void ) { }
+Server::~Server( void )
+{
+	std::cout << "~Server => TODO" << std::endl;
+}
 
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
