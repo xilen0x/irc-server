@@ -14,8 +14,8 @@ class Server
 	private:
 
     	std::string                 _serverName;
-	    int			                _port;
 	    std::string	                _password;
+	    int			                _port;
 	    int			                _fdServer;
 	    //static bool                 _Signal;
     	std::vector<struct pollfd> 	_fdsClients;
@@ -39,9 +39,12 @@ class Server
 
     public:
 		Server();
-		Server(int port, std::string password);
+		Server(std::string serverName, std::string password, int port);
 		//getters and setters
-		
+		std::string	getServerName( void ) const;
+		std::string	getPassword( void ) const;
+		int 		getPort( void ) const;
+		int			getFdServer( void ) const;
 
 		void runServer();
 		~Server();
