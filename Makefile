@@ -12,11 +12,10 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands -g -fsaniti
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
 			src/Server.cpp \
+			src/serverUtils.cpp \
 			src/Client.cpp \
 			src/Messageprocessing.cpp \
 			src/commands/Ping.cpp
-
-IRC_HEADER = ./inc/Server.hpp
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
@@ -53,14 +52,16 @@ $(OBJS_DIR) $(DEP_DIR):
 	@mkdir -p $@
 
 # Regla para compilar archivos fuente en archivos objeto
-$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) $(IRC_HEADER) Makefile | $(OBJS_DIR) $(DEP_DIR)
+#$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) $(IRC_HEADER) Makefile | $(OBJS_DIR) $(DEP_DIR)
+$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
 	@mkdir -p $(dir $@)
 	@echo "▶ Compiling... $<"
 	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 	@mv $(OBJS_DIR)$*.d $(DEP_DIR)
 
 # Regla para crear el ejecutable
-$(NAME): $(OBJS) Makefile $(IRC_HEADER)
+#$(NAME): $(OBJS) Makefile $(IRC_HEADER)
+$(NAME): $(OBJS) Makefile
 	@$(CXX) $(CXXFLAGS) $(OBJS) -o $@
 	@echo "$(GREEN)▉▉▉▉▉▉▉▉▉▉ ircserv project successfully compiled! ▉▉▉▉▉▉▉▉▉▉$(RESET)"
 

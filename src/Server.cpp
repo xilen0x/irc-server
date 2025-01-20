@@ -1,17 +1,14 @@
 #include "Server.hpp"
 
-//constructors
-// Server::Server(){}
-
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }
 
-//createSocket
+//Function that creates the socket(_fdServer) and configures it.
 void Server::createSocket()
 {
     struct	sockaddr_in socketAddress;//estructura que almacena la dirección del socket (IP y puerto) para una conexión IPv4.
     int                 enableReuseAddr;
     // Crear y configurar el socket
-	memset(socketAddress.sin_zero, 0, sizeof(socketAddress.sin_zero));//Rellena con ceros el resto de la estructura sockaddr_in.
+	std::memset(socketAddress.sin_zero, 0, sizeof(socketAddress.sin_zero));//Rellena con ceros el resto de la estructura sockaddr_in.
 	socketAddress.sin_family = AF_INET;//Especifica que el socket usará el protocolo IPv4.
 	socketAddress.sin_port = htons(_port);//Establece el puerto del socket, convirtiéndolo a formato de red (big-endian) usando htons.
 	socketAddress.sin_addr.s_addr = INADDR_ANY;//Establece la dirección IP del socket, en este caso, INADDR_ANY, que indica que el socket escuchará en todas las interfaces de red.
@@ -37,8 +34,9 @@ void Server::createSocket()
 
     std::cout << "Socket created successfully." << std::endl;
 
-}  
+}
 
+//Function that listens for incoming connections.
 void Server::listenSocket()
 {
     // Escuchar conexiones entrantes
@@ -49,6 +47,7 @@ void Server::listenSocket()
     std::cout << "Server is now listening for incoming connections." << std::endl;
 }
 
+//Function that fills the pollfd structure and adds it to the monitoring vector.
 void Server::fillPollfd()
 {
     // Configurar pollfd y agregar al vector de monitoreo
@@ -61,86 +60,50 @@ void Server::fillPollfd()
 	std::cout << "Waiting for incoming connections..." << std::endl;
 }
 
-// loop	(standar c++98)
+//Function that loops to monitor events on the fd.
 void Server::loop()
 {
-    int                 pollRet;
-    struct sockaddr_in  clientAddress;
-    socklen_t           clientAddressSize;
-    int                 fdClient;
-    struct pollfd       pollFds[1];
-    char                buffer[1024];
-    int                 bytesRead;
+    while (true)
+    {
+        int pollRet;  // Stores the return value of the poll() function
+        int revents;  // Stores the events that occurred in the fd
 
-    while (true) {
-        // Copiar el vector de monitoreo a un array de pollfd
-        std::copy(_fdsClients.begin(), _fdsClients.end(), pollFds);
-
-        // Esperar por eventos en los descriptores de archivo
-        pollRet = poll(pollFds, _fdsClients.size(), -1);
+        // Wait for events on the file descriptors
+        pollRet = poll(_fdsClients.data(), _fdsClients.size(), -1);
         if (pollRet == -1) {
-            throw std::runtime_error("Failed to poll for events");
+            throw std::runtime_error("The function poll() failed");
         }
 
-        // Iterar sobre los descriptores de archivo para determinar el evento
-        for (std::vector<struct pollfd>::size_type i = 0; i < _fdsClients.size(); i++) { // Tipo corregido
-            if (pollFds[i].revents & POLLIN) {
-                // Nuevo cliente
-                if (pollFds[i].fd == _fdServer) {
-                    clientAddressSize = sizeof(clientAddress);
-                    fdClient = accept(_fdServer, reinterpret_cast<struct sockaddr*>(&clientAddress), &clientAddressSize);
-                    if (fdClient == -1) {
-                        throw std::runtime_error("Failed to accept connection");
-                    }
-                    // Configurar el nuevo cliente como no bloqueante
-                    if (fcntl(fdClient, F_SETFL, O_NONBLOCK) == -1) {
-                        throw std::runtime_error("Failed to set option (O_NONBLOCK) on client socket");
-                    }
-                    // Agregar el nuevo cliente al vector de monitoreo
-                    struct pollfd newClient;
-                    newClient.fd = fdClient;
-                    newClient.events = POLLIN;
-                    _fdsClients.push_back(newClient);
-                    std::cout << "New client connected." << std::endl;
+        // Iterate over the file descriptors to determine the event
+        for (size_t i = 0; i < _fdsClients.size(); i++)
+        {
+            revents = _fdsClients[i].revents;
+
+            // If no events, skip to the next iteration
+            if (revents == 0) 
+                continue;
+
+            // Handle errors or unexpected disconnections
+            if ((revents & POLLERR) == POLLERR || (revents & POLLHUP) == POLLHUP) 
+            {
+                std::cout << "Socket error or client disconnection\n";
+                clearClients(_fdsClients[i].fd, "Client disconnected\n", _fdsClients);
+            }
+            else if (revents & POLLIN) {  // There is data to read
+                if (_fdsClients[i].fd == _fdServer) {  // New incoming connection
+                    acceptNewClient(_fdServer, _fdsClients);
                 }
-                // Cliente existente
-                else {
-                    // Leer datos del cliente
-                    bytesRead = recv(pollFds[i].fd, buffer, sizeof(buffer), 0);
-                    if (bytesRead == -1) {
-                        throw std::runtime_error("Failed to read data from client");
-                    }
-                    else if (bytesRead == 0) {
-                        // Cliente desconectado
-                        close(pollFds[i].fd);
-                        _fdsClients.erase(_fdsClients.begin() + i);
-                        std::cout << "Client disconnected." << std::endl;
-                    }
-                    else {
-                        // Imprimir los datos recibidos
-                        buffer[bytesRead] = '\0';
-                        std::cout << "Received: " << buffer << std::endl;
-                    }
+                else {  // Message from an existing client
+                    receiveNewData(_fdsClients[i].fd, _fdsClients);
+                }
+                // Mark all fds as ready to write
+                for (size_t j = 1; j < _fdsClients.size(); j++) {
+                    _fdsClients[j].events |= POLLOUT;
                 }
             }
         }
     }
 }
-
-
-// void Server::clean()
-// {
-//     // Cerrar el socket y limpiar recursos
-//     if (_fdServer != -1) {
-//         close(_fdServer);
-//         _fdServer = -1;
-//     }
-//     std::cout << "Server resources cleaned up." << std::endl;
-// }
-
-//getters and setters
-// ...
-
 
 void Server::runServer()
 {
@@ -156,6 +119,7 @@ Server::~Server( void )
 	std::cout << "~Server => TODO" << std::endl;
 }
 
+//getters and setters
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };

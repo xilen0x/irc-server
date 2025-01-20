@@ -8,7 +8,11 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <unistd.h>
+#include <cstdlib>
 
+
+class Client;
+class Channel;
 
 class Server 
 {
@@ -50,5 +54,9 @@ class Server
 		void runServer();
 		~Server();
 };
+
+void clearClients(int fd, std::string msg, std::vector<struct pollfd>& _fdsClients);
+void acceptNewClient(int _fdServer, std::vector<struct pollfd>& _fdsClients);
+void receiveNewData(int fd, std::vector<struct pollfd>& _fdsClients);
 
 #endif

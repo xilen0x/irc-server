@@ -1,22 +1,31 @@
 #include "Server.hpp"
 
-int main()
+int main(int argc, char const *argv[])
 {
-    // signal(SIGINT, signalHandler);
-	// signal(SIGQUIT, signalHandler);
-
-    Server server("IRCServer", "password", 4444);
-    
-    //check conexion args
-    // ...
-    try
+    if (argc == 3)
     {
-        server.runServer();        
+        int port = std::atoi(argv[1]);
+        std::string serverName = "ircserv";
+        std::string password = argv[2];
+        
+        if (port <= 0 || port > 65535)
+        {
+            std::cerr << "Invalid port number." << std::endl;
+            return (1);
+        }
+        try
+        {
+            Server server(serverName, password, port);
+            server.runServer();
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
     }
-    catch(const std::exception& e)
+    else
     {
-        std::cerr << e.what() << '\n';
-        // server.clean();
+        std::cerr << "Usage: " << argv[0] << " <port> <password>" << std::endl;
     }
     return (0);
 }
