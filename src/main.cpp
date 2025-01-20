@@ -1,11 +1,11 @@
-#include "../inc/Server.hpp"
+#include "Server.hpp"
 
 int main()
 {
     // signal(SIGINT, signalHandler);
 	// signal(SIGQUIT, signalHandler);
 
-    Server server;
+    Server server("IRCServer", "password", 4444);
     
     //check conexion args
     // ...

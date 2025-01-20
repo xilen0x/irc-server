@@ -37,7 +37,7 @@ class Client
 //	tipo lista  _channelsList;
 
 	public:
-		// Client( int fd, std::string ipClient );
+		Client( int fd, std::string ipClient );
 		// ~Client( void );
 
 		// int			getFdClient( void ) const;

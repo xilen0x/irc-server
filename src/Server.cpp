@@ -1,9 +1,9 @@
-#include "../inc/Server.hpp"
+#include "Server.hpp"
 
 //constructors
 // Server::Server(){}
 
-Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }{}
+Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }
 
 //createSocket
 void Server::createSocket()

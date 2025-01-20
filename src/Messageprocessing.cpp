@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Messageprocessing.hpp"
+#include "Messageprocessing.hpp"
 
 // Public
 
