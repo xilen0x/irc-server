@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERVER_HPP
+# define SERVER_HPP
 
 #include <iostream>
 #include <vector>
@@ -38,7 +39,7 @@ class Server
         // void clean();
 
     public:
-		Server();
+
 		Server(std::string serverName, std::string password, int port);
 		//getters and setters
 		std::string	getServerName( void ) const;
@@ -49,3 +50,5 @@ class Server
 		void runServer();
 		~Server();
 };
+
+#endif

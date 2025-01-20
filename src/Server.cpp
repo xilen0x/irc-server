@@ -1,11 +1,9 @@
 #include "../inc/Server.hpp"
 
 //constructors
-Server::Server()
-{}
+// Server::Server(){}
 
-Server::Server(int port, std::string password) : _port(port), _password(password), _fdServer(-1)
-{}
+Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }{}
 
 //createSocket
 void Server::createSocket()
@@ -153,7 +151,12 @@ void Server::runServer()
 	// clean();
 }
 
-Server::~Server()
+Server::~Server( void )
 {
-    // clean();
+	std::cout << "~Server => TODO" << std::endl;
 }
+
+std::string	Server::getServerName( void ) const { return (this->_serverName); }
+std::string	Server::getPassword( void ) const { return (this->_password); }
+int 		Server::getPort( void ) const { return (this->_port); };
+int			Server::getFdServer( void ) const { return (this->_fdServer); };
