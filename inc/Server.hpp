@@ -24,7 +24,7 @@ class Server
 	    //static bool                 _Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
-	    std::vector<Channel>		_channels;
+	    // std::vector<Channel>		_channels;
 
 		//createSocket
         void createSocket();
