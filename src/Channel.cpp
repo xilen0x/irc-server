@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 08:59:00 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/21 17:08:29 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:06:28 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
 {
+	std::cout << "Channel => Object created" << std::endl;
+
 	this->_inviteChannel = false;
 	this->_topic = "";
 	this->_topicRestricted = false;

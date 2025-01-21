@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:02:50 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/21 11:22:55 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:08:11 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,3 +72,24 @@ void	Client::setHasNick( void ) { this->_hasNick = true; }
 void	Client::sethasUser( void ) { this->_hasUser = true; }
 	
 void	Client::sethasAuth( void ) { this->_hasAuth = true; }	
+
+
+// For debugging
+void	Client::printClientVars( void )
+{
+	std::cout << "----- CLIENT DATA  (start)-----" << std::endl;
+	std::cout << "_fdClient = " << this->_fdClient << std::endl; 
+	std::cout << "_ipClient = " << this->_ipClient << std::endl;
+	std::cout << "_nick = " << this->_nick << std::endl;
+	std::cout << "_userName = " << this->_userName << std::endl;
+    std::cout << "_realName = " << this->_realName << std::endl;
+
+    std::cout << "_bufferInMessage = " << this->_bufferInMessage << std::endl;
+    std::cout << "_bufferOutResponse = " << this->_bufferOutResponse << std::endl;
+
+    std::cout << "_hasPass = " << this->_hasPass << std::endl;
+    std::cout << "_hasNick = " << this->_hasNick << std::endl;
+    std::cout << "_hasUser = " << this->_hasNick << std::endl;
+    std::cout << "_hasAuth = " << this->_hasAuth << std::endl;
+	std::cout << "----- CLIENT DATA  (end)-----" << std::endl;
+}

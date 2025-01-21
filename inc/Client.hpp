@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon	  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/18 16:45:47 by apardo-m		  #+#	#+#			 */
-/*   Updated: 2025/01/21 11:21:03 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:02:51 by apardo-m         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ class Client
 		void		sethasUser( void );
 		void		sethasAuth( void );	
 
- 
+// For debugging
+		void		printClientVars( void ); 
 };
 
 #endif
