@@ -52,7 +52,6 @@ $(OBJS_DIR) $(DEP_DIR):
 	@mkdir -p $@
 
 # Regla para compilar archivos fuente en archivos objeto
-#$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) $(IRC_HEADER) Makefile | $(OBJS_DIR) $(DEP_DIR)
 $(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
 	@mkdir -p $(dir $@)
 	@echo "▶ Compiling... $<"
@@ -60,7 +59,6 @@ $(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
 	@mv $(OBJS_DIR)$*.d $(DEP_DIR)
 
 # Regla para crear el ejecutable
-#$(NAME): $(OBJS) Makefile $(IRC_HEADER)
 $(NAME): $(OBJS) Makefile
 	@$(CXX) $(CXXFLAGS) $(OBJS) -o $@
 	@echo "$(GREEN)▉▉▉▉▉▉▉▉▉▉ ircserv project successfully compiled! ▉▉▉▉▉▉▉▉▉▉$(RESET)"

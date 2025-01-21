@@ -58,5 +58,7 @@ class Server
 void clearClients(int fd, std::string msg, std::vector<struct pollfd>& _fdsClients);
 void acceptNewClient(int _fdServer, std::vector<struct pollfd>& _fdsClients);
 void receiveNewData(int fd, std::vector<struct pollfd>& _fdsClients);
+int	 parseInput(std::string serverName, std::string password, int port);
+
 
 #endif

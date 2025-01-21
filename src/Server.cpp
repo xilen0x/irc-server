@@ -7,6 +7,7 @@ void Server::createSocket()
 {
     struct	sockaddr_in socketAddress;//estructura que almacena la dirección del socket (IP y puerto) para una conexión IPv4.
     int                 enableReuseAddr;
+    
     // Crear y configurar el socket
 	std::memset(socketAddress.sin_zero, 0, sizeof(socketAddress.sin_zero));//Rellena con ceros el resto de la estructura sockaddr_in.
 	socketAddress.sin_family = AF_INET;//Especifica que el socket usará el protocolo IPv4.
@@ -104,7 +105,7 @@ void Server::loop()
         }
     }
 }
-
+ 
 void Server::runServer()
 {
 	createSocket();
