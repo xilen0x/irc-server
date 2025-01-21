@@ -13,6 +13,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands  -g -fsanit
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
 	src/Client.cpp \
+	src/Channel.cpp \
 	src/Messageprocessing.cpp \
 	src/Server.cpp \
 	src/commands/Ping.cpp

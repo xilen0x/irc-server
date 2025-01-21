@@ -6,13 +6,14 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 07:11:15 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/19 11:00:24 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:30:48 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
+# include <algorithm> 
 # include <iostream>
 # include <vector>
 
@@ -35,9 +36,19 @@ class Channel
 		std::vector<std::string>	_operators;
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
-
-		std::vector<std::string>::iterator	_findStringInVector( std::string  findString);
 		
+		template <typename T>
+		std::vector<std::string>::iterator	_findStringInVector( const std::string findString , T & stringVector);
+		
+		template <typename T>
+		bool	_isInVector(T &t, std::string nickClient );
+
+		template <typename T>
+		bool	_addInVector(T &t, std::string nickClient );
+
+		template <typename T>
+		void	_deleteInVector(T &t, std::string nickClient );
+
 	public:
 		Channel( std::string channelName, std::string operatorNick );
 		~Channel( void );
@@ -86,6 +97,8 @@ class Channel
 		bool			isInvited( std::string nickClient );
 		void			addInvited( std::string nickClient );
 		void			deleteInvited( std::string nickClient );
-}
+};
+
+# include "Channel.tpp"
 
 #endif
