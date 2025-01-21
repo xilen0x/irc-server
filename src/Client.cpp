@@ -12,21 +12,8 @@
 
 #include "Client.hpp"
 
-// Client::Client( int fd, std::string ipClient ) :_fdClient(fd), _ipClient(ipClient)
-// {
-// 	this->_nick = "";
-// 	this->_userName = "";
-// 	this->_realName = "";
-
-// 	this->_bufferInMessage = "";
-// 	this->_bufferOutResponse = "";
-
-// 	this->_hasPass = false;
-// 	this->_hasNick = false;
-// 	this->_hasUser = false;
-// 	this->_hasAuth = false;
-	
-// }
+Client::Client() :_fdClient(-1), _ipClient("")
+{}
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)
 {
@@ -45,15 +32,19 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_fdClient = fd;
 }
 
-// Client::~Client( void ) {}
+Client::~Client( void ) {}
 
 // int		Client::getFdClient( void ) const { return (this->_fdClient	); }
 
-// void	Client::setFdClient( int fd ) { this->_fdClient = fd; }
+void	Client::setFdClient( int fd ) { 
+	this->_fdClient = fd; 
+}
 
 // std::string	Client::getIpClient( void ) const { return ( this->_ipClient ); }
 
-// void	Client::setIpClient( std::string ip ) { this->_ipClient = ip; }
+void	Client::setIpClient( std::string ip ) { 
+	this->_ipClient = ip; 
+}
 
 // std::string	Client::getNick( void ) const { return ( this->_nick ); }
 

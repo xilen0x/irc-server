@@ -9,9 +9,8 @@
 #include <cstring>
 #include <unistd.h>
 #include <cstdlib>
+#include "Client.hpp"
 
-
-class Client;
 class Channel;
 
 class Server 
@@ -23,8 +22,9 @@ class Server
 	    int			                _port;
 	    int			                _fdServer;
 	    //static bool                 _Signal;
-    	std::vector<struct pollfd> 	_fdsClients;
-    	// std::vector<Client>		_clients;
+    	
+		std::vector<struct pollfd> 	_fdsClients;
+    	std::vector<Client>			_clients;
 	    // std::vector<Channel>		_channels;
 
 		//createSocket
@@ -52,12 +52,12 @@ class Server
 		int			getFdServer( void ) const;
 
 		void runServer();
+		void acceptClient();
+		void receiveData(int fd);
+		void clearClients(int fd, std::string msg);
 		~Server();
 };
 
-void clearClients(int fd, std::string msg, std::vector<struct pollfd>& _fdsClients);
-void acceptNewClient(int _fdServer, std::vector<struct pollfd>& _fdsClients);
-void receiveNewData(int fd, std::vector<struct pollfd>& _fdsClients);
 int	 parseInput(std::string serverName, std::string password, int port);
 
 

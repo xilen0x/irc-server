@@ -18,8 +18,8 @@
 class Client
 {
 	private:
-		int			_fdClient;
-		std::string	_ipClient;
+		int			_fdClient;//init ok
+		std::string	_ipClient;//init ok
 
 		std::string	_nick;
 		std::string _userName;
@@ -37,13 +37,14 @@ class Client
 //	tipo lista  _channelsList;
 
 	public:
+		Client( void );
 		Client( int fd, std::string ipClient );
-		// ~Client( void );
+		~Client( void );
 
 		// int			getFdClient( void ) const;
-		// void		setFdClient( int fd );
+		void		setFdClient( int fd );
 		// std::string	getIpClient( void ) const;
-		// void		setIpClient( std::string ip );
+		void		setIpClient( std::string ip );
 
 		// std::string	getNick( void ) const;
 		// void		setNick( std::string nick );

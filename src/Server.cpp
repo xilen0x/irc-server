@@ -88,14 +88,14 @@ void Server::loop()
             if ((revents & POLLERR) == POLLERR || (revents & POLLHUP) == POLLHUP) 
             {
                 std::cout << "Socket error or client disconnection\n";
-                clearClients(_fdsClients[i].fd, "Client disconnected\n", _fdsClients);
+                clearClients(_fdsClients[i].fd, "Client disconnected\n");
             }
             else if (revents & POLLIN) {  // There is data to read
                 if (_fdsClients[i].fd == _fdServer) {  // New incoming connection
-                    acceptNewClient(_fdServer, _fdsClients);
+                    acceptClient();
                 }
                 else {  // Message from an existing client
-                    receiveNewData(_fdsClients[i].fd, _fdsClients);
+                    receiveData(_fdsClients[i].fd);
                 }
                 // Mark all fds as ready to write
                 for (size_t j = 1; j < _fdsClients.size(); j++) {
