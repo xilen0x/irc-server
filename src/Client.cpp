@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:02:50 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/20 15:33:49 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:22:55 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ bool	Client::gethasUser( void ) const { return ( this->_hasUser ); }
 	
 bool	Client::gethasAuth( void ) const { return ( this->_hasAuth ); }
 	
-void	Client::setHasPass( bool has ) { this->_hasPass = has; }
+void	Client::setHasPass( void ) { this->_hasPass = true; }
 
-void	Client::setHasNick( bool has ) { this->_hasNick = has; }
+void	Client::setHasNick( void ) { this->_hasNick = true; }
 		
-void	Client::sethasUser( bool has ) { this->_hasUser = has; }
+void	Client::sethasUser( void ) { this->_hasUser = true; }
 	
-void	Client::sethasAuth( bool has ) { this->_hasAuth = has; }	
+void	Client::sethasAuth( void ) { this->_hasAuth = true; }	

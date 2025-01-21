@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon	  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/18 16:45:47 by apardo-m		  #+#	#+#			 */
-/*   Updated: 2025/01/18 18:36:18 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:21:03 by apardo-m         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ class Client
 		bool		getHasNick( void ) const;
 		bool		gethasUser( void ) const;
 		bool		gethasAuth( void ) const;	
-		void		setHasPass( bool has );
-		void		setHasNick( bool has );
-		void		sethasUser( bool has );
-		void		sethasAuth( bool has );	
+		void		setHasPass( void );
+		void		setHasNick( void );
+		void		sethasUser( void );
+		void		sethasAuth( void );	
 
  
 };
