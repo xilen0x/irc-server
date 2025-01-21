@@ -22,10 +22,9 @@ class Server
 	    int			                _port;
 	    int			                _fdServer;
 	    //static bool                 _Signal;
-    	
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
-	    // std::vector<Channel>		_channels;
+	    std::vector<Channel>		_channels;
 
 		//createSocket
         void createSocket();
@@ -42,7 +41,11 @@ class Server
 		// //clean
         // void clean();
 
-    public:
+		void acceptClient();
+		void receiveData(int fd);
+		void clearClients(int fd, std::string msg);
+    
+	public:
 
 		Server(std::string serverName, std::string password, int port);
 		//getters and setters
@@ -52,9 +55,6 @@ class Server
 		int			getFdServer( void ) const;
 
 		void runServer();
-		void acceptClient();
-		void receiveData(int fd);
-		void clearClients(int fd, std::string msg);
 		~Server();
 };
 

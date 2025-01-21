@@ -69,6 +69,8 @@
             buffer[bytesRead] = '\0';
             std::cout << "Received data: " << buffer << std::endl;
         }
+
+        
     }
 
     // void Server::clean()
