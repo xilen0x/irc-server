@@ -6,11 +6,11 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:43:04 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 14:55:55 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:33:23 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/commands/Ping.hpp"
+#include "Ping.hpp"
 
 Ping::~Ping( void ) {};
 

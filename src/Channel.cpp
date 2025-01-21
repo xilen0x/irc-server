@@ -6,11 +6,11 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 08:59:00 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/19 11:00:20 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:33:41 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../inc/Channel.hpp"
+# include "Channel.hpp"
 
 # define DEFAULT_LIMIT 100
 

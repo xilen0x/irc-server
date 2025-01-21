@@ -6,11 +6,11 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:02:50 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 18:36:18 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:33:49 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Client.hpp"
+#include "Client.hpp"
 
 Client::Client( int fd, std::string ipClient ) :_fdClient(fd), _ipClient(ipClient)
 {

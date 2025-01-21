@@ -8,7 +8,7 @@ DEP_DIR = .dep/
 
 # Compilador y FLAGS
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands  -g -fsanitize=address
 
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
@@ -16,14 +16,6 @@ SRC_FILES = src/main.cpp \
 	src/Messageprocessing.cpp \
 	src/Server.cpp \
 	src/commands/Ping.cpp
-
-HDR_FILES = inc/Client.hpp \
-	inc/commands/ICommand.hpp \
-	inc/Messageprocessing.hpp \
-	inc/commands/Ping.hpp \
-	inc/replies.hpp \
-	inc/Server.hpp
-	
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
@@ -60,7 +52,8 @@ $(OBJS_DIR) $(DEP_DIR):
 	@mkdir -p $@
 
 # Regla para compilar archivos fuente en archivos objeto
-$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
+#$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
+$(OBJS_DIR)%.o: %.cpp Makefile | $(OBJS_DIR) $(DEP_DIR)
 	@mkdir -p $(dir $@)
 	@echo "▶ Compiling... $<"
 	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@

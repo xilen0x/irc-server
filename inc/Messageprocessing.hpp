@@ -15,8 +15,8 @@
 
 # include <iostream>
 # include <map>
-# include "./commands/ICommand.hpp"
-# include "./commands/Ping.hpp"
+# include "ICommand.hpp"
+# include "Ping.hpp"
 
 class Messageprocessing
 {

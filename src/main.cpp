@@ -1,7 +1,7 @@
 #include <iostream>
-#include "../inc/Client.hpp"
-#include "../inc/Messageprocessing.hpp"
-#include "../inc/Server.hpp"
+#include "Client.hpp"
+#include "Messageprocessing.hpp"
+#include "Server.hpp"
 
 int main()
 {

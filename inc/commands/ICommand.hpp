@@ -14,7 +14,7 @@
 #ifndef ICOMMAND_HPP
 # define ICOMMAND_HPP
 
-# include "../replies.hpp"
+# include "replies.hpp"
 
 class ICommand
 {
