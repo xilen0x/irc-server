@@ -20,5 +20,3 @@ git checkout castorga
 git pull
 echo ".............................."
 git checkout $ACTUAL_BRANCH
-echo ".............................."
-git status
