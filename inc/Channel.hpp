@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 07:11:15 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/21 15:30:48 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:27:48 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ class Channel
 
 		template <typename T>
 		void	_deleteInVector(T &t, std::string nickClient );
+
+// For debugging
+		void	_printVectorStrings(std::vector<std::string> stringVector);
 
 	public:
 		Channel( std::string channelName, std::string operatorNick );
@@ -97,6 +100,9 @@ class Channel
 		bool			isInvited( std::string nickClient );
 		void			addInvited( std::string nickClient );
 		void			deleteInvited( std::string nickClient );
+
+// For debugging
+		void		printChannelVars( void ); 
 };
 
 # include "Channel.tpp"

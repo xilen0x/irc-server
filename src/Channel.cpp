@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 08:59:00 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/21 18:06:28 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:58:36 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 
 # define DEFAULT_LIMIT 100
 
+
+// Private For debugging
+void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
+{
+	
+	std::vector<std::string>::iterator it;
+
+	for (it=stringVector.begin();it != stringVector.end(); it++)
+	{
+		std::cout << "\t- " << *it << std::endl;
+	}
+}
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
@@ -78,15 +90,6 @@ unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLim
 void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
 
 // _operators
-//bool 	Channel::isOperator( std::string nickClient )
-//{
-//	for ( std::vector<std::string>::iterator it = this->_operators.begin(); it != this->_operators.end(); ++it)
-//	{
-//		if (*it == nickClient)
-//			return (true);
-//	}
-//	return (false);
-//}
 bool 	Channel::isOperator( std::string nickClient )
 {
 	return ( this->_isInVector(this->_operators, nickClient));
@@ -95,7 +98,7 @@ bool 	Channel::isOperator( std::string nickClient )
 void 	Channel::addOperator( std::string nickClient )
 {
 	if (!this->_addInVector(this->_operators,nickClient))
-		std::cout << nickClient << "is in _operators vector. CAN´T ADD!!!" << std::endl;
+		std::cout << nickClient << " is in _operators vector. CAN´T ADD!!!" << std::endl;
 }
 
 void 	Channel::deleteOperator( std::string nickClient )
@@ -112,7 +115,7 @@ bool	Channel::isMember( std::string nickClient )
 void	Channel::addMember( std::string nickClient )
 {
 	if (!this->_addInVector(this->_memberClients, nickClient))
-		std::cout << nickClient << "is in _memberClients. CAN´T ADD!!!" << std::endl;
+		std::cout << nickClient << " is in _memberClients. CAN´T ADD!!!" << std::endl;
 }
 
 void	Channel::deleteMember( std::string nickClient )
@@ -128,11 +131,31 @@ bool	Channel::isInvited( std::string nickClient )
 
 void	Channel::addInvited( std::string nickClient )
 {
-	if (!this->_addInVector(this->_memberClients, nickClient))
-		std::cout << nickClient << "is in  invitedClients. CAN´T ADD!!!" << std::endl;
+	if (!this->_addInVector(this->_invitedClients, nickClient))
+		std::cout << nickClient << " is in invitedClients. CAN´T ADD!!!" << std::endl;
 }
 
 void	Channel::deleteInvited( std::string nickClient )
 {
 	this->_deleteInVector(this->_invitedClients, nickClient);
+}
+
+// For debugging
+void	Channel::printChannelVars( void )
+{
+	std::cout << "----- CHANNEL DATA  (start)-----" << std::endl;
+	std::cout << "_channelName = " << this->_channelName << std::endl;
+	std::cout << "_inviteChannel = " << this->_inviteChannel << std::endl;
+	std::cout << "_topic = " << this->_topic << std::endl;
+	std::cout << "_topicRestricted = " << this->_topicRestricted << std::endl;
+	std::cout << "_channelKey = " << this->_channelKey << std::endl;
+	std::cout << "_hasUserLimit = " << this->_hasUserLimit << std::endl;
+	std::cout << "_userLimitNumber = " << this->_userLimitNumber << std::endl;
+	std::cout << "- CHANNEL _operators:" << std::endl;
+	this->_printVectorStrings(this->_operators);
+	std::cout << "- CHANNEL _memberClients:" << std::endl;
+	this->_printVectorStrings(this->_memberClients);
+	std::cout << "- CHANNEL _invitedClients:" << std::endl;
+	this->_printVectorStrings(this->_invitedClients);
+	std::cout << "----- CHANNEL DATA  (end)-----" << std::endl;
 }

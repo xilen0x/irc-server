@@ -18,7 +18,7 @@
 template <typename T>
 std::vector<std::string>::iterator	Channel::_findStringInVector(const std::string  findString,  T &t )
 {
-	return (find(t. begin(), t.end(), findString));
+	return (std::find(t.begin(), t.end(), findString));
 } 
 
 template <typename T>
@@ -26,9 +26,12 @@ bool	Channel::_isInVector(T &t, std::string nickClient )
 {
 	std::vector<std::string>::iterator it;
 	
-	it = this->_findStringInVector(nickClient, t);
-	if (it != this->_operators.end())
-		return (true);
+	if (t.size() != 0)
+	{	
+		it = this->_findStringInVector(nickClient, t);
+		if (it != t.end())
+			return (true);
+	}
 	return (false);
 }
 
