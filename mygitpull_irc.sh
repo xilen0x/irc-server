@@ -13,10 +13,10 @@ echo ".............................."
 git checkout apardo
 git pull
 echo ".............................."
-git checkout castorga
+git checkout linyao
 git pull
 echo ".............................."
-git checkout linyao
+git checkout castorga
 git pull
 echo ".............................."
 git checkout $ACTUAL_BRANCH
