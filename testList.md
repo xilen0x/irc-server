@@ -16,4 +16,5 @@ make command | test file | Description
 `make -f ./MakeFileTest/MakefileTest_3` | mainTest_3.cpp | prints default private vars Client object on CLI
 `make -f ./MakeFileTest/MakefileTest_4` | mainTest_4.cpp | TEST  Channel modification Member and Invited 
 `make -f ./MakeFileTest/MakefileTest_5` | mainTest_5.cpp | TEST  Channel Setters and Getters 
+`make -f ./MakeFileTest/MakefileTest_6` | mainTest_6.cpp | TEST  Server 
 

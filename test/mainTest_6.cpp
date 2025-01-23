@@ -129,11 +129,6 @@ void testChannelSetGet(Channel & channel)
 	std::cout << "----- END  Test Set/Get Channel VARS -----" << std::endl;
 }
 
-void testChannel(Channel & channel)
-{
-	testChannelSetGet(channel);
-}
-
 int main()
 {
 	Messageprocessing	messageProcesing;
@@ -141,24 +136,10 @@ int main()
 	Server				server("42_IRC", "hola", 4444);
 	Channel				channel1("channel_1", nick_1);
 
-    std::cout << "Executing Messageprocessing !" << std::endl;
+    std::cout << "\n!!!!!!  TEST  Server !!!!!!!\n" << std::endl;
 
-	messageProcesing.processMessage("tokenPing!!");
+	testChannelSetGet(channel1);
 
-	testClient(client);
-
-// Channel tests
-	channel1.printChannelVars();
-	
-	channel1.addMember(nick_2);
-	channel1.addInvited(nick_3);
-	channel1.addInvited(nick_4);
-	channel1.addInvited(nick_3);
-
-	channel1.printChannelVars();
-
-	testChannel(channel1);
-// TODO
-// 250122 : no compila si se cambia el *.tpp
     return (0);
+
 }
