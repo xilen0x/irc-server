@@ -6,14 +6,13 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 08:59:00 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/22 13:58:36 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:47:46 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Channel.hpp"
 
 # define DEFAULT_LIMIT 100
-
 
 // Private For debugging
 void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
@@ -103,7 +102,9 @@ void 	Channel::addOperator( std::string nickClient )
 
 void 	Channel::deleteOperator( std::string nickClient )
 {
-	this->_deleteInVector(this->_operators, nickClient);
+	if(!this->_deleteInVector(this->_operators, nickClient))
+		std::cout << nickClient << " is NOT in _operators. CAN´T DELETE IT!!!" << std::endl;
+
 }
 
 // _memberClients
@@ -120,7 +121,8 @@ void	Channel::addMember( std::string nickClient )
 
 void	Channel::deleteMember( std::string nickClient )
 {
-	this->_deleteInVector(this->_memberClients, nickClient);
+	if( !this->_deleteInVector(this->_memberClients, nickClient))
+		std::cout << nickClient << " is NOT  in _memberClients. CAN´T DELETE IT!!!" << std::endl;
 }
 
 // _invitedClients
@@ -137,7 +139,8 @@ void	Channel::addInvited( std::string nickClient )
 
 void	Channel::deleteInvited( std::string nickClient )
 {
-	this->_deleteInVector(this->_invitedClients, nickClient);
+	if(!this->_deleteInVector(this->_invitedClients, nickClient))
+		std::cout << nickClient << " is NOT in _invitedClients. CAN´T DELETE IT!!!" << std::endl;
 }
 
 // For debugging

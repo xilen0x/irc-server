@@ -16,19 +16,13 @@
 # include "Channel.hpp"
 
 template <typename T>
-std::vector<std::string>::iterator	Channel::_findStringInVector(const std::string  findString,  T &t )
-{
-	return (std::find(t.begin(), t.end(), findString));
-} 
-
-template <typename T>
 bool	Channel::_isInVector(T &t, std::string nickClient )
 {
 	std::vector<std::string>::iterator it;
 	
 	if (t.size() != 0)
 	{	
-		it = this->_findStringInVector(nickClient, t);
+		it = std::find(t.begin(), t.end(), nickClient);
 		if (it != t.end())
 			return (true);
 	}
@@ -45,13 +39,15 @@ bool	Channel::_addInVector(T &t, std::string nickClient )
 }
 
 template <typename T>
-void	Channel::_deleteInVector(T &t, std::string nickClient )
+bool	Channel::_deleteInVector(T &t, std::string nickClient )
 {
 	std::vector<std::string>::iterator	it;
 	
-	it = this->_findStringInVector(nickClient, t);
-	if (it != this->_operators.end())
-		this->_operators.erase(it);
+	it = std::find(t.begin(), t.end(), nickClient);
+	if (it == t.end())
+		return (false);
+	t.erase(it);
+	return (true);
 }	
 
 #endif

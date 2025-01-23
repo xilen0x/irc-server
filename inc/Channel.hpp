@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 07:11:15 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/22 12:27:48 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:50:58 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,11 @@ class Channel
 		bool			_hasUserLimit;
 		unsigned long	_userLimitNumber;
 
-		// DOUBT: 250119 - only store nicks?
+		// DOUBT: 250119 - only store nicks o store Objects?
 		std::vector<std::string>	_operators;
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
-		
-		template <typename T>
-		std::vector<std::string>::iterator	_findStringInVector( const std::string findString , T & stringVector);
-		
+
 		template <typename T>
 		bool	_isInVector(T &t, std::string nickClient );
 
@@ -47,9 +44,9 @@ class Channel
 		bool	_addInVector(T &t, std::string nickClient );
 
 		template <typename T>
-		void	_deleteInVector(T &t, std::string nickClient );
+		bool	_deleteInVector(T &t, std::string nickClient );
 
-// For debugging
+		// For debugging
 		void	_printVectorStrings(std::vector<std::string> stringVector);
 
 	public:

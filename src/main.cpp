@@ -21,8 +21,7 @@ void testChannelSetters(Channel & channel)
 	std::string	key1 = "key_1";
 	unsigned long	userLimit = 20;
 
-
-	std::cout << "----- Test Setters Channel -----" << std::endl;
+	std::cout << "----- Test Set/Get Channel VARS -----" << std::endl;
 	std::cout << "getChannelName() = " << channel.getChannelName() << std::endl;
 	std::cout << "_inviteChannel Var: " << channel.isInviteChannel() << std::endl;
 	std::cout << "    isInviteChannel() = " << channel.isInviteChannel() << std::endl;
@@ -34,7 +33,8 @@ void testChannelSetters(Channel & channel)
 	std::cout << "    isInviteChannel() = " << channel.isInviteChannel() << std::endl;
 	std::cout << "_topic : " << std::endl;
 	std::cout << "    getTopic() = " << channel.getTopic() << std::endl;
-	std::cout << "    setTopic(" << topic1 << ")"<< channel.getTopic() << std::endl;
+	std::cout << "    setTopic(" << topic1 << ")" << std::endl;
+	channel.setTopic(topic1);
 	std::cout << "    getTopic() = " << channel.getTopic() << std::endl;
 	std::cout << "_topicRestricted" << std::endl;
 	std::cout << "    isTopicRestricted() = " << channel.isTopicRestricted() << std::endl;
@@ -52,15 +52,75 @@ void testChannelSetters(Channel & channel)
 	std::cout << "_hasUserLimit" << std::endl;
 	std::cout << "    isUserLimitActived() = " << channel.isUserLimitActived() << std::endl;
 	std::cout << "    setUserLimitActived()" << std::endl;
+	channel.setUserLimitActived();
 	std::cout << "    isUserLimitActived() = " << channel.isUserLimitActived() << std::endl;
 	std::cout << "    unsetUserLimitActived()" << std::endl;
 	channel.unsetUserLimitActived();
+	std::cout << "    isUserLimitActived() = " << channel.isUserLimitActived() << std::endl;
 	std::cout << "_userLimitNumber" << std::endl;
 	std::cout << "    getUserLimitNumber() = " << channel.getUserLimitNumber() << std::endl;
 	std::cout << "    setUserLimitNumber(" << userLimit << ")" << std::endl;
 	channel.setUserLimitNumber(userLimit);
 	std::cout << "    getUserLimitNumber() = " << channel.getUserLimitNumber() << std::endl;
-	std::cout << "----- END  Test Setters Channel -----" << std::endl;
+	// _operators
+	std::cout << "_operators" << std::endl;
+	std::cout << "    isOperator(nick_2) = " << channel.isOperator(nick_2) << std::endl;
+	std::cout << "    addOperator(nick_1)" << std::endl;
+	channel.addOperator(nick_1);
+	std::cout << "    addOperator(nick_2)" << std::endl;
+	channel.addOperator(nick_2);
+	std::cout << "    isOperator(nick_1) = " << channel.isOperator(nick_1) << std::endl;
+	std::cout << "    isOperator(nick_2) = " << channel.isOperator(nick_2) << std::endl;
+	std::cout << "    deleteOperator(nick_1)" << std::endl;
+	channel.deleteOperator(nick_1);
+	std::cout << "    isOperator(nick_1) = " << channel.isOperator(nick_1) << std::endl;
+	std::cout << "    isOperator(nick_2) = " << channel.isOperator(nick_2) << std::endl;
+	std::cout << "    deleteOperator(nick_1)" << std::endl;
+	channel.deleteOperator(nick_1);
+	std::cout << "    deleteOperator(nick_2)" << std::endl;
+	channel.deleteOperator(nick_2);
+	std::cout << "    isOperator(nick_1) = " << channel.isOperator(nick_1) << std::endl;
+	std::cout << "    isOperator(nick_2) = " << channel.isOperator(nick_2) << std::endl;
+	// _memberClients
+	std::cout << "_memberClients" << std::endl;
+	std::cout << "    isMember(nick_2) = " << channel.isMember(nick_2) << std::endl;
+	std::cout << "    addMember(nick_1)" << std::endl;
+	channel.addMember(nick_1);
+	std::cout << "    addMember(nick_2)" << std::endl;
+	channel.addMember(nick_2);
+	std::cout << "    isMember(nick_1) = " << channel.isMember(nick_1) << std::endl;
+	std::cout << "    isMember(nick_2) = " << channel.isMember(nick_2) << std::endl;
+	std::cout << "    deleteMember(nick_1)" << std::endl;
+	channel.deleteMember(nick_1);
+	std::cout << "    isMember(nick_1) = " << channel.isMember(nick_1) << std::endl;
+	std::cout << "    isMember(nick_2) = " << channel.isMember(nick_2) << std::endl;
+	std::cout << "    deleteMember(nick_1)" << std::endl;
+	channel.deleteMember(nick_1);
+	std::cout << "    deleteMember(nick_2)" << std::endl;
+	channel.deleteMember(nick_2);
+	std::cout << "    isMember(nick_1) = " << channel.isMember(nick_1) << std::endl;
+	std::cout << "    isMember(nick_2) = " << channel.isMember(nick_2) << std::endl;
+
+	// _invitedClients
+	std::cout << "_invitedClients" << std::endl;
+	std::cout << "    isInvited(nick_2) = " << channel.isInvited(nick_2) << std::endl;
+	std::cout << "    addInvited(nick_1)" << std::endl;
+	channel.addInvited(nick_1);
+	std::cout << "    addInvited(nick_2)" << std::endl;
+	channel.addInvited(nick_2);
+	std::cout << "    isInvited(nick_1) = " << channel.isInvited(nick_1) << std::endl;
+	std::cout << "    isInvited(nick_2) = " << channel.isInvited(nick_2) << std::endl;
+	std::cout << "    deleteInvited(nick_1)" << std::endl;
+	channel.deleteInvited(nick_1);
+	std::cout << "    isInvited(nick_1) = " << channel.isInvited(nick_1) << std::endl;
+	std::cout << "    isInvited(nick_2) = " << channel.isInvited(nick_2) << std::endl;
+	std::cout << "    deleteInvited(nick_1)" << std::endl;
+	channel.deleteInvited(nick_1);
+	std::cout << "    deleteInvited(nick_2)" << std::endl;
+	channel.deleteInvited(nick_2);
+	std::cout << "    isInvited(nick_1) = " << channel.isInvited(nick_1) << std::endl;
+	std::cout << "    isInvited(nick_2) = " << channel.isInvited(nick_2) << std::endl;
+	std::cout << "----- END  Test Set/Get Channel VARS -----" << std::endl;
 }
 
 void testChannel(Channel & channel)
@@ -94,6 +154,5 @@ int main()
 	testChannel(channel1);
 // TODO
 // 250122 : no compila si se cambia el *.tpp
-// 			revisar popr que no asigna Topic	
     return (0);
 }
