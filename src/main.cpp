@@ -14,7 +14,7 @@ void testClient(Client & client)
 	client.printClientVars();
 }
 
-void testChannelSetters(Channel & channel)
+void testChannelSetGet(Channel & channel)
 {
 
 	std::string	topic1 = "Topic_1";
@@ -23,19 +23,22 @@ void testChannelSetters(Channel & channel)
 
 	std::cout << "----- Test Set/Get Channel VARS -----" << std::endl;
 	std::cout << "getChannelName() = " << channel.getChannelName() << std::endl;
-	std::cout << "_inviteChannel Var: " << channel.isInviteChannel() << std::endl;
+	// _inviteChannel
+	std::cout << "_inviteChannel : " << std::endl;
 	std::cout << "    isInviteChannel() = " << channel.isInviteChannel() << std::endl;
 	std::cout << "    setInviteChannel()" << std::endl;
 	channel.setInviteChannel();
 	std::cout << "    isInviteChannel() = " << channel.isInviteChannel() << std::endl;
-	std::cout << "    unsetInviteChannel() = " << std::endl;
+	std::cout << "    unsetInviteChannel()" << std::endl;
 	channel.unsetInviteChannel();
 	std::cout << "    isInviteChannel() = " << channel.isInviteChannel() << std::endl;
+	// _topic
 	std::cout << "_topic : " << std::endl;
 	std::cout << "    getTopic() = " << channel.getTopic() << std::endl;
 	std::cout << "    setTopic(" << topic1 << ")" << std::endl;
 	channel.setTopic(topic1);
 	std::cout << "    getTopic() = " << channel.getTopic() << std::endl;
+	// _topicRestricted
 	std::cout << "_topicRestricted" << std::endl;
 	std::cout << "    isTopicRestricted() = " << channel.isTopicRestricted() << std::endl;
 	std::cout << "    setTopicRestricted()" << std::endl;
@@ -44,11 +47,13 @@ void testChannelSetters(Channel & channel)
 	std::cout << "    unsetTopicRestricted()" << std::endl;
 	channel.unsetTopicRestricted();
 	std::cout << "    isTopicRestricted() = " << channel.isTopicRestricted() << std::endl;
+	// _channelKey
 	std::cout << "_channelKey" << std::endl;
 	std::cout << "    getChannelKey() = " << channel.getChannelKey() << std::endl;
 	std::cout << "    setChannelKey(" << key1 << ")" << std::endl;
 	channel.setChannelKey(key1);
 	std::cout << "    getChannelKey() = " << channel.getChannelKey() << std::endl;
+	// _hasUserLimit
 	std::cout << "_hasUserLimit" << std::endl;
 	std::cout << "    isUserLimitActived() = " << channel.isUserLimitActived() << std::endl;
 	std::cout << "    setUserLimitActived()" << std::endl;
@@ -57,6 +62,7 @@ void testChannelSetters(Channel & channel)
 	std::cout << "    unsetUserLimitActived()" << std::endl;
 	channel.unsetUserLimitActived();
 	std::cout << "    isUserLimitActived() = " << channel.isUserLimitActived() << std::endl;
+	// _userLimitNumber 
 	std::cout << "_userLimitNumber" << std::endl;
 	std::cout << "    getUserLimitNumber() = " << channel.getUserLimitNumber() << std::endl;
 	std::cout << "    setUserLimitNumber(" << userLimit << ")" << std::endl;
@@ -125,7 +131,7 @@ void testChannelSetters(Channel & channel)
 
 void testChannel(Channel & channel)
 {
-	testChannelSetters(channel);
+	testChannelSetGet(channel);
 }
 
 int main()
