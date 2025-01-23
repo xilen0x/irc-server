@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:02:50 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/21 18:08:11 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:31:41 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,14 @@ Client::Client( int fd, std::string ipClient ) :_fdClient(fd), _ipClient(ipClien
 	this->_hasNick = false;
 	this->_hasUser = false;
 	this->_hasAuth = false;
+
+	std::cout << "Client() => Set initial values" << std::endl;
 }
 
-Client::~Client( void ) {}
+Client::~Client( void )
+{
+	std::cout << "~Client() => TODO" << std::endl;
+}
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
 
