@@ -86,6 +86,6 @@ class Channel
 		// bool			isInvited( std::string nickClient );
 		// void			addInvited( std::string nickClient );
 		// void			deleteInvited( std::string nickClient );
-}
+};
 
 #endif

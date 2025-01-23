@@ -1,3 +1,4 @@
+
 # Nombre del ejecutable
 NAME = ircserv
 
@@ -7,15 +8,18 @@ DEP_DIR = .dep/
 
 # Compilador y FLAGS
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands -g -fsanitize=address
+
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands  -g -fsanitize=address
 
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
-			src/Server.cpp \
-			src/serverUtils.cpp \
-			src/Client.cpp \
-			src/Messageprocessing.cpp \
-			src/commands/Ping.cpp
+	src/Client.cpp \
+	src/Channel.cpp \
+	src/Messageprocessing.cpp \
+	src/Server.cpp \
+	src/serverUtils.cpp \
+	src/commands/Ping.cpp
+
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
@@ -52,7 +56,10 @@ $(OBJS_DIR) $(DEP_DIR):
 	@mkdir -p $@
 
 # Regla para compilar archivos fuente en archivos objeto
-$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
+
+#$(OBJS_DIR)%.o: %.cpp $(HDR_FILES) Makefile | $(OBJS_DIR) $(DEP_DIR)
+$(OBJS_DIR)%.o: %.cpp Makefile | $(OBJS_DIR) $(DEP_DIR)
+
 	@mkdir -p $(dir $@)
 	@echo "▶ Compiling... $<"
 	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
