@@ -1,15 +1,14 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include <iostream>
-#include <vector>
-#include <poll.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-#include <cstring>
-#include <unistd.h>
-#include <cstdlib>
-#include "Client.hpp"
+# include <iostream>
+# include <vector>
+# include <poll.h>
+# include <fcntl.h>
+# include <netinet/in.h>
+# include <cstring>
+# include <unistd.h>
+# include <cstdlib>
 
 # include "Client.hpp"
 # include "Channel.hpp"
