@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:29:51 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/18 16:40:20 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/23 18:13:33 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <iostream>
 # include <poll.h>
 # include <vector>
+
+class Client;
+class Channel;
 
 class Server
 {
@@ -28,8 +31,8 @@ class Server
 //		static bool					_Signal;
 
 		std::vector<struct pollfd>	_fdsClients;
-//		std::vector<Client>			_clients;
-//		std::vector<Channel>		_channels;
+		std::vector<Client>			_clients;
+		std::vector<Channel>		_channels;
 
 	public:
 		Server(std::string serverName, std::string password, int port);
@@ -39,6 +42,9 @@ class Server
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
+
+		void		addClient( Client newClient );
+		void		addChannel( Channel newChannel );  
 };
 
 #endif
