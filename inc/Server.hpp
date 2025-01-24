@@ -6,7 +6,7 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:29:51 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/23 18:13:33 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:51:34 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <iostream>
 # include <poll.h>
 # include <vector>
+
+# include "Client.hpp"
+# include "Channel.hpp"
 
 class Client;
 class Channel;
