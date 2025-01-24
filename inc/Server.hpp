@@ -11,9 +11,13 @@
 #include <cstdlib>
 #include "Client.hpp"
 
+# include "Client.hpp"
+# include "Channel.hpp"
+
+class Client;
 class Channel;
 
-class Server 
+class Server
 {
 	private:
 
@@ -24,7 +28,7 @@ class Server
 	    //static bool                 _Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
-	    // std::vector<Channel>		_channels;
+		std::vector<Channel>		_channels;
 
 		//createSocket
         void createSocket();
@@ -48,11 +52,15 @@ class Server
 	public:
 
 		Server(std::string serverName, std::string password, int port);
+
 		//getters and setters
 		std::string	getServerName( void ) const;
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
+
+		void		addClient( Client newClient );
+		void		addChannel( Channel newChannel );  
 
 		void runServer();
 		~Server();

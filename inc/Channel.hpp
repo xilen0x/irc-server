@@ -6,13 +6,14 @@
 /*   By: apardo-m <apardo-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 07:11:15 by apardo-m          #+#    #+#             */
-/*   Updated: 2025/01/19 11:00:24 by apardo-m         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:17:04 by apardo-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
+# include <algorithm> 
 # include <iostream>
 # include <vector>
 
@@ -31,61 +32,76 @@ class Channel
 		bool			_hasUserLimit;
 		unsigned long	_userLimitNumber;
 
-		// DOUBT: 250119 - only store nicks?
+		// DOUBT: 250119 - only store nicks o store Objects?
 		std::vector<std::string>	_operators;
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
 
-		std::vector<std::string>::iterator	_findStringInVector( std::string  findString);
-		
+		template <typename T>
+		bool	_isInVector(T &t, std::string nickClient );
+
+		template <typename T>
+		bool	_addInVector(T &t, std::string nickClient );
+
+		template <typename T>
+		bool	_deleteInVector(T &t, std::string nickClient );
+
+		// For debugging
+		void	_printVectorStrings(std::vector<std::string> stringVector);
+
 	public:
-		// Channel( std::string channelName, std::string operatorNick );
-		// ~Channel( void );
+		Channel( std::string channelName, std::string operatorNick );
+		~Channel( void );
 
-		// //_channelName
-		// std::string		getChannelName( void ) const;
+		//_channelName
+		std::string		getChannelName( void ) const;
 
-		// //_inviteChannel
-		// bool			isInviteChannel( void ) const;
-		// void			setInviteChannel ( void );
-		// void			unsetInviteChannel ( void );
+		//_inviteChannel
+		bool			isInviteChannel( void ) const;
+		void			setInviteChannel ( void );
+		void			unsetInviteChannel ( void );
 
-		// // _topic
-		// std::string		getTopic( void ) const;
-		// void			setTopic( std::string topic );
+		// _topic
+		std::string		getTopic( void ) const;
+		void			setTopic( std::string topic );
 
-		// //_topicRestricted
-		// bool			isTopicRestricted( void ) const;
-		// void			setTopicRestricted( void );
-		// void			unsetTopicRestricted( void );
+		//_topicRestricted
+		bool			isTopicRestricted( void ) const;
+		void			setTopicRestricted( void );
+		void			unsetTopicRestricted( void );
 
-		// // _channelKey
-		// std::string		getChannelKey( void ) const;
-		// void			setChannelKey( std::string key );
+		// _channelKey
+		std::string		getChannelKey( void ) const;
+		void			setChannelKey( std::string key );
 
-		// // _userLimit
-		// bool			isUserLimitActived( void ) const;
-		// void			setUserLimitActived( void );
-		// void			unsetUserLimitActived( void );
+		// _userLimit
+		bool			isUserLimitActived( void ) const;
+		void			setUserLimitActived( void );
+		void			unsetUserLimitActived( void );
 
-		// // _userLimitNumber
-		// unsigned long	getUserLimitNumber( void ) const;
-		// void			setUserLimitNumber( unsigned long limit);
+		// _userLimitNumber
+		unsigned long	getUserLimitNumber( void ) const;
+		void			setUserLimitNumber( unsigned long limit);
 
-		// // _operators
-		// bool 			isOperator( std::string nickClient );
-		// void 			addOperator( std::string nickClient );
-		// void 			deleteOperator( std::string nickClient );
+		// _operators
+		bool 			isOperator( std::string nickClient );
+		void 			addOperator( std::string nickClient );
+		void 			deleteOperator( std::string nickClient );
 
-		// // _memberClients
-		// bool			isMember( std::string nickClient );
-		// void			addMember( std::string nickClient );
-		// void			deleteMember( std::string nickClient );
+		// _memberClients
+		bool			isMember( std::string nickClient );
+		void			addMember( std::string nickClient );
+		void			deleteMember( std::string nickClient );
 
-		// // _invitedClients
-		// bool			isInvited( std::string nickClient );
-		// void			addInvited( std::string nickClient );
-		// void			deleteInvited( std::string nickClient );
+		// _invitedClients
+		bool			isInvited( std::string nickClient );
+		void			addInvited( std::string nickClient );
+		void			deleteInvited( std::string nickClient );
+
+// For debugging
+		void		printChannelVars( void ); 
 };
+
+# include "Channel.tpp"
 
 #endif
