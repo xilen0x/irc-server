@@ -16,6 +16,7 @@ SRC_FILES = test/mainTest_3.cpp \
 	src/Channel.cpp \
 	src/Messageprocessing.cpp \
 	src/Server.cpp \
+	src/serverUtils.cpp \
 	src/commands/Ping.cpp
 
 # Archivos objeto

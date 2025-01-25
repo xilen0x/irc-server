@@ -21,9 +21,30 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	std::cout << "Client() => Set initial values" << std::endl;
 }
 
+Client::Client( Client const &src){ *this = src; }
+
+Client &Client::operator=( Client const &src )
+{
+	if (this != &src)
+	{
+		this->_fdClient = src._fdClient;	
+		this->_ipClient = src._ipClient;
+		this->_nick = src._nick;
+		this->_userName = src._userName;
+		this->_realName = src._realName;
+		this->_bufferInMessage = src._bufferInMessage;
+		this->_bufferOutResponse = src._bufferOutResponse;
+		this->_hasPass = src._hasPass;
+		this->_hasNick = src._hasNick;
+		this->_hasUser = src._hasUser;
+		this->_hasAuth = src._hasAuth;
+	}
+	return (*this);
+}
+
 Client::~Client( void )
 {
-	std::cout << "~Client() => TODO" << std::endl;
+	std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
 }
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }

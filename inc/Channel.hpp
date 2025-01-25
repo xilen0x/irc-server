@@ -40,6 +40,8 @@ class Channel
 
 	public:
 		Channel( std::string channelName, std::string operatorNick );
+		Channel( Channel const &src);
+		Channel &operator=( Channel const &src);
 		~Channel( void );
 
 		//_channelName

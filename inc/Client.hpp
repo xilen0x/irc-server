@@ -28,6 +28,8 @@ class Client
 	public:
 		Client( void );
 		Client( int fd, std::string ipClient );
+		Client( Client const &src );
+		Client &operator=( Client const &src );
 		~Client( void );
 
 		int			getFdClient( void ) const;

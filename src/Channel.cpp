@@ -30,9 +30,31 @@ Channel::Channel( std::string channelName, std::string operatorNick ) :_channelN
 	this->_operators.push_back(operatorNick);
 }
 
+Channel::Channel( Channel const &src){ *this = src; }
+
+Channel &Channel::operator=( Channel const &src)
+{
+	if (this != &src)
+	{
+		this->_channelName = src._channelName;
+		this->_inviteChannel = src._inviteChannel;
+		this->_topic = src._topic;
+		this->_topicRestricted = src._topicRestricted;
+		this->_channelKey = src._channelKey;
+		this->_hasUserLimit = src._hasUserLimit;
+		this->_userLimitNumber = src._userLimitNumber;
+
+		this->_operators = src._operators;
+		this->_memberClients = src._memberClients;
+		this->_invitedClients = src._invitedClients;
+	}
+	return (*this);
+
+}
+
 Channel::~Channel( void )
 {
-	std::cout << "~Channel => Clear vectors" << std::endl;
+	std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
