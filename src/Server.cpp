@@ -31,14 +31,12 @@ void Server::createSocket()
     // Configurar el socket como no bloqueante
 	if (fcntl(_fdServer, F_SETFL, O_NONBLOCK) == -1)
 		throw(std::runtime_error("Failed to set option (O_NONBLOCK) on socket"));
-	
+
     // Vincular el socket a la dirección y puerto especificados
     if (bind(_fdServer, reinterpret_cast<struct sockaddr*>(&socketAddress), sizeof(socketAddress)) == -1) {
         throw std::runtime_error("Failed to bind socket");
     }
-
     std::cout << "Socket created successfully." << std::endl;
-
 }
 
 //Function that listens for incoming connections.
@@ -118,24 +116,25 @@ void Server::clearClients(int fd, std::string msg)
         std::cout << msg;
     }
 
-    void Server::receiveData(int fd)
-    {
-        // Receive data from the client
-        char buffer[1024];
-        int bytesRead = recv(fd, buffer, sizeof(buffer), 0);
-        if (bytesRead == -1) {
-            throw std::runtime_error("Failed to receive data from client");
-        }
-        else if (bytesRead == 0) {
-            clearClients(fd, "Client disconnected\n");
-        }
-        else {
-            buffer[bytesRead] = '\0';
-            std::cout << "Received data: " << buffer << std::endl;
-        }
-
+void Server::receiveData(int fd)
+{
+    // Receive data from the client
+    char    buffer[1024];
+    int     bytesRead;
+        
+    bytesRead = recv(fd, buffer, sizeof(buffer), 0);
+    if (bytesRead == -1) {
+        throw std::runtime_error("Failed to receive data from client");
+    }
+    else if (bytesRead == 0) {
+        clearClients(fd, "Client disconnected\n");
+    }
+    else {
+        buffer[bytesRead] = '\0';
+        std::cout << "Received data: " << buffer << std::endl;
         
     }
+}
 
 //Function that loops to monitor events on the fd.
 void Server::loop()

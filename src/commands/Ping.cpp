@@ -5,10 +5,10 @@ Ping::~Ping( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Ping::execute( void )
-{
-	std::cout << "PING => TODO" << std::endl;
-}
+// void Ping::execute( void )
+// {
+// 	std::cout << "PING => TODO" << std::endl;
+// }
 
 void Ping::execute( std::string token )
 {

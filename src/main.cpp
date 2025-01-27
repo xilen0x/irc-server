@@ -12,14 +12,14 @@ int main(int argc, char const *argv[])
     if (argc == 3)
     {
         int port = std::atoi(argv[1]);
-        std::string serverName = "ircserv";
+        // std::string serverName = ;
         std::string password = argv[2];
 
         try
         {
-            if (!parseInput(serverName, password, port))
+            if (!parseInput(password, port))
             {
-                Server server(serverName, password, port);
+                Server server("ircserv", password, port);
                 server.runServer();
             }
         }

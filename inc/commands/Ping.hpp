@@ -9,7 +9,7 @@ class Ping : public ICommand
 	public:
 		~Ping( void );
 
-		void execute( void ); 		
+		//void execute( void ); 		
 		void execute( std::string );
 };
 

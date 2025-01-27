@@ -30,7 +30,7 @@ void	Messageprocessing::processMessage(std::string message)
 	
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
 	std::cout << "----- PING test -----" << std::endl;
-	this->_commands["PING"]->execute();
+	//this->_commands["PING"]->execute();
 	this->_commands["PING"]->execute(message);
 	std::cout << "----- end PING test -----" << std::endl;   
 }
