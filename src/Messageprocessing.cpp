@@ -1,6 +1,6 @@
 
 #include "Messageprocessing.hpp"
-
+# include <sstream>//
 #define CAP "CAP"
 #define INVITE "INVITE"
 #define JOIN "JOIN"
@@ -43,6 +43,19 @@ Messageprocessing::~Messageprocessing( void )
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
+std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
+{
+	std::vector<std::string> res;
+	std::istringstream stream(msg);
+	std::string s;
+	while (stream >> s)
+	{
+		res.push_back(s);
+		s.clear();
+	}
+	return (res);
+}
+
 void	Messageprocessing::processMessage(std::string message, int fd)
 {
 	// TODO
@@ -50,17 +63,23 @@ void	Messageprocessing::processMessage(std::string message, int fd)
 	// 1 - Parssing message
 	// 2 - Detect COMMAND
 	// 3 - Execute COMMAND
-	
+	(void)fd;
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
-	this->_commands[CAP]->execute(message, fd);
-	this->_commands[INVITE]->execute(message, fd);
-	this->_commands[JOIN]->execute(message, fd);
-	this->_commands[KICK]->execute(message, fd);
-	this->_commands[MODE]->execute(message, fd);
-	this->_commands[NICK]->execute(message, fd);
-	this->_commands[PASS]->execute(message, fd);
-	this->_commands[PING]->execute(message, fd);
-	this->_commands[QUIT]->execute(message, fd);
-	this->_commands[TOPIC]->execute(message, fd);
-	this->_commands[USER]->execute(message, fd);
+
+	std::vector<std::string> str = split_msg(message);
+	// if (_commands.find(uppercase(str[0])) != _commands.end())
+	// 	_commands[uppercase(str[0])]();
+/*
+	this->_commands[CAP]->execute(message);
+	this->_commands[INVITE]->execute(message);
+	this->_commands[JOIN]->execute(message);
+	this->_commands[KICK]->execute(message);
+	this->_commands[MODE]->execute(message);
+	this->_commands[NICK]->execute(message);
+	this->_commands[PASS]->execute(message);
+	this->_commands[PING]->execute(message);
+	this->_commands[QUIT]->execute(message);
+	this->_commands[TOPIC]->execute(message);
+	this->_commands[USER]->execute(message);
+*/
 }
