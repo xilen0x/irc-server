@@ -48,6 +48,10 @@
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
-		"ranges": "cpp"
+		"ranges": "cpp",
+		"csignal": "cpp",
+		"complex": "cpp",
+		"optional": "cpp",
+		"sstream": "cpp"
 	}
 }

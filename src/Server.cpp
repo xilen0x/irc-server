@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1) { }
 
@@ -61,6 +62,78 @@ void Server::fillPollfd()
 	std::cout << "Waiting for incoming connections..." << std::endl;
 }
 
+// Function to accept a new client connection
+void Server::acceptClient()
+{
+        struct sockaddr_in  clientAddress;
+        socklen_t           clientAddressSize;
+        int                 connectionSocket;
+        struct pollfd       clientPoll;
+        Client              newClient;
+
+        clientAddressSize = sizeof(clientAddress);
+        connectionSocket = accept(_fdServer, (struct sockaddr*)&clientAddress, &clientAddressSize);
+        if (connectionSocket == -1) {
+            throw std::runtime_error("Failed to accept new client");
+        }
+
+        // Configure the client socket as non-blocking
+        if (fcntl(connectionSocket, F_SETFL, O_NONBLOCK) == -1) {
+            throw std::runtime_error("Failed to set option (O_NONBLOCK) on client socket");
+        }
+
+        // Add the client to the list of monitored FDs
+        clientPoll.fd = connectionSocket;//
+        clientPoll.events = POLLIN;
+        clientPoll.revents = 0;
+
+        newClient.setFdClient(connectionSocket);
+        newClient.setIpClient(inet_ntoa(clientAddress.sin_addr));
+        _clients.push_back(newClient);
+        _fdsClients.push_back(clientPoll);
+        std::cout << "New client connected\n";
+}
+
+// Function to remove a client based on its file descriptor
+void Server::clearClients(int fd, std::string msg)
+    {
+        // Manual find-if loop to find the client based on fd
+        std::vector<struct pollfd>::iterator it = _fdsClients.begin();
+        for (; it != _fdsClients.end(); ++it) {
+            if (it->fd == fd) {
+                break;  // Found the client
+            }
+        }
+
+        // If found, erase the client from the list
+        if (it != _fdsClients.end()) {
+            _fdsClients.erase(it);
+        }
+        
+        // Close the socket of the client
+        close(fd);
+        std::cout << msg;
+    }
+
+    void Server::receiveData(int fd)
+    {
+        // Receive data from the client
+        char buffer[1024];
+        int bytesRead = recv(fd, buffer, sizeof(buffer), 0);
+        if (bytesRead == -1) {
+            throw std::runtime_error("Failed to receive data from client");
+        }
+        else if (bytesRead == 0) {
+            clearClients(fd, "Client disconnected\n");
+        }
+        else {
+            buffer[bytesRead] = '\0';
+            std::cout << "Received data: " << buffer << std::endl;
+        }
+
+        
+    }
+
 //Function that loops to monitor events on the fd.
 void Server::loop()
 {
@@ -114,14 +187,23 @@ void Server::runServer()
 	loop();
 	// clean();
 }
-
-Server::~Server( void )
-{
-	std::cout << "~Server => TODO" << std::endl;
-}
+ // void Server::clean()
+ // {
+ //     // Cerrar el socket y limpiar recursos
+ //     if (_fdServer != -1) {
+ //         close(_fdServer);
+ //         _fdServer = -1;
+ //     }
+ //     std::cout << "Server resources cleaned up." << std::endl;
+ // }
 
 //getters and setters
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
+
+Server::~Server( void )
+{
+	std::cout << "~Server => TODO" << std::endl;
+}
