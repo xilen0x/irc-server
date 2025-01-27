@@ -1,13 +1,13 @@
 
-#include "Pass.hpp"
+#include "Cap.hpp"
 
-Pass::~Pass( void ) {};
+Cap::~Cap( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Pass::execute( std::string msg )
+void Cap::execute( std::string msg )
 {
 	std::cout << "    ----" << std::endl;
-	std::cout << "PASS  => TODO with message " << msg << std::endl;
+	std::cout << "CAP  => TODO with message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }

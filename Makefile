@@ -16,8 +16,18 @@ SRC_FILES = src/main.cpp \
 			src/Messageprocessing.cpp \
 			src/Server.cpp \
 			src/serverUtils.cpp \
+			src/commands/Cap.cpp \
+			src/commands/Invite.cpp \
+			src/commands/Join.cpp \
+			src/commands/Kick.cpp \
+			src/commands/Mode.cpp \
+			src/commands/Nick.cpp \
 			src/commands/Pass.cpp \
-			src/commands/Ping.cpp
+			src/commands/Ping.cpp \
+			src/commands/Privmsg.cpp \
+			src/commands/Quit.cpp \
+			src/commands/Topic.cpp \
+			src/commands/User.cpp 
 
 HDR_FILES = inc/Client.hpp \
 			inc/Channel.hpp \
@@ -25,8 +35,18 @@ HDR_FILES = inc/Client.hpp \
 			inc/Messageprocessing.hpp \
 			inc/Server.hpp \
 			inc/serverUtils.hpp \
+			inc/commands/Cap.hpp \
+			inc/commands/Invite.hpp \
+			inc/commands/Join.hpp \
+			inc/commands/Kick.hpp \
+			inc/commands/Mode.hpp \
+			inc/commands/Nick.hpp \
 			inc/commands/Pass.hpp \
 			inc/commands/Ping.hpp \
+			inc/commands/Privmsg.hpp \
+			inc/commands/Quit.hpp \
+			inc/commands/Topic.hpp \
+			inc/commands/User.hpp \
 			inc/commands/ICommand.hpp
 
 # Archivos objeto

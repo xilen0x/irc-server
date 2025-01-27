@@ -5,8 +5,18 @@
 # include <iostream>
 # include <map>
 # include "ICommand.hpp"
+# include "Cap.hpp"
+# include "Invite.hpp"
+# include "Join.hpp"
+# include "Kick.hpp"
+# include "Mode.hpp"
+# include "Nick.hpp"
 # include "Pass.hpp"
 # include "Ping.hpp"
+# include "Privmsg.hpp"
+# include "Quit.hpp"
+# include "Topic.hpp"
+# include "User.hpp"
 
 class Messageprocessing
 {

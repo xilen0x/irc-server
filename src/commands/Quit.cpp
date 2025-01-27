@@ -1,13 +1,13 @@
 
-#include "Pass.hpp"
+#include "Quit.hpp"
 
-Pass::~Pass( void ) {};
+Quit::~Quit( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Pass::execute( std::string msg )
+void Quit::execute( std::string msg )
 {
 	std::cout << "    ----" << std::endl;
-	std::cout << "PASS  => TODO with message " << msg << std::endl;
+	std::cout << "QUIT  => TODO with message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }

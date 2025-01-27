@@ -1,13 +1,13 @@
 
-#include "Pass.hpp"
+#include "Kick.hpp"
 
-Pass::~Pass( void ) {};
+Kick::~Kick( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Pass::execute( std::string msg )
+void Kick::execute( std::string msg )
 {
 	std::cout << "    ----" << std::endl;
-	std::cout << "PASS  => TODO with message " << msg << std::endl;
+	std::cout << "KICK  => TODO with message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }

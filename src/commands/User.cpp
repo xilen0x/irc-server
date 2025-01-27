@@ -1,13 +1,13 @@
 
-#include "Pass.hpp"
+#include "User.hpp"
 
-Pass::~Pass( void ) {};
+User::~User( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Pass::execute( std::string msg )
+void User::execute( std::string msg )
 {
 	std::cout << "    ----" << std::endl;
-	std::cout << "PASS  => TODO with message " << msg << std::endl;
+	std::cout << "USER  => TODO with message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }

@@ -1,13 +1,13 @@
 
-#include "Pass.hpp"
+#include "Join.hpp"
 
-Pass::~Pass( void ) {};
+Join::~Join( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Pass::execute( std::string msg )
+void Join::execute( std::string msg )
 {
 	std::cout << "    ----" << std::endl;
-	std::cout << "PASS  => TODO with message " << msg << std::endl;
+	std::cout << "JOIN  => TODO with message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }
