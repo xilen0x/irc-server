@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef QUIT_HPP
+# define QUIT_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Quit : public ICommand
 {
 	public:
-		~Ping( void );
+		~Quit( void );
 
 		void execute( std::string & , int );
 };

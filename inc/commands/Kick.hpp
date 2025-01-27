@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef KICK_HPP
+# define KICK_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Kick : public ICommand
 {
 	public:
-		~Ping( void );
+		~Kick( void );
 
 		void execute( std::string & , int );
 };

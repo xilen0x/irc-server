@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
+#include "Messageprocessing.hpp"
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
 {
@@ -116,12 +117,13 @@ void Server::clearClients(int fd, std::string msg)
         std::cout << msg;
     }
 
+// Receive data from the client
 void Server::receiveData(int fd)
 {
-    // Receive data from the client
-    char    buffer[1024];
-    int     bytesRead;
-        
+    char                buffer[1024];
+    int                 bytesRead;
+    Messageprocessing   messageProcesing;        
+    
     bytesRead = recv(fd, buffer, sizeof(buffer), 0);
     if (bytesRead == -1) {
         throw std::runtime_error("Failed to receive data from client");
@@ -132,7 +134,7 @@ void Server::receiveData(int fd)
     else {
         buffer[bytesRead] = '\0';
         std::cout << "Received data: " << buffer << std::endl;
-        
+        messageProcesing.processMessage(buffer, fd);
     }
 }
 

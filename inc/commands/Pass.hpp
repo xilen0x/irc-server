@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef PASS_HPP
+# define PASS_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Pass : public ICommand
 {
 	public:
-		~Ping( void );
+		~Pass( void );
 
 		void execute( std::string & , int );
 };

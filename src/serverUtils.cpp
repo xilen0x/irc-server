@@ -1,3 +1,6 @@
+
+#include "Messageprocessing.hpp"
+
 #include "Server.hpp"
 
 int parseInput(std::string password, int port)

@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef PRIVMSG_HPP
+# define PRIVMSG_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Privmsg : public ICommand
 {
 	public:
-		~Ping( void );
+		~Privmsg( void );
 
 		void execute( std::string & , int );
 };
