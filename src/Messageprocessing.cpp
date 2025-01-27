@@ -56,7 +56,7 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	return (res);
 }
 
-void	Messageprocessing::processMessage(std::string message)
+void	Messageprocessing::processMessage(std::string message, int fd)
 {
 	// TODO
 	//

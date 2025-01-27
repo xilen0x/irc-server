@@ -4,6 +4,8 @@
 
 # include <iostream>
 # include <map>
+# include <vector>
+# include <sstream>
 # include "ICommand.hpp"
 # include "Cap.hpp"
 # include "Invite.hpp"
@@ -27,7 +29,8 @@ class Messageprocessing
 		Messageprocessing( void );
 		~Messageprocessing( void );
 
-		void	processMessage(std::string message); 
+		void	processMessage(std::string message, int fd);
+		std::vector<std::string> Messageprocessing::split_msg(std::string &msg);
 };
 
 #endif
