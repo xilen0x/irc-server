@@ -9,7 +9,7 @@ class Privmsg : public ICommand
 	public:
 		~Privmsg( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif

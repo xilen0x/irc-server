@@ -9,7 +9,7 @@ class Mode : public ICommand
 	public:
 		~Mode( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif

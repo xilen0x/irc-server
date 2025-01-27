@@ -9,7 +9,7 @@ class Join : public ICommand
 	public:
 		~Join( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif

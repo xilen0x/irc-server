@@ -9,7 +9,7 @@ class Quit : public ICommand
 	public:
 		~Quit( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif

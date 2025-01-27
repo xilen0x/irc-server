@@ -9,7 +9,7 @@ class Kick : public ICommand
 	public:
 		~Kick( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif

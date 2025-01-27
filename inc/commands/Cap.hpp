@@ -9,7 +9,7 @@ class Cap : public ICommand
 	public:
 		~Cap( void );
 
-		void execute( std::string );
+		void execute( std::string & , int );
 };
 
 #endif
