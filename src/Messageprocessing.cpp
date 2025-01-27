@@ -1,12 +1,17 @@
 
 #include "Messageprocessing.hpp"
 
+#define PASS "PASS"
+#define PING "PING"
+
+
 // Public
 
 Messageprocessing::Messageprocessing( void )
 {
 	std::cout << "Messageprocessing => Creating _command Map" << std::endl;
-	this->_commands["PING"] = new Ping();
+	this->_commands[PASS] = new Pass();
+	this->_commands[PING] = new Ping();
 }
 
 Messageprocessing::~Messageprocessing( void )
@@ -30,7 +35,6 @@ void	Messageprocessing::processMessage(std::string message)
 	
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
 	std::cout << "----- PING test -----" << std::endl;
-	this->_commands["PING"]->execute();
-	this->_commands["PING"]->execute(message);
+	this->_commands[PING]->execute(message);
 	std::cout << "----- end PING test -----" << std::endl;   
 }

@@ -16,6 +16,7 @@ SRC_FILES = src/main.cpp \
 			src/Messageprocessing.cpp \
 			src/Server.cpp \
 			src/serverUtils.cpp \
+			src/commands/Pass.cpp \
 			src/commands/Ping.cpp
 
 HDR_FILES = inc/Client.hpp \
@@ -24,6 +25,7 @@ HDR_FILES = inc/Client.hpp \
 			inc/Messageprocessing.hpp \
 			inc/Server.hpp \
 			inc/serverUtils.hpp \
+			inc/commands/Pass.hpp \
 			inc/commands/Ping.hpp \
 			inc/commands/ICommand.hpp
 

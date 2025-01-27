@@ -1,3 +1,6 @@
+
+#include "Messageprocessing.hpp"
+
 #include "Server.hpp"
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 
@@ -56,6 +59,8 @@
 
     void Server::receiveData(int fd)
     {
+		Messageprocessing	messageProcesing;
+
         // Receive data from the client
         char buffer[1024];
         int bytesRead = recv(fd, buffer, sizeof(buffer), 0);
@@ -68,6 +73,9 @@
         else {
             buffer[bytesRead] = '\0';
             std::cout << "Received data: " << buffer << std::endl;
+
+			messageProcesing.processMessage(buffer);
+
         }
 
         

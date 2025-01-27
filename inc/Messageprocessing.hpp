@@ -5,6 +5,7 @@
 # include <iostream>
 # include <map>
 # include "ICommand.hpp"
+# include "Pass.hpp"
 # include "Ping.hpp"
 
 class Messageprocessing
