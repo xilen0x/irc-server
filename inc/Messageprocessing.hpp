@@ -6,6 +6,8 @@
 # include <map>
 # include <vector>
 # include <sstream>
+# include <algorithm>
+# include <cctype>
 # include "ICommand.hpp"
 # include "Cap.hpp"
 # include "Invite.hpp"
@@ -30,7 +32,7 @@ class Messageprocessing
 		~Messageprocessing( void );
 
 		void	processMessage(std::string message, int fd);
-		std::vector<std::string> Messageprocessing::split_msg(std::string &msg);
+		std::vector<std::string> split_msg(std::string &msg);
 };
 
 #endif

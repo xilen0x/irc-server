@@ -56,6 +56,17 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	return (res);
 }
 
+static char to_upper(char c)
+{
+	return (std::toupper(static_cast<unsigned char>(c)));
+}
+
+static std::string uppercase(std::string &s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), to_upper);
+	return (s);
+}
+
 void	Messageprocessing::processMessage(std::string message, int fd)
 {
 	// TODO
@@ -67,8 +78,8 @@ void	Messageprocessing::processMessage(std::string message, int fd)
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
 
 	std::vector<std::string> str = split_msg(message);
-	if (_commands.find(uppercase(str[0])) != _commands.end())
-		_commands[uppercase(str[0])]();
+	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())
+		this->_commands[uppercase(str[0])]->execute(message, fd);
 /*
 	this->_commands[CAP]->execute(message);
 	this->_commands[INVITE]->execute(message);
