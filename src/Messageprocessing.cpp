@@ -13,6 +13,7 @@
 #define TOPIC "TOPIC"
 #define USER "USER"
 #define QUIT "QUIT"
+#define TEST "TEST"
 
 // Public
 Messageprocessing::Messageprocessing( void )
@@ -63,23 +64,67 @@ void	Messageprocessing::processMessage(std::string message, int fd)
 	// 1 - Parssing message
 	// 2 - Detect COMMAND
 	// 3 - Execute COMMAND
-	(void)fd;
+	
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
 
 	std::vector<std::string> str = split_msg(message);
 	// if (_commands.find(uppercase(str[0])) != _commands.end())
 	// 	_commands[uppercase(str[0])]();
-/*
-	this->_commands[CAP]->execute(message);
-	this->_commands[INVITE]->execute(message);
-	this->_commands[JOIN]->execute(message);
-	this->_commands[KICK]->execute(message);
-	this->_commands[MODE]->execute(message);
-	this->_commands[NICK]->execute(message);
-	this->_commands[PASS]->execute(message);
-	this->_commands[PING]->execute(message);
-	this->_commands[QUIT]->execute(message);
-	this->_commands[TOPIC]->execute(message);
-	this->_commands[USER]->execute(message);
-*/
+	if (str[0] == TEST)
+	{
+		this->_commands[TEST]->execute(message, fd);
+	}
+	else if (str[0] == CAP)
+	{
+		this->_commands[CAP]->execute(message, fd);
+	}
+	else if (str[0] == INVITE)
+	{
+		this->_commands[INVITE]->execute(message, fd);
+	}
+	else if (str[0] == JOIN)
+	{
+		this->_commands[JOIN]->execute(message, fd);
+	}
+	else if (str[0] == KICK)
+	{
+		this->_commands[KICK]->execute(message, fd);
+	}
+	else if (str[0] == MODE)
+	{
+		this->_commands[MODE]->execute(message, fd);
+	}
+	else if (str[0] == NICK)
+	{
+		this->_commands[NICK]->execute(message, fd);
+	}
+	else if (str[0] == PASS)
+	{
+		this->_commands[PASS]->execute(message, fd);
+	}
+	else if (str[0] == PING)
+	{
+		this->_commands[PING]->execute(message, fd);
+	}
+	else if (str[0] == PRIVMSG)
+	{
+		this->_commands[PRIVMSG]->execute(message, fd);
+	}
+	else if (str[0] == QUIT)
+	{
+		this->_commands[QUIT]->execute(message, fd);
+	}
+	else if (str[0] == TOPIC)
+	{
+		this->_commands[TOPIC]->execute(message, fd);
+	}
+	else if (str[0] == USER)
+	{
+		this->_commands[USER]->execute(message, fd);
+	}
+	else
+	{
+		std::cout << "Command not found" << std::endl;
+	}
+	
 }
