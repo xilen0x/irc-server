@@ -1,3 +1,7 @@
+#include <iostream>
+#include "Channel.hpp"
+#include "Client.hpp"
+#include "Messageprocessing.hpp"
 #include "Server.hpp"
 
 int main(int argc, char const *argv[])

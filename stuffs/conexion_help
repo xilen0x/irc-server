@@ -1,6 +1,0 @@
-EJ. DE CONEXION POR CLIENTE IRSSI
-irssi -c 127.0.0.1 -p 5555 -n nickname -w password
-
-EJ. DE CONEXION POR CLIENTE NC
-nc 127.0.0.1 5555
-PASS password
