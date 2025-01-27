@@ -43,6 +43,19 @@ Messageprocessing::~Messageprocessing( void )
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
+std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
+{
+	std::vector<std::string> res;
+	std::istringstream stream(msg);
+	std::string s;
+	while (stream >> s)
+	{
+		res.push_back(s);
+		s.clear();
+	}
+	return (res);
+}
+
 void	Messageprocessing::processMessage(std::string message)
 {
 	// TODO
@@ -52,6 +65,11 @@ void	Messageprocessing::processMessage(std::string message)
 	// 3 - Execute COMMAND
 	
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
+
+	std::vector<std::string> str = split_msg(message);
+	if (_commands.find(uppercase(str[0])) != _commands.end())
+		_commands[uppercase(str[0])]();
+/*
 	this->_commands[CAP]->execute(message);
 	this->_commands[INVITE]->execute(message);
 	this->_commands[JOIN]->execute(message);
@@ -63,4 +81,5 @@ void	Messageprocessing::processMessage(std::string message)
 	this->_commands[QUIT]->execute(message);
 	this->_commands[TOPIC]->execute(message);
 	this->_commands[USER]->execute(message);
+*/
 }
