@@ -53,6 +53,7 @@ class Server
 		void		addChannel( Channel newChannel );  
 
 		void runServer(void);
+		void sendResp(std::string resp, int fd);
 		~Server();
 };
 
