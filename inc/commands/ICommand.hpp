@@ -2,6 +2,7 @@
 # define ICOMMAND_HPP
 
 # include "replies.hpp"
+# include "Server.hpp"
 
 class ICommand
 {
@@ -9,7 +10,8 @@ class ICommand
 		virtual	~ICommand( void ) {};
 
 //		virtual void execute( void ) = 0;
-		virtual void execute( std::string &, int ) = 0;
+		// virtual void execute( std::string &, int ) = 0;
+		virtual void execute( Server*, std::string &, int ) = 0;
 };
 
 #endif

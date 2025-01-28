@@ -9,7 +9,8 @@ class Invite : public ICommand
 	public:
 		~Invite( void );
 
-		void execute( std::string & , int );
+		// void execute( std::string & , int );
+		void execute( Server*, std::string &, int );
 };
 
 #endif

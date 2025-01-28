@@ -12,11 +12,12 @@ void Ping::execute( void )
 }
 */
 
-void Ping::execute( std::string &token, int fd )
+void Ping::execute( Server* server, std::string &msg , int fd)
 {
 	(void)fd;
+	(void)server;
+
 	std::cout << "    ----" << std::endl;
-	std::cout << "PING responde en la siguiente linea con:" << std::endl;
-	std::cout << PONG(token) << std::endl;
+	std::cout << "PING  => TODO wit message " << msg << std::endl;
 	std::cout << "    ----" << std::endl;
 }

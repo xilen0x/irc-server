@@ -44,7 +44,7 @@ Client &Client::operator=( Client const &src )
 
 Client::~Client( void )
 {
-	std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
+	// std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
 }
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
