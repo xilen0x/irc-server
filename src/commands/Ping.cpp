@@ -12,8 +12,9 @@ void Ping::execute( void )
 }
 */
 
-void Ping::execute( std::string token )
+void Ping::execute( std::string &token, int fd )
 {
+	(void)fd;
 	std::cout << "    ----" << std::endl;
 	std::cout << "PING responde en la siguiente linea con:" << std::endl;
 	std::cout << PONG(token) << std::endl;

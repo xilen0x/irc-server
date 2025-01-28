@@ -17,6 +17,8 @@
 # include "Quit.hpp"
 # include "Topic.hpp"
 # include "User.hpp"
+# include "Test.hpp"
+# include <vector>
 
 class Messageprocessing
 {
@@ -27,7 +29,8 @@ class Messageprocessing
 		Messageprocessing( void );
 		~Messageprocessing( void );
 
-		void	processMessage(std::string message); 
+		void	processMessage(std::string message, int fd);
+		std::vector<std::string> split_msg(std::string &msg);
 };
 
 #endif

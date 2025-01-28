@@ -1,4 +1,6 @@
 #include "Server.hpp"
+#include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
+#include "Messageprocessing.hpp"
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
 {
@@ -30,14 +32,12 @@ void Server::createSocket()
     // Configurar el socket como no bloqueante
 	if (fcntl(_fdServer, F_SETFL, O_NONBLOCK) == -1)
 		throw(std::runtime_error("Failed to set option (O_NONBLOCK) on socket"));
-	
+
     // Vincular el socket a la dirección y puerto especificados
     if (bind(_fdServer, reinterpret_cast<struct sockaddr*>(&socketAddress), sizeof(socketAddress)) == -1) {
         throw std::runtime_error("Failed to bind socket");
     }
-
     std::cout << "Socket created successfully." << std::endl;
-
 }
 
 //Function that listens for incoming connections.
@@ -62,6 +62,80 @@ void Server::fillPollfd()
     _fdsClients.push_back(serPoll);//Agrega el pollfd al vector de monitoreo.
     std::cout << "Server successfully connected on port " << _port << "." << std::endl;
 	std::cout << "Waiting for incoming connections..." << std::endl;
+}
+
+// Function to accept a new client connection
+void Server::acceptClient()
+{
+        struct sockaddr_in  clientAddress;
+        socklen_t           clientAddressSize;
+        int                 connectionSocket;
+        struct pollfd       clientPoll;
+        Client              newClient;
+
+        clientAddressSize = sizeof(clientAddress);
+        connectionSocket = accept(_fdServer, (struct sockaddr*)&clientAddress, &clientAddressSize);
+        if (connectionSocket == -1) {
+            throw std::runtime_error("Failed to accept new client");
+        }
+
+        // Configure the client socket as non-blocking
+        if (fcntl(connectionSocket, F_SETFL, O_NONBLOCK) == -1) {
+            throw std::runtime_error("Failed to set option (O_NONBLOCK) on client socket");
+        }
+
+        // Add the client to the list of monitored FDs
+        clientPoll.fd = connectionSocket;//
+        clientPoll.events = POLLIN;
+        clientPoll.revents = 0;
+
+        newClient.setFdClient(connectionSocket);
+        newClient.setIpClient(inet_ntoa(clientAddress.sin_addr));
+        _clients.push_back(newClient);
+        _fdsClients.push_back(clientPoll);
+        std::cout << "New client connected\n";
+}
+
+// Function to remove a client based on its file descriptor
+void Server::clearClients(int fd, std::string msg)
+    {
+        // Manual find-if loop to find the client based on fd
+        std::vector<struct pollfd>::iterator it = _fdsClients.begin();
+        for (; it != _fdsClients.end(); ++it) {
+            if (it->fd == fd) {
+                break;  // Found the client
+            }
+        }
+
+        // If found, erase the client from the list
+        if (it != _fdsClients.end()) {
+            _fdsClients.erase(it);
+        }
+        
+        // Close the socket of the client
+        close(fd);
+        std::cout << msg;
+    }
+
+// Receive data from the client
+void Server::receiveData(int fd)
+{
+    char                buffer[1024];
+    int                 bytesRead;
+    Messageprocessing   messageProcesing;        
+    
+    bytesRead = recv(fd, buffer, sizeof(buffer), 0);
+    if (bytesRead == -1) {
+        throw std::runtime_error("Failed to receive data from client");
+    }
+    else if (bytesRead == 0) {
+        clearClients(fd, "Client disconnected\n");
+    }
+    else {
+        buffer[bytesRead] = '\0';
+        std::cout << "Received data: " << buffer << std::endl;
+        messageProcesing.processMessage(buffer, fd);
+    }
 }
 
 //Function that loops to monitor events on the fd.
