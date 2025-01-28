@@ -4,6 +4,10 @@
 
 # include <iostream>
 # include <map>
+# include <vector>
+# include <sstream>
+# include <algorithm>
+# include <cctype>
 # include "ICommand.hpp"
 # include "Cap.hpp"
 # include "Invite.hpp"
