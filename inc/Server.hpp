@@ -29,21 +29,11 @@ class Server
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
 
-		//createSocket
         void createSocket();
-
-		//listenSocket
         void listenSocket();
+		void fillPollfd();
+		void loop();
 		
-		//llenar estruct pollfd 
-        void fillPollfd();
-		
-		// loop	
-        void loop();
-		
-		// //clean
-        // void clean();
-
 		void acceptClient();
 		void receiveData(int fd);
 		void clearClients(int fd, std::string msg);
@@ -52,17 +42,17 @@ class Server
 
 		Server(std::string serverName, std::string password, int port);
 
-		//getters and setters
 		std::string	getServerName( void ) const;
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
 		std::vector<Channel> getChannels( void ) const;
 		std::vector<Client> getClients( void ) const;
+
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
 
-		void runServer();
+		void runServer(void);
 		~Server();
 };
 

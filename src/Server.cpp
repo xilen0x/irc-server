@@ -4,7 +4,7 @@
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
 {
-	std::cout << "Server() => Set initial values" << std::endl;
+	// std::cout << "Server() => Set initial values" << std::endl;
 }
 
 //Function that creates the socket(_fdServer) and configures it.
@@ -189,36 +189,26 @@ void Server::runServer()
 	listenSocket();
 	fillPollfd();
 	loop();
-	// clean();
 }
 
 Server::~Server( void )
 {
 	// TODO : Close connections if are open 
 	
-	std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
+	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
 	this->_fdsClients.clear();
 	this->_clients.clear();
 	this->_channels.clear();
-	std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
+	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
 }
 
-//getters and setters
+//-----------------------------Getters & Setters-----------------------------//
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
+std::vector<Channel> Server::getChannels( void ) const{ return (this->_channels); }
+std::vector<Client> Server::getClients( void ) const { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
-
-
-std::vector<Channel> Server::getChannels( void ) const
-{
-    return (this->_channels);
-}
-
-std::vector<Client> Server::getClients( void ) const
-{
-    return (this->_clients);
-}
