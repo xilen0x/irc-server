@@ -8,5 +8,5 @@ class Test : public ICommand
 	public:
 		~Test( void );
 
-		void execute( std::string& msg, int fd);
+		void execute( std::string& , int );
 };
