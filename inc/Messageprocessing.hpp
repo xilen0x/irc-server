@@ -33,7 +33,8 @@ class Messageprocessing
 		Messageprocessing( void );
 		~Messageprocessing( void );
 
-		void	processMessage(std::string message, int fd);
+		// void	processMessage(std::string message, int fd);
+		void processMessage(Server* server, std::string message, int fd);
 		std::vector<std::string> split_msg(std::string &msg);
 };
 

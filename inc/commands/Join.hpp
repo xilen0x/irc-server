@@ -4,12 +4,14 @@
 # include <iostream>
 # include "ICommand.hpp"
 
+class Server;
+
 class Join : public ICommand
 {
 	public:
 		~Join( void );
 
-		void execute( std::string & , int );
+		void execute(Server* server, std::string &msg , int fd);
 };
 
 #endif

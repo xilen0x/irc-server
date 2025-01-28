@@ -8,8 +8,8 @@ class Mode : public ICommand
 {
 	public:
 		~Mode( void );
-
-		void execute( std::string & , int );
+		// void execute( std::string & , int );
+		void execute( Server*, std::string &, int );
 };
 
 #endif

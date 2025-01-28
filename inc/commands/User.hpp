@@ -9,7 +9,8 @@ class User : public ICommand
 	public:
 		~User( void );
 
-		void execute( std::string & , int );
+		// void execute( std::string & , int );
+		void execute( Server*, std::string &, int );
 };
 
 #endif

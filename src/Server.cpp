@@ -134,7 +134,7 @@ void Server::receiveData(int fd)
     else {
         buffer[bytesRead] = '\0';
         std::cout << "Received data: " << buffer << std::endl;
-        messageProcesing.processMessage(buffer, fd);
+        messageProcesing.processMessage(this, buffer, fd);
     }
 }
 
@@ -211,3 +211,14 @@ int			Server::getFdServer( void ) const { return (this->_fdServer); };
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
+
+
+std::vector<Channel> Server::getChannels( void ) const
+{
+    return (this->_channels);
+}
+
+std::vector<Client> Server::getClients( void ) const
+{
+    return (this->_clients);
+}
