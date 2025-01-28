@@ -122,7 +122,7 @@ void Server::receiveData(int fd)
 {
     char                buffer[1024];
     int                 bytesRead;
-    Messageprocessing   messageProcesing;        
+    Messageprocessing   messageProcesing;
     
     bytesRead = recv(fd, buffer, sizeof(buffer), 0);
     if (bytesRead == -1) {

@@ -37,7 +37,7 @@ Messageprocessing::Messageprocessing( void )
 
 Messageprocessing::~Messageprocessing( void )
 {
-	std::cout << "~Messageprocessing => Delete _commands" << std::endl;
+	//std::cout << "~Messageprocessing => Delete _commands" << std::endl;
 	for (std::map<std::string, ICommand*>::iterator it = _commands.begin(); it != _commands.end(); ++it)
     {
         delete it->second;
@@ -59,6 +59,17 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	return (res);
 }
 
+static char to_upper(char c)
+{
+	return (std::toupper(static_cast<unsigned char>(c)));
+}
+
+static std::string uppercase(std::string &s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), to_upper);
+	return (s);
+}
+
 void	Messageprocessing::processMessage(std::string message, int fd)
 {
 	// TODO
@@ -70,19 +81,7 @@ void	Messageprocessing::processMessage(std::string message, int fd)
 	std::cout << "processMessage(std:string message) with message = " << message << std::endl;
 
 	std::vector<std::string> str = split_msg(message);
-	// if (_commands.find(uppercase(str[0])) != _commands.end())
-	// 	_commands[uppercase(str[0])]();
-/*
-	this->_commands[CAP]->execute(message);
-	this->_commands[INVITE]->execute(message);
-	this->_commands[JOIN]->execute(message);
-	this->_commands[KICK]->execute(message);
-	this->_commands[MODE]->execute(message);
-	this->_commands[NICK]->execute(message);
-	this->_commands[PASS]->execute(message);
-	this->_commands[PING]->execute(message);
-	this->_commands[QUIT]->execute(message);
-	this->_commands[TOPIC]->execute(message);
-	this->_commands[USER]->execute(message);
-*/
+	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())
+		this->_commands[uppercase(str[0])]->execute(message, fd);
+
 }
