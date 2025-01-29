@@ -133,7 +133,7 @@ void Server::receiveData(int fd)
     }
     else {
         buffer[bytesRead] = '\0';
-        std::cout << "Received data: " << buffer << std::endl;
+        std::cout << "Received data: " << buffer;
         messageProcesing.processMessage(this, buffer, fd);
     }
 }

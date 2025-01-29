@@ -14,45 +14,31 @@ void Server::sendResp(std::string resp, int fd)
 
 void Pass::execute( Server* server, std::string &msg , int fd)
 {
-	const std::vector<Client>& clients = server->getClients();
+	std::vector<Client>clients = server->getClients();
 
-	for (size_t i = 0; i < clients.size(); i++) {
-		std::cout << "Client: " << i << std::endl;
-		std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
-    	// std::cout << "getNick " << ": " << clients[i].getNick() << std::endl;
-		// std::cout << "getUserName " << ": " << clients[i].getUserName() << std::endl;
-		// std::cout << "getRealName " << ": " << clients[i].getRealName() << std::endl;
-		// std::cout << "getIpClient " << ": " << clients[i].getIpClient() << std::endl;
-		// std::cout << "getFdClient " << ": " << clients[i].getFdClient() << std::endl;
-		// std::cout << "getHasNick " << ": " << clients[i].getHasNick() << std::endl;
-		// std::cout << "getHasUser " << ": " << clients[i].getHasUser() << std::endl;
-		// std::cout << "getHasAuth " << ": " << clients[i].getHasAuth() << std::endl;
-		// std::cout << "getBufferInMessage " << ": " << clients[i].getBufferInMessage() << std::endl;
-		// std::cout << "getBufferOutResponse " << ": " << clients[i].getBufferOutResponse() << std::endl;
-	}
-
-	// std::vector<Client> clients = server->getClients();
-	// if (fd >= 0 && fd < static_cast<int>(clients.size()))
+	// for (size_t i = 0; i < clients.size(); i++) //delete later this for loop
 	// {
-	// 	std::cout << YEL << "Has pass: " << clients[fd].getHasPass() << RES << std::endl;
-	// } else {
-	// 	std::cerr << "Error: índice fd fuera de rango en getClients()" << std::endl;
+	// 	std::cout << "Client: " << i << std::endl;
+	// 	std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
 	// }
-	
-	std::string password = msg.substr(5);
-	
-	// std::cout << "Password: " << password << std::endl;
-	// std::cout << "Server password: " << server->getPassword() << std::endl;
-	//remve the /r/n from the password
-	password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());
-	password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());
+	// std::cout << "+++++++++++++ msg: " << msg << std::endl;
+	std::string password = msg.substr(5); //msg.substr(5) means from the 6th character to the end
+	if (msg.size() < 6)
+	{
+		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), password), fd);
+		return;
+	}
+	password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());//move to a function
+	password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());//move to a function
 	if (password == server->getPassword())
 	{
-		std::cout << "Correct password!" << std::endl;
-			for (size_t i = 0; i < clients.size(); i++) {
-		std::cout << "Client: " << i << std::endl;
-		std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
-	}
+		std::cout << YEL << "Correct password!" << RES << std::endl;
+		
+		size_t i = 0;
+		std::cout << "*********************** Client: " << i << std::endl;//delete later
+		std::cout << "Has pass(before set): " << ": " << clients[i].getHasPass() << std::endl;//delete later
+		clients[i].setHasPass();
+		std::cout << "Has pass(after set): " << ": " << clients[i].getHasPass() << std::endl;//delete later
 	}
 	else
 	{

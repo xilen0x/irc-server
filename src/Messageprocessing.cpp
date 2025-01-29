@@ -19,7 +19,7 @@
 // Public
 Messageprocessing::Messageprocessing( void )
 {
-	std::cout << "Messageprocessing => Creating _command Map" << std::endl;
+	// std::cout << "Messageprocessing => Creating _command Map" << std::endl;
 	this->_commands[CAP] = new Cap();
 	this->_commands[INVITE] = new Invite();
 	this->_commands[JOIN] = new Join();
@@ -89,6 +89,11 @@ static std::string uppercase(std::string &s)
 void Messageprocessing::processMessage(Server* server, std::string message, int fd)
 {
 	std::vector<std::string> str = split_msg(message);
+	if (str.empty())
+	{
+		std::cout << YEL << "Empty message" << RES << std::endl;//silence this later
+		return ;
+	}
 	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())
 		this->_commands[uppercase(str[0])]->execute(server, message, fd);
 }
