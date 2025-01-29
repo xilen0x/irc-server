@@ -85,7 +85,7 @@ void Server::acceptClient()
         }
 
         // Add the client to the list of monitored FDs
-        clientPoll.fd = connectionSocket;//
+        clientPoll.fd = connectionSocket;
         clientPoll.events = POLLIN;
         clientPoll.revents = 0;
 
@@ -213,8 +213,8 @@ std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
-std::vector<Channel> Server::getChannels( void ) const{ return (this->_channels); }
-std::vector<Client> Server::getClients( void ) const { return (this->_clients); }
+std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
+std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }

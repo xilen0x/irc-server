@@ -46,8 +46,8 @@ class Server
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
-		std::vector<Channel> getChannels( void ) const;
-		std::vector<Client> getClients( void ) const;
+		std::vector<Channel> getChannels( void );
+		std::vector<Client> getClients( void );
 
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
