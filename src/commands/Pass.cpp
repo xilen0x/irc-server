@@ -5,12 +5,6 @@ Pass::~Pass( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-void Server::sendResp(std::string resp, int fd)
-{
-	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << "Response failed!" << std::endl;
-}
-
 void Pass::execute( Server* server, std::string &msg , int fd)
 {
 	std::string password = msg.substr(5);

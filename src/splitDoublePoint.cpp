@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include "Server.hpp"
 
 /*
  * If ´:' is in 'msg'
