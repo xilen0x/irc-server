@@ -2,12 +2,12 @@
 #ifndef MESSAGEPROCESSING_HPP
 # define MESSAGEPROCESSING_HPP
 
+# include <algorithm>
+# include <cctype>
 # include <iostream>
 # include <map>
 # include <vector>
 # include <sstream>
-# include <algorithm>
-# include <cctype>
 # include "ICommand.hpp"
 # include "Cap.hpp"
 # include "Invite.hpp"
@@ -22,7 +22,6 @@
 # include "Topic.hpp"
 # include "User.hpp"
 # include "Test.hpp"
-# include <vector>
 
 class Messageprocessing
 {

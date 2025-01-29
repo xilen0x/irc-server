@@ -25,7 +25,8 @@
 
 // MESSAGES SERVER TO CLIENT
 
-#define MSG_QUIT_CHANNEL(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
+#define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
+#define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
 
 // ERRORS
 
