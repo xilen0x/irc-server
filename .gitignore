@@ -35,3 +35,6 @@ ircserv
 # stuffs
 stuffs/
 stuffs/repos_irc
+
+#scripts
+git_pull_branches.sh
