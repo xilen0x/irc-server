@@ -14,6 +14,31 @@ void Server::sendResp(std::string resp, int fd)
 
 void Pass::execute( Server* server, std::string &msg , int fd)
 {
+	const std::vector<Client>& clients = server->getClients();
+
+	for (size_t i = 0; i < clients.size(); i++) {
+		std::cout << "Client: " << i << std::endl;
+		std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
+    	// std::cout << "getNick " << ": " << clients[i].getNick() << std::endl;
+		// std::cout << "getUserName " << ": " << clients[i].getUserName() << std::endl;
+		// std::cout << "getRealName " << ": " << clients[i].getRealName() << std::endl;
+		// std::cout << "getIpClient " << ": " << clients[i].getIpClient() << std::endl;
+		// std::cout << "getFdClient " << ": " << clients[i].getFdClient() << std::endl;
+		// std::cout << "getHasNick " << ": " << clients[i].getHasNick() << std::endl;
+		// std::cout << "getHasUser " << ": " << clients[i].getHasUser() << std::endl;
+		// std::cout << "getHasAuth " << ": " << clients[i].getHasAuth() << std::endl;
+		// std::cout << "getBufferInMessage " << ": " << clients[i].getBufferInMessage() << std::endl;
+		// std::cout << "getBufferOutResponse " << ": " << clients[i].getBufferOutResponse() << std::endl;
+	}
+
+	// std::vector<Client> clients = server->getClients();
+	// if (fd >= 0 && fd < static_cast<int>(clients.size()))
+	// {
+	// 	std::cout << YEL << "Has pass: " << clients[fd].getHasPass() << RES << std::endl;
+	// } else {
+	// 	std::cerr << "Error: índice fd fuera de rango en getClients()" << std::endl;
+	// }
+	
 	std::string password = msg.substr(5);
 	
 	// std::cout << "Password: " << password << std::endl;
@@ -23,12 +48,11 @@ void Pass::execute( Server* server, std::string &msg , int fd)
 	password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());
 	if (password == server->getPassword())
 	{
-		// server->addClient(Client(fd));
-		// std::cout << "Client connected" << std::endl;
-		// std::cout << server->getClients()
 		std::cout << "Correct password!" << std::endl;
-		server->getClients()[fd].setHasPass();
-		std::cout << YEL << "Has pass: " << server->getClients()[fd].getHasPass() << RES << std::endl;
+			for (size_t i = 0; i < clients.size(); i++) {
+		std::cout << "Client: " << i << std::endl;
+		std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
+	}
 	}
 	else
 	{

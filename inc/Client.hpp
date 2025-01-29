@@ -51,8 +51,8 @@ class Client
 
 		bool		getHasPass( void ) const;
 		bool		getHasNick( void ) const;
-		bool		gethasUser( void ) const;
-		bool		gethasAuth( void ) const;	
+		bool		getHasUser( void ) const;
+		bool		getHasAuth( void ) const;	
 		void		setHasPass( void );
 		void		setHasNick( void );
 		void		sethasUser( void );

@@ -38,3 +38,6 @@ stuffs/repos_irc
 
 #scripts
 git_pull_branches.sh
+
+#docs
+commandsForTests
