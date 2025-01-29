@@ -49,6 +49,7 @@ HDR_FILES = inc/Client.hpp \
 			inc/commands/Topic.hpp \
 			inc/commands/User.hpp \
 			inc/commands/ICommand.hpp \
+			inc/irc.hpp \
 			inc/commands/Test.hpp
 
 # Archivos objeto

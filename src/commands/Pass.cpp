@@ -1,5 +1,6 @@
 
 #include "Pass.hpp"
+#include "Client.hpp"
 
 Pass::~Pass( void ) {};
 
@@ -8,7 +9,7 @@ Pass::~Pass( void ) {};
 void Server::sendResp(std::string resp, int fd)
 {
 	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << "Response failed!" << std::endl;
+		std::cerr << RED << "Response error!" << RES << std::endl;
 }
 
 void Pass::execute( Server* server, std::string &msg , int fd)
@@ -24,12 +25,13 @@ void Pass::execute( Server* server, std::string &msg , int fd)
 	{
 		// server->addClient(Client(fd));
 		// std::cout << "Client connected" << std::endl;
-		std::cout << "Password correct" << std::endl;
+		// std::cout << server->getClients()
+		std::cout << "Correct password!" << std::endl;
+		server->getClients()[fd].setHasPass();
+		std::cout << YEL << "Has pass: " << server->getClients()[fd].getHasPass() << RES << std::endl;
 	}
 	else
 	{
-		server->sendResp(ERR_PASSWDMISMATCH(std::string("*")), fd);//ultima linea agregada
-		// std::cout << server->getClients()
-		close(fd);
+		server->sendResp(ERR_PASSWDMISMATCH(std::string("*")), fd);
 	}
 }
