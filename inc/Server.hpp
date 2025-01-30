@@ -54,6 +54,7 @@ class Server
 };
 
 int	 parseInput(std::string password, int port);
-
+std::string trimLeft(std::string &str);
+std::string uppercase(std::string &s);
 
 #endif

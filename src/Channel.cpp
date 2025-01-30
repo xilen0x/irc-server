@@ -64,6 +64,26 @@ Channel::~Channel( void )
 //_channelName
 std::string	Channel::getChannelName( void ) const { return ( this->_channelName); }
 
+// it will be modified in near future: clients should be those in this instance of channel instead of those in server
+Client	*Channel::getCliInChannel(std::vector<Client> clients, std::string &nick)
+{
+	for (std::vector<Client>::iterator it = clients.begin(); it !=clients.end(); it++)
+	{
+		std::string tmpCli = it->getNick();
+		if (uppercase(tmpCli) == uppercase(nick))
+			return (&(*it));
+	}
+	/* // to complete the part of admin
+	for (std::vector<Client>::iterator it = clients.admins.begin(); it !=clients.admins.end(); it++)
+	{
+		std::string tmpAdm = it->getNick();
+		if (uppercase(tmpAdm) == uppercase(nick))
+			return (&(*it));
+	}
+	*/
+	return (NULL);
+}
+
 //_inviteChannel
 bool	Channel::isInviteChannel( void ) const { return (this->_inviteChannel); }
 

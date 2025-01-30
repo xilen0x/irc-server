@@ -5,6 +5,8 @@
 # include <algorithm> 
 # include <iostream>
 # include <vector>
+# include "Server.hpp"
+# include "Client.hpp"
 
 class Channel
 {
@@ -46,6 +48,9 @@ class Channel
 
 		//_channelName
 		std::string		getChannelName( void ) const;
+
+		// to get Client with nickname in a specific channel
+		Client			*getCliInChannel(std::vector<Client> clients, std::string &nick);
 
 		//_inviteChannel
 		bool			isInviteChannel( void ) const;

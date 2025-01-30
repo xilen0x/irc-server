@@ -25,7 +25,7 @@ void Pass::execute( Server* server, std::string &msg , int fd)
 	std::string password = msg.substr(5); //msg.substr(5) means from the 6th character to the end
 	if (msg.size() < 6)
 	{
-		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), password), fd);
+		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "PASS"), fd);
 		return;
 	}
 	password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());//move to a function
