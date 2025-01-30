@@ -3,6 +3,7 @@
 
 #include "Join.hpp"
 
+#define MY_CHANNEL_NAME "MyChannel"
 #define BASE_NICK "nick_"
 #define BASE_USER_NAME "userName_"
 
@@ -24,11 +25,13 @@ void Join::execute( Server* server, std::string &msg , int fd)
 
 	std::cout << "getChannels: " << channels.size() << std::endl;
 	std::cout << "getClients:" << clients.size() << std::endl;
+
 	for (unsigned long i=0; i < clients.size(); i++)
 	{
-		std::cout << "getFD[" << i << "]:" << clients[i].getFdClient() << std::endl;
+		std::cout << "- getFD[" << i << "]:" << clients[i].getFdClient() << std::endl;
 	}
-	
+
+	// Add nick and user on client 	
 	for (unsigned long i = 0; i < clients.size(); i++)
 	{
 		if (clients[i].getFdClient() == fd)
@@ -41,19 +44,26 @@ void Join::execute( Server* server, std::string &msg , int fd)
 			nick = BASE_NICK + numStr;
 			clients[i].setNick(nick);
 			clients[i].setUserName(nick);
+			std::cout << " added : " << clients[i].getNick() << std::endl;
 			break;
 		}
 	}
 
 	if (channels.size() == 0)
 	{
-		Channel newChannel("MyChannel", nick);
+		Channel newChannel(MY_CHANNEL_NAME, nick);
+//		newChannel.printChannelVars();
 		server->addChannel(newChannel);
+		//std::cout << "Channels size = " << server->getChannels().size() << std::endl;
 	}
 	else
-		channels[0].addMember(nick);
-	if ( channels.size() > 0 )
-		channels[0].printChannelVars();
+	{
+		server->getChannels()[0].addMember(nick);
+		std::cout << "- Nick added " << nick << std::endl;
+		std::cout << "-  " << nick << " is added as member? " << server->getChannels()[0].isMember(nick) << std::endl;
+	}
+	if ( server->getChannels().size() > 0 )
+		server->getChannels()[0].printChannelVars();
 	else
 		std::cout << "ERROR : no channels" << std::endl;
 }
