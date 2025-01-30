@@ -3,15 +3,12 @@
 
 Cap::~Cap( void ) {};
 
-/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
-
-// void Cap::execute( std::string &msg, int fd )
 void Cap::execute( Server* server, std::string &msg, int fd )
 {
+	(void)msg;
 	(void)server;
-	(void)fd;
-
-	std::cout << "    ----" << std::endl;
-	std::cout << "CAP  => TODO wit message " << msg << std::endl;
-	std::cout << "    ----" << std::endl;
+	// (void)fd;
+	// send(fd, "CAP * LS :\r\n", 12, 0); 
+	send(fd, "CAP * LS :multi-prefix\r\n", 24, 0);//Permite ver múltiples prefijos de usuario (@%+).
+	// std::cout << "Cap command executed" << std::endl;
 }

@@ -44,4 +44,4 @@
 #define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + RED + " :Not enough parameters" + RES + CRLF
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF
 
-#endif
+#endif  

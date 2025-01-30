@@ -1,7 +1,12 @@
 
 #include "Messageprocessing.hpp"
-
 #include "Server.hpp"
+
+void Server::sendResp(std::string resp, int fd)
+{
+	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
+		std::cerr << RED << "Response error!" << RES << std::endl;
+}
 
 int parseInput(std::string password, int port)
 {

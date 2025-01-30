@@ -4,24 +4,10 @@
 
 Pass::~Pass( void ) {};
 
-/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
-
-void Server::sendResp(std::string resp, int fd)
-{
-	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << RED << "Response error!" << RES << std::endl;
-}
-
 void Pass::execute( Server* server, std::string &msg , int fd)
 {
 	std::vector<Client>clients = server->getClients();
 
-	// for (size_t i = 0; i < clients.size(); i++) //delete later this for loop
-	// {
-	// 	std::cout << "Client: " << i << std::endl;
-	// 	std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
-	// }
-	// std::cout << "+++++++++++++ msg: " << msg << std::endl;
 	std::string password = msg.substr(5); //msg.substr(5) means from the 6th character to the end
 	if (msg.size() < 6)
 	{
