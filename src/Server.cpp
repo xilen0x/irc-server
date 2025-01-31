@@ -218,3 +218,20 @@ std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
+
+//For test proposal
+
+Client*		Server::getClientByFD(int fd)
+{
+	 for (unsigned long i = 0 ; i < this->_clients.size(); i++)
+	 {
+		if (this->_clients[i].getFdClient() == fd)
+			return (&(this->_clients[i]));
+	 }
+	 return (NULL);
+}
+
+Channel*	Server::getChannelsByNumPosInVector(int pos)
+{
+	 return (&(this->_channels[pos]));
+}

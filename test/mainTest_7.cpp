@@ -6,7 +6,11 @@
 #include "Messageprocessing.hpp"
 #include "Server.hpp"
 
-# define MAX_NUMBER 6
+# define INITIAL_FD 3
+# define MAX_FD_NUMBER 6
+
+# define LIMIT_NUMBER 4
+
 # define BASE_IP_NAME "IP_CLIENT"
 # define BASE_NICK "nick_"
 # define BASE_CHANNEL_NAME "channel_"
@@ -20,8 +24,8 @@ void	addClientsChannels ( Server & server)
 {
 	std::string	numStr;
 
-    std::cout << "\n--- Add several clients and channels ---" << std::endl;
-	for (int i=3; i <= MAX_NUMBER; i++)
+    std::cout << "\n--- Add several clients and channels in server---" << std::endl;
+	for (int i=INITIAL_FD; i <= MAX_FD_NUMBER; i++)
 	{
 		std::ostringstream	str1;
 
@@ -36,22 +40,45 @@ void	addClientsChannels ( Server & server)
 		std::cout << "  - START ADD ---"<< std::endl;
 		server.addClient(client);
 		server.addChannel(channel);
-
 		std::cout << "   -END  ADD ---"<< std::endl;
 
 		std::cout << "    - Client => _fd=" << client.getFdClient() << ", _ip=" << client.getIpClient() << std::endl;
 		std::cout << "    - Channel => _channelName=" << channel.getChannelName() << std::endl;
 		std::cout << "-- i=" << i << " END ---\n"<< std::endl;
 	}
+    std::cout << "-- End several clients and channels in server ---\n" << std::endl;
 
+// Add several nicks in each channel
+	std::cout << "\n-- START add members in channels--"<< std::endl;
 /*
- * Todo añadr nicks en cada channel
- 
-		addMember("Uno");
-		addMember("Dos");
-		addMember("Tres");
+ *Works bt no persist data
+	std::vector<Channel>	channels;
+
+	channels = server.getChannels();
+
+	for (unsigned long i=0; i < channels.size(); i++)
+	{
+ 		channels[i].addMember("Uno");
+		channels[i].addMember("Dos");
+		channels[i].addMember("Tres");
+	}
+
+// Print channels Info
+
+	for (unsigned long i=0; i < channels.size(); i++)
+	{
+		channels[i].printChannelVars();
+	}
 */
-    std::cout << "-- End several clients and channels ---\n" << std::endl;
+
+	Channel	*channel;
+	for (int i = 0; i < LIMIT_NUMBER; i++)
+	{
+		channel = server.getChannelsByNumPosInVector(i);
+ 		channel->addMember("Uno");
+ 		channel->addMember("Dos");
+ 		channel->addMember("Tres");
+	}
 }
 
 void printClientChannels( Server & server )
@@ -71,8 +98,6 @@ void printClientChannels( Server & server )
 		std::cout << std::endl;
 	}
     std::cout << "-- END print clients and channels ---\n" << std::endl;
-
-	channels[0].printChannelVars();
 }
 
 int main()
