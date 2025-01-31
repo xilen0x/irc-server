@@ -32,38 +32,42 @@ void Join::execute( Server* server, std::string &msg , int fd)
 	}
 
 	// Add nick and user on client 	
-	for (unsigned long i = 0; i < clients.size(); i++)
+	Client	*client;
+	Channel	*channel;
+
+	client = server->getClientByFD(fd);
+	if (client != NULL)
 	{
-		if (clients[i].getFdClient() == fd)
+		std::ostringstream	str1;
+
+		str1 << fd;
+		numStr = str1.str();
+
+		nick = BASE_NICK + numStr;
+		client->setNick(nick);
+		client->setUserName(nick);
+		std::cout << " added : " << client->getNick() << std::endl;
+
+		if (channels.size() == 0)
 		{
-			std::ostringstream	str1;
-
-			str1 << i;
-			numStr = str1.str();
-
-			nick = BASE_NICK + numStr;
-			clients[i].setNick(nick);
-			clients[i].setUserName(nick);
-			std::cout << " added : " << clients[i].getNick() << std::endl;
-			break;
+			Channel newChannel(MY_CHANNEL_NAME, nick);
+	//		newChannel.printChannelVars();
+			server->addChannel(newChannel);
+			std::cout << "Channels size = " << server->getChannels().size() << std::endl;
 		}
+		else
+		{
+			channel = server->getChannelsByNumPosInVector(0);
+ 			channel->addMember(nick);
+			std::cout << "- Nick added " << nick << std::endl;
+			std::cout << "-  " << nick << " is added as member? " << server->getChannels()[0].isMember(nick) << std::endl;
+		}
+		if ( server->getChannels().size() > 0)
+		{
+			channel = server->getChannelsByNumPosInVector(0);
+			channel->printChannelVars();
+		}
+		else
+			std::cout << "ERROR : no channels" << std::endl;
 	}
-
-	if (channels.size() == 0)
-	{
-		Channel newChannel(MY_CHANNEL_NAME, nick);
-//		newChannel.printChannelVars();
-		server->addChannel(newChannel);
-		//std::cout << "Channels size = " << server->getChannels().size() << std::endl;
-	}
-	else
-	{
-		server->getChannels()[0].addMember(nick);
-		std::cout << "- Nick added " << nick << std::endl;
-		std::cout << "-  " << nick << " is added as member? " << server->getChannels()[0].isMember(nick) << std::endl;
-	}
-	if ( server->getChannels().size() > 0 )
-		server->getChannels()[0].printChannelVars();
-	else
-		std::cout << "ERROR : no channels" << std::endl;
 }
