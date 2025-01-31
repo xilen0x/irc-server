@@ -5,6 +5,7 @@
 # include <algorithm> 
 # include <iostream>
 # include <vector>
+# include <map>
 # include "Server.hpp"
 # include "Client.hpp"
 
@@ -28,6 +29,19 @@ class Channel
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
 
+		// Added by Linnnnnnnnnnnnnnnnnn
+//		std::vector<Client> 		_clients; // including _memberClients and _invitedClients
+//		std::vector<Client> 		_operators;
+		std::map<std::string, Client *>	_memClients;
+		std::map<std::string, Client *>	_invClients;
+		std::map<std::string, Client *>	_operator;
+
+		template <typename T>
+		bool	_addInMap(std::map<std::string, T*> &targetMap, std::string &nick, T *t);
+		template <typename T>
+		bool	_deleteInMap(std::map<std::string, T*> &targetMap, std::string &nick);
+
+
 		template <typename T>
 		bool	_isInVector(T &t, std::string nickClient );
 
@@ -42,6 +56,7 @@ class Channel
 
 	public:
 		Channel( std::string channelName, std::string operatorNick );
+		Channel( std::string channelName, std::string operatorNick, Client *operatorClient);
 		Channel( Channel const &src);
 		Channel &operator=( Channel const &src);
 		~Channel( void );
@@ -49,8 +64,8 @@ class Channel
 		//_channelName
 		std::string		getChannelName( void ) const;
 
-		// to get Client with nickname in a specific channel
-		Client			*getCliInChannel(std::vector<Client> clients, std::string &nick);
+		// to get Client with nickname in a specific channel //Added by Lin
+		Client			*getCliInChannel(std::string &nick);
 
 		//_inviteChannel
 		bool			isInviteChannel( void ) const;
@@ -94,10 +109,19 @@ class Channel
 		void			addInvited( std::string nickClient );
 		void			deleteInvited( std::string nickClient );
 
+		// _operator _memClients _invClients  Added by Linnnnnnnnnnnnnnnnnnnn
+		void 			addOpe(std::string &nick, Client *client);
+		void 			deleteOpe(std::string &nick);
+		void			addMem(std::string &nick, Client *client);
+		void			deleteMem(std::string &nick);
+		void			addInv(std::string &nick, Client *client);
+		void			deleteInv(std::string &nick);
+
 // For debugging
 		void		printChannelVars( void ); 
 };
 
 # include "Channel.tpp"
+# include "Channel1.tpp"
 
 #endif

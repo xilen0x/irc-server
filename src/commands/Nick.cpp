@@ -14,12 +14,17 @@ static std::string trimLeft(std::string &str)
 }
 */
 
-static Client *getClient(std::vector<Client> clients, int fd)
+//Client *Server::getClient(std::vector<Client> clients, int fd)
+Client *Server::getClient(int fd)
 {
-	for (size_t i = 0; i < clients.size(); i++)
+//	for (size_t i = 0; i < clients.size(); i++)
+	std::vector<Client>& clientsRef = getClients();
+	for (size_t i = 0; i < clientsRef.size(); i++)
 	{
-		if (clients[i].getFdClient() == fd)
-			return (&clients[i]);
+//		if (clients[i].getFdClient() == fd)
+		if (clientsRef[i].getFdClient() == fd)
+			return (&clientsRef[i]);
+//			return (&(clients[i]));
 	}
 	return (NULL);
 }
@@ -45,7 +50,7 @@ static bool validateNick(std::string &s)
 		return (false);
 	for (size_t i = 1; i < s.size(); i++)
 	{
-		if (!allowedChars.find_first_not_of(s[i]) != std::string::npos)
+		if (allowedChars.find_first_not_of(s[i]) != std::string::npos)
 			return (false);
 	}
 	if (uppercase(s) == "NICKSERV" || uppercase(s) == "CHANSERV")
@@ -55,14 +60,6 @@ static bool validateNick(std::string &s)
 
 void Nick::execute( Server* server, std::string &msg , int fd)
 {
-/*
-	(void)fd;
-	(void)server;
-
-	std::cout << "    ----" << std::endl;
-	std::cout << "NICK  => TODO wit message " << msg << std::endl;
-	std::cout << "    ----" << std::endl;
-*/
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
 	if (!msg.empty() && msg[0] == ':')
@@ -73,11 +70,17 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		return ;
 	}
 	std::vector<Client> clients = server->getClients();
-	Client *cl = getClient(clients, fd);
+//	Client *cl = server->getClient(clients, fd);
+	Client *cl = server->getClient(fd);
 	if (checkNickInUse(clients, msg) && cl->getNick() != msg)
 	{
 		if (cl->getNick().empty())
 			cl->setNick("*");
+		server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);
+		return ;
+	}
+	else if (checkNickInUse(clients, msg) && cl->getNick() == msg)
+	{
 		server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);
 		return ;
 	}
@@ -95,7 +98,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			std::vector<Channel> channels = server->getChannels();
 			for (size_t i = 0; i < channels.size(); i++)
 			{
-				Client *clt = channels[i].getCliInChannel(clients, preNick);//get the client in this specific channel through preNick. "clients" here is to change into those in this channel
+				Client *clt = channels[i].getCliInChannel(preNick);//get the client in this specific channel through preNick. "clients" here is to change into those in this channel
 				if (clt)
 					clt->setNick(msg);
 			}
@@ -103,9 +106,12 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			{
 				if (preNick == "*" && !cl->getUserName().empty())
 				{
-					// maybe there is much more controlling here
-					server->sendResp(RPL_NICKCHANGE(std::string(preNick), msg), fd);
+					cl->setHasNick();
+					server->sendResp(RPL_CONNECTED(std::string(msg)), fd);
+					server->sendResp(RPL_NICKCHANGE(std::string("*"), msg), fd);
 				}
+				else
+					server->sendResp(RPL_NICKCHANGE(std::string(preNick), msg), fd);
 			}
 		}
 		else if (cl && !cl->getHasNick())

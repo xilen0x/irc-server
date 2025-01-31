@@ -69,6 +69,7 @@
 		"locale": "cpp",
 		"mutex": "cpp",
 		"ratio": "cpp",
-		"variant": "cpp"
+		"variant": "cpp",
+		"*.tpp": "cpp"
 	}
 }
