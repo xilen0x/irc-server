@@ -145,15 +145,14 @@ void Server::receiveData(int fd)
     else {
         buffer[bytesRead] = '\0';
         std::cout << "Received data: " << buffer;
-        std::cout << "*************Buffer size: " << strlen(buffer) << std::endl;
+        std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
         std::string message(buffer);//
-        std::vector<std::string> words = splitStr(message, '\n');
-        for (size_t i = 0; i < words.size(); i++)
+        std::vector<std::string> line = splitStr(message, '\n');
+        for (size_t i = 0; i < line.size(); i++)
         {
-            std::cout << "Word " << i << ": " << words[i] << std::endl;
+            std::cout << "line " << i << ": " << line[i] << std::endl;//debug
+            messageProcesing.processMessage(this, line[i], fd);
         }
-        // messageProcesing.processMessage(this, buffer, fd);
-        messageProcesing.processMessage(this, message, fd);
     }
 }
 
