@@ -51,6 +51,7 @@ class Server
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
+		void sendBroad(std::string resp, int fd);
 
 //For test proposal
 		Client	*getClientByFD(int fd);

@@ -197,6 +197,15 @@ void Server::sendResp(std::string resp, int fd)
 		std::cerr << "Response failed!" << std::endl;
 }
 
+void Server::sendBroad(std::string resp, int fd)
+{
+	for (unsigned long i = 0; i < this->_clients.size(); i++)
+	{
+		if (_clients[i].getFdClient() != fd)
+			sendResp(resp, fd);
+	}
+}
+
 Server::~Server( void )
 {
 	// TODO : Close connections if are open 

@@ -19,8 +19,18 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	deleteRN(msg);
 	splitedStrVect = splitByDoublePoint(msg);
 	if (splitedStrVect.size() == 2)
-		server->sendResp(MSG_QUIT_CHANNEL_REASON(nick, user, splitedStrVect[1]), fd);
+		server->sendBroad(MSG_QUIT_CHANNEL_REASON(nick, user, splitedStrVect[1]), fd);
 	else
-		server->sendResp(MSG_QUIT_CHANNEL_NO_REASON(nick, user), fd);
+		server->sendBroad(MSG_QUIT_CHANNEL_NO_REASON(nick, user), fd);
+	server->sendResp(ERR_QUIT_MSG, fd);
+			
 	std::cout << "    ----" << std::endl;
+	
+	// Iterar sobre los canales para los que el cliente está registrado
+		// Borrar cliente del canal pertinente
+		// Si el canal queda vacío, lo eliminamos
+		// Si no hay administradores en el canal, asignar un nuevo administrador
+		// 	Obtener el primer cliente del canal
+		// 	Asignar el nuevo administrador
+		// Notificar al nuevo administrador
 }
