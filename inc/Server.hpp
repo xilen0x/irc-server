@@ -53,7 +53,5 @@ class Server
 		~Server();
 };
 
-int	 parseInput(std::string password, int port);
-
 
 #endif

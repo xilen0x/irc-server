@@ -28,7 +28,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 	clients[0].setHasNick();
 	// std::cout << "Has nick(after set): " << ": " << clients[0].getHasNick() << std::endl;//debug
 
-	// std::cout << "Nickname: " << nickname << std::endl;//debug
+	// std::cout << "Nickname_x: " << nickname << std::endl;//debug
 	// std::cout << "clients[0].getNick(): " << clients[0].getNick() << std::endl;//debug
 	clients[0].setNick(nickname);
 	// std::cout << "clients[0].getNick(): " << clients[0].getNick() << std::endl;//debug
