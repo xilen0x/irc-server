@@ -65,10 +65,9 @@ int main(int argc, char const *argv[])
             if (!parseInput(password, port))
             {
                 Server server("ircserv", password, port);
-                alarm(60);
-
-    std::cout << "IRC server is running. Press Ctrl+C to stop." << std::endl;
+                // alarm(30);
                 server.runServer();
+                std::cout << "IRC server is running. Press Ctrl+C to stop." << std::endl;
             }
         }
         catch (const std::exception &e)
