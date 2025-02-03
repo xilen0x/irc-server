@@ -110,11 +110,11 @@ class Channel
 		void			deleteInvited( std::string nickClient );
 
 		// _operator _memClients _invClients  Added by Linnnnnnnnnnnnnnnnnnnn
-		void 			addOpe(std::string &nick, Client *client);
+		void 			addOpe(Client *client);
 		void 			deleteOpe(std::string &nick);
-		void			addMem(std::string &nick, Client *client);
+		void			addMem(Client *client);
 		void			deleteMem(std::string &nick);
-		void			addInv(std::string &nick, Client *client);
+		void			addInv(Client *client);
 		void			deleteInv(std::string &nick);
 
 // For debugging

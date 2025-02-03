@@ -4,15 +4,6 @@
 Nick::~Nick( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
-/*
-static std::string trimLeft(std::string &str)
-{
-	size_t pos = str.find_first_not_of(" \t\v\r\n");
-	if (pos == std::string::npos)
-		return ("");
-	return (str.substr(pos));
-}
-*/
 
 //Client *Server::getClient(std::vector<Client> clients, int fd)
 Client *Server::getClient(int fd)
@@ -42,7 +33,7 @@ static bool checkNickInUse(std::vector<Client> clients, std::string &s)
 
 static bool validateNick(std::string &s)
 {
-	if (s.size() > 9)
+	if (s.size() > 9 || s.size() <= 0)
 		return (false);
 	const std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_[]{}\\|^";
 	const std::string prohibited = " &#:@!*\t";
@@ -50,7 +41,7 @@ static bool validateNick(std::string &s)
 		return (false);
 	for (size_t i = 1; i < s.size(); i++)
 	{
-		if (allowedChars.find_first_not_of(s[i]) != std::string::npos)
+		if (allowedChars.find(s[i]) == std::string::npos)
 			return (false);
 	}
 	if (uppercase(s) == "NICKSERV" || uppercase(s) == "CHANSERV")
@@ -62,11 +53,13 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 {
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
+	msg = trimLeft(msg);
 	if (!msg.empty() && msg[0] == ':')
 		msg = msg.substr(1);
 	if (msg.empty())
 	{
 		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "NICK"), fd);
+		std::cout << "input nick is empty, new nick is *" << std::endl;//////////////
 		return ;
 	}
 	std::vector<Client> clients = server->getClients();
@@ -76,16 +69,19 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 	{
 		if (cl->getNick().empty())
 			cl->setNick("*");
+		std::cout << "input nick is in use, different from old one" << std::endl;///////////
 		server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);
 		return ;
 	}
 	else if (checkNickInUse(clients, msg) && cl->getNick() == msg)
 	{
+		std::cout << "input nick is in use, same with old one,you don't change yr name" << std::endl;////////////////
 		server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);
 		return ;
 	}
 	if (!validateNick(msg))
 	{
+		std::cout << "input nick is invalid" << std::endl;////////////////
 		server->sendResp(ERR_ERRONEUSNICK(std::string(msg)), fd);
 		return ;
 	}
@@ -95,19 +91,21 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		{
 			std::string preNick = cl->getNick();
 			cl->setNick(msg);
+			std::cout << "change global nick into: " << cl->getNick() << std::endl;////////////////
 			std::vector<Channel> channels = server->getChannels();
 			for (size_t i = 0; i < channels.size(); i++)
 			{
-				Client *clt = channels[i].getCliInChannel(preNick);//get the client in this specific channel through preNick. "clients" here is to change into those in this channel
+				Client *clt = channels[i].getCliInChannel(preNick);
 				if (clt)
 					clt->setNick(msg);
+				std::cout << "change nick in channel into: " << clt->getNick() << std::endl;////////////////
 			}
 			if (!preNick.empty() && preNick != msg)
 			{
 				if (preNick == "*" && !cl->getUserName().empty())
 				{
 					cl->setHasNick();
-					server->sendResp(RPL_CONNECTED(std::string(msg)), fd);
+//					server->sendResp(RPL_CONNECTED(std::string(msg)), fd);
 					server->sendResp(RPL_NICKCHANGE(std::string("*"), msg), fd);
 				}
 				else
@@ -115,7 +113,15 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			}
 		}
 		else if (cl && !cl->getHasNick())
-			server->sendResp(ERR_NOTREGISTERED(std::string(msg)), fd);
+		{
+			cl->setNick(msg);
+			cl->setHasNick();
+			std::cout << "1st set a global nick: " << cl->getNick() << std::endl;////////////////
+			server->sendResp(RPL_CONNECTED(std::string(msg)), fd);
+//			server->sendResp(ERR_NOTREGISTERED(std::string(msg)), fd);
+		}
+		else
+			std::cout << "cl is empty!!!!!!" << std::endl;////////////////
 	}
 	if (cl && cl->getHasNick() && !cl->getUserName().empty() && !cl->getNick().empty() && cl->getNick() != "*")
 	{

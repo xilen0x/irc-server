@@ -33,7 +33,7 @@ Channel::Channel( std::string channelName, std::string operatorNick ) :_channelN
 // Reloaded by Linnnnnnnnnnnnnnnnnnnnnn
 Channel::Channel( std::string channelName, std::string operatorNick, Client *operatorClient) :_channelName( channelName )
 {
-	std::cout << "Channel => Object created" << std::endl;
+	std::cout << "Channel => Object Map created" << std::endl;
 
 	this->_inviteChannel = false;
 	this->_topic = "";
@@ -210,10 +210,16 @@ void	Channel::deleteInvited( std::string nickClient )
 }
 
 // Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
-void 	Channel::addOpe(std::string &nick, Client *client)
+//void 	Channel::addOpe(std::string &nick, Client *client)
+void 	Channel::addOpe(Client *client)
 {
-	if (!this->_addInMap(this->_operator, nick, client))
-		std::cout << nick << " is already in _operator map. CAN'T ADD!!!" << std::endl;
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+//		if (!this->_addInMap(this->_operator, nick, client))
+		if (!this->_addInMap(this->_operator, nick, client))
+			std::cout << nick << " is already in _operator map. CAN'T ADD!!!" << std::endl;
+	}
 }
 
 void 	Channel::deleteOpe(std::string &nick)
@@ -222,10 +228,16 @@ void 	Channel::deleteOpe(std::string &nick)
 		std::cout << nick << " is NOT in _operator map. CAN'T DELETE IT!!!" << std::endl;
 }
 
-void	Channel::addMem(std::string &nick, Client *client)
+void	Channel::addMem(Client *client)
 {
-	if (!this->_addInMap(this->_memClients, nick, client))
-		std::cout << nick << " is already in _memClients map. CAN'T ADD!!!" << std::endl;
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+		if (!this->_addInMap(this->_memClients, nick, client))
+			std::cout << nick << " is already in _memClients map. CAN'T ADD!!!" << std::endl;
+		else
+			std::cout << nick << " has been added in _memClients map! " << std::endl;
+	}
 }
 
 void	Channel::deleteMem(std::string &nick)
@@ -234,10 +246,16 @@ void	Channel::deleteMem(std::string &nick)
 		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;
 }
 
-void	Channel::addInv(std::string &nick, Client *client)
+void	Channel::addInv(Client *client)
 {
-	if (!this->_addInMap(this->_invClients, nick, client))
-		std::cout << nick << " is in already _invClients map. CAN'T ADD!!!" << std::endl;
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+		if (!this->_addInMap(this->_invClients, nick, client))
+			std::cout << nick << " is in already _invClients map. CAN'T ADD!!!" << std::endl;
+		else
+			std::cout << nick << " has been added in _invClients map! " << std::endl;
+	}
 }
 		
 void	Channel::deleteInv(std::string &nick)
