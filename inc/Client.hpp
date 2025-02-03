@@ -55,8 +55,8 @@ class Client
 		bool		getHasAuth( void ) const;	
 		void		setHasPass( void );
 		void		setHasNick( void );
-		void		sethasUser( void );
-		void		sethasAuth( void );	
+		void		setHasUser( void );
+		void		setHasAuth( void );	
 
 // For debugging
 		void		printClientVars( void ); 

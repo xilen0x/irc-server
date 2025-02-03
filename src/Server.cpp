@@ -117,6 +117,17 @@ void Server::clearClients(int fd, std::string msg)
         std::cout << msg;
     }
 
+std::vector<std::string> splitStr(const std::string& input, char separator)
+{
+    std::istringstream          stream(input);
+    std::string                 token;
+    std::vector<std::string>    ret;
+
+    while (std::getline(stream, token, separator))
+        ret.push_back(token);
+    return (ret);
+}
+
 // Receive data from the client
 void Server::receiveData(int fd)
 {
@@ -134,7 +145,14 @@ void Server::receiveData(int fd)
     else {
         buffer[bytesRead] = '\0';
         std::cout << "Received data: " << buffer;
-        messageProcesing.processMessage(this, buffer, fd);
+        std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
+        std::string message(buffer);//
+        std::vector<std::string> line = splitStr(message, '\n');
+        for (size_t i = 0; i < line.size(); i++)
+        {
+            std::cout << "line " << i << ": " << line[i] << std::endl;//debug
+            messageProcesing.processMessage(this, line[i], fd);
+        }
     }
 }
 
@@ -183,7 +201,7 @@ void Server::loop()
     }
 }
  
-void Server::runServer()
+void Server::   runServer()
 {
 	createSocket();
 	listenSocket();

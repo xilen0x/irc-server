@@ -89,9 +89,9 @@ void	Client::setHasPass( void ) { this->_hasPass = true; }
 
 void	Client::setHasNick( void ) { this->_hasNick = true; }
 		
-void	Client::sethasUser( void ) { this->_hasUser = true; }
+void	Client::setHasUser( void ) { this->_hasUser = true; }
 	
-void	Client::sethasAuth( void ) { this->_hasAuth = true; }	
+void	Client::setHasAuth( void ) { this->_hasAuth = true; }	
 
 
 // For debugging
