@@ -29,11 +29,13 @@ void Server::sendResp(std::string resp, int fd)
 		std::cerr << RED << "Response error!" << RES << std::endl;
 }
 
+// Parse the input arguments
+//https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Dynamic.2C_private_or_ephemeral_ports
 int parseInput(std::string password, int port)
 {
-    if (port < 1024 || port > 65535)
+    if (port < 49152 || port > 65535)
     {
-        std::cerr << "Invalid port number. Must be beetwen 1024 and 65535" << std::endl;
+        std::cerr << "Invalid port number. Must be beetwen 49152 and 65535" << std::endl;
         return (1);
     }
     if (std::strlen(password.c_str()) < 4)

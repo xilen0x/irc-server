@@ -8,6 +8,7 @@
 # include "irc.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
+# include <csignal>
 
 class Server
 {
@@ -17,7 +18,7 @@ class Server
 	    std::string	                _password;
 	    int			                _port;
 	    int			                _fdServer;
-	    //static bool                 _Signal;
+	    static bool                 _Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
