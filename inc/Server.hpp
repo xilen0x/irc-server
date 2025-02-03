@@ -9,6 +9,9 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 
+class Client;
+class Channel;
+
 class Server
 {
 	private:
