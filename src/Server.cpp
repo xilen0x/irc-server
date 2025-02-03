@@ -199,10 +199,20 @@ void Server::sendResp(std::string resp, int fd)
 
 void Server::sendBroad(std::string resp, int fd)
 {
+	int	actualFd;
+
+	std::cout << "sendBroad() :" << std::endl;
+
 	for (unsigned long i = 0; i < this->_clients.size(); i++)
 	{
-		if (_clients[i].getFdClient() != fd)
-			sendResp(resp, fd);
+		actualFd = _clients[i].getFdClient();
+		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;
+		if (actualFd != fd)
+		{
+			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;
+			sendResp(resp, actualFd);
+		}
+
 	}
 }
 

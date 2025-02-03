@@ -54,7 +54,7 @@ Channel &Channel::operator=( Channel const &src)
 
 Channel::~Channel( void )
 {
-	std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
+	//std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
