@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
         catch (const std::exception &e)
         {
             std::cerr << e.what() << '\n';
-            //free resources if needed
+            //free resources if needed         
         }
     }
     else

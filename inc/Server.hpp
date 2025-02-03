@@ -10,6 +10,9 @@
 # include "Channel.hpp"
 # include <csignal>
 
+class Client;
+class Channel;
+
 class Server
 {
 	private:
@@ -41,7 +44,8 @@ class Server
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
 		std::vector<Channel> getChannels( void ) const;
-		std::vector<Client> getClients( void ) const;
+		std::vector<Client>& getClients( void );
+		Client 		*getClient(int fd);
 
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
@@ -51,5 +55,8 @@ class Server
 		~Server();
 };
 
+int	 parseInput(std::string password, int port);
+std::string trimLeft(std::string &str);
+std::string uppercase(std::string &s);
 
 #endif

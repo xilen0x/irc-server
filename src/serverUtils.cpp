@@ -45,3 +45,23 @@ int parseInput(std::string password, int port)
     }
     return (0);
 }
+
+// to remove the first white spaces of a string
+std::string trimLeft(std::string &str)
+{
+	size_t pos = str.find_first_not_of(" \t\v\r\n");
+	if (pos == std::string::npos)
+		return ("");
+	return (str.substr(pos));
+}
+
+static char to_upper(char c)
+{
+	return (std::toupper(static_cast<unsigned char>(c)));
+}
+
+std::string uppercase(std::string &s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), to_upper);
+	return (s);
+}

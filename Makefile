@@ -33,6 +33,7 @@ SRC_FILES = src/main.cpp \
 HDR_FILES = inc/Client.hpp \
 			inc/Channel.hpp \
 			inc/Channel.tpp \
+			inc/Channel1.tpp \
 			inc/Messageprocessing.hpp \
 			inc/Server.hpp \
 			inc/serverUtils.hpp \
