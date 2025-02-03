@@ -9,10 +9,16 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 {
 	std::vector<std::string> splitedStrVect;
 
-	std::string nick = "nickTest";
-	std::string user = "userName";
+	std::string nick;
+	std::string user;
 //	(void)fd;
 //	(void)server;
+
+	Client*	client;
+
+	client = server->getClientByFD(fd);
+	nick = client->getNick();
+	user = client->getUserName();
 
 	std::cout << "    ----" << std::endl;
 	std::cout << "QUIT  => TODO test bad format" << std::endl;
@@ -26,11 +32,8 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 			
 	std::cout << "    ----" << std::endl;
 	
-	// Iterar sobre los canales para los que el cliente está registrado
-		// Borrar cliente del canal pertinente
-		// Si el canal queda vacío, lo eliminamos
-		// Si no hay administradores en el canal, asignar un nuevo administrador
-		// 	Obtener el primer cliente del canal
-		// 	Asignar el nuevo administrador
-		// Notificar al nuevo administrador
+	//Borrar cliente de server->clients , de server->_fdclients y cerrar el canal de cliente
+	std::cout << "Delete client : " << fd << std::endl;
+	server->deleteClientFromAnyChannel(fd);
+	server->clearClients(fd, "A client has QUIT from server !!!");
 }

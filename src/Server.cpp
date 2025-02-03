@@ -114,7 +114,9 @@ void Server::clearClients(int fd, std::string msg)
         
         // Close the socket of the client
         close(fd);
-        std::cout << msg;
+
+        //std::cout << msg;
+        std::cout << msg << std::endl;
     }
 
 // Receive data from the client
@@ -218,7 +220,7 @@ void Server::sendBroad(std::string resp, int fd)
 
 Server::~Server( void )
 {
-	// TODO : Close connections if are open 
+	// TODO : Close connections if are open :
 	
 	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
 	this->_fdsClients.clear();
@@ -231,13 +233,27 @@ Server::~Server( void )
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
-int			Server::getFdServer( void ) const { return (this->_fdServer); };
+int	Server::getFdServer( void ) const { return (this->_fdServer); };
 std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
 std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
 
+// apardo-m need for QUIT
+void 		 Server::deleteClientFromAnyChannel(int fd)
+{
+	(void)fd;
+	// Iterar sobre los canales para los que el cliente está registrado
+		// Borrar cliente del canal pertinente
+		// Si no hay administradores en el canal y hay miembros (asignar un nuevo administrador)
+		// 	Obtener el primer cliente de la lista de miembros
+		// 	Asignar el nuevo administrador
+		//  Notificar al nuevo administrador
+		// Si el canal queda vacío, lo eliminamos
+	std::cout << "TODO => deleteClientFromAnyChannel(int fd) " << std::endl;
+
+}
 //For test proposal
 
 Client*		Server::getClientByFD(int fd)
