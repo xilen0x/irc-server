@@ -1,7 +1,9 @@
 
 #include "Client.hpp"
 
-Client::Client() :_fdClient(-1), _ipClient("")
+// Client::Client() :_fdClient(-1), _ipClient("")
+// {}
+Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
 {}
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)

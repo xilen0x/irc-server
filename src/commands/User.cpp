@@ -32,19 +32,23 @@ Note: Tiene que tener nick y pass antes de poder usar este comando
 // }
 
 void User::execute(Server* server, std::string& msg, int fd) {
-    std::vector<Client> clients = server->getClients();
-
-    // Check if the message is too short
-    if (msg.size() < 5) {
-        std::string errorMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(std::string("*"), "USER"));
-        server->sendResp(errorMsg, fd); // 461
+    // std::vector<Client> clients = server->getClients();
+    // Obtener el cliente correcto
+    Client* client = server->getClient(fd);
+    if (!client) {
+        std::cerr << "Error: Client not found for fd: " << fd << std::endl;
         return;
     }
+    std::cout << "Client FD****: " << fd << " | Has pass (before set): " << client->getHasPass() << std::endl;//debug
 
-    // Check if the client is already registered
-    if (clients[0].getHasUser()) {
-        std::string errorMsg = formatIRCMessage(ERR_ALREADYREGISTERED(std::string("*")));
-        server->sendResp(errorMsg, fd); // 462
+    // Si el cliente ya pasó la verificación de contraseña, enviar error 462
+    if (!client->getHasPass()) {
+        server->sendResp(ERR_ALREADYREGISTERED(std::string("*")), fd);  // 462
+        return;
+    }
+    // Validar que el mensaje tiene la estructura correcta
+    if (msg.size() < 5) {
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "PASS"), fd);  // 461
         return;
     }
 
@@ -54,8 +58,9 @@ void User::execute(Server* server, std::string& msg, int fd) {
     username.erase(std::remove(username.begin(), username.end(), '\n'), username.end());
 
     // Set the user flag for the client
-    clients[0].setHasUser();
-    std::cout << YEL << clients[0].getNick() << " has set user: " << username << RES << std::endl;
+    client->setHasUser();
+    // std::cout << YEL << clients[0].getNick() << " has set user: " << username << RES << std::endl;
+	std::cout << YEL << client->getNick() << " has set user: " << username << RES << std::endl;
 
     // Send welcome messages with timestamps
     std::string welcomeMsg = formatIRCMessage(RPL_WELCOME(server->getServerName(), username));
