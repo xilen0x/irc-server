@@ -107,17 +107,17 @@ bool	Client::getHasPass( void ) const { return ( this->_hasPass ); }
 		
 bool	Client::getHasNick( void ) const { return ( this->_hasNick ); }
 	
-bool	Client::gethasUser( void ) const { return ( this->_hasUser ); }
+bool	Client::getHasUser( void ) const { return ( this->_hasUser ); }
 	
-bool	Client::gethasAuth( void ) const { return ( this->_hasAuth ); }
+bool	Client::getHasAuth( void ) const { return ( this->_hasAuth ); }
 	
 void	Client::setHasPass( void ) { this->_hasPass = true; }
 
 void	Client::setHasNick( void ) { this->_hasNick = true; }
 		
-void	Client::sethasUser( void ) { this->_hasUser = true; }
+void	Client::setHasUser( void ) { this->_hasUser = true; }
 	
-void	Client::sethasAuth( void ) { this->_hasAuth = true; }	
+void	Client::setHasAuth( void ) { this->_hasAuth = true; }	
 
 
 // For debugging

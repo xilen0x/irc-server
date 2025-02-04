@@ -35,7 +35,7 @@ SRC_FILES = src/main.cpp \
 HDR_FILES = inc/Client.hpp \
 			inc/Channel.hpp \
 			inc/Channel.tpp \
-			inc/irc.hpp \
+			inc/Channel1.tpp \
 			inc/Messageprocessing.hpp \
 			inc/Server.hpp \
 			inc/serverUtils.hpp \
@@ -52,6 +52,7 @@ HDR_FILES = inc/Client.hpp \
 			inc/commands/Topic.hpp \
 			inc/commands/User.hpp \
 			inc/commands/ICommand.hpp \
+			inc/irc.hpp \
 			inc/commands/Test.hpp
 
 # Archivos objeto

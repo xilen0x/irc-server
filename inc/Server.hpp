@@ -1,14 +1,13 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+# include <vector>
+# include <poll.h>
 # include <fcntl.h>
 # include <netinet/in.h>
-# include <poll.h>
-# include <vector>
-
+# include "irc.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-# include "irc.hpp"
 
 class Client;
 class Channel;
@@ -44,7 +43,9 @@ class Server
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
 		std::vector<Channel> getChannels( void );
-		std::vector<Client> getClients( void );
+//		std::vector<Client> getClients( void );
+		std::vector<Client>& getClients( void );
+		Client 		*getClient(int fd);
 
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
@@ -69,5 +70,7 @@ class Server
 void deleteRN(std::string &msg);
 int	 parseInput(std::string password, int port);
 std::vector<std::string> splitByDoublePoint(const std::string & msg);
+std::string trimLeft(std::string &str);
+std::string uppercase(std::string &s);
 
 #endif

@@ -2,33 +2,20 @@
 #include "Pass.hpp"
 #include "Client.hpp"
 
-Pass::~Pass( void ) {};
-
-/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
-/*
-void Server::sendResp(std::string resp, int fd)
-{
-	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << RED << "Response error!" << RES << std::endl;
-}
-*/
-
 void Pass::execute( Server* server, std::string &msg , int fd)
 {
 	std::vector<Client>clients = server->getClients();
-
-	// for (size_t i = 0; i < clients.size(); i++) //delete later this for loop
-	// {
-	// 	std::cout << "Client: " << i << std::endl;
-	// 	std::cout << "Has pass: " << ": " << clients[i].getHasPass() << std::endl;
-	// }
-	// std::cout << "+++++++++++++ msg: " << msg << std::endl;
-	std::string password = msg.substr(5); //msg.substr(5) means from the 6th character to the end
-	if (msg.size() < 6)
+	if (clients[0].getHasPass())//si ya tiene pass
 	{
-		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), password), fd);
+		server->sendResp(ERR_ALREADYREGISTERED(std::string("*")), fd);//462 //falta testear este msg cuando ya se ha registrado
 		return;
 	}
+	if (msg.size() < 5)
+	{
+		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "PASS"), fd);//461
+		return;
+	}
+	std::string password = msg.substr(5); //msg.substr(5) means from the 6th character to the end
 	password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());//move to a function
 	password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());//move to a function
 	if (password == server->getPassword())
@@ -36,13 +23,15 @@ void Pass::execute( Server* server, std::string &msg , int fd)
 		std::cout << YEL << "Correct password!" << RES << std::endl;
 		
 		size_t i = 0;
-		std::cout << "*********************** Client: " << i << std::endl;//delete later
-		std::cout << "Has pass(before set): " << ": " << clients[i].getHasPass() << std::endl;//delete later
+		// std::cout << "*********************** Client: " << i << std::endl;//debug
+		// std::cout << "Has pass(before set): " << ": " << clients[i].getHasPass() << std::endl;//debug
 		clients[i].setHasPass();
-		std::cout << "Has pass(after set): " << ": " << clients[i].getHasPass() << std::endl;//delete later
+		// std::cout << "Has pass(after set): " << ": " << clients[i].getHasPass() << std::endl;//debug
 	}
 	else
 	{
-		server->sendResp(ERR_PASSWDMISMATCH(std::string("*")), fd);
+		server->sendResp(ERR_PASSWDMISMATCH(std::string("*")), fd);//464
 	}
 }
+
+Pass::~Pass( void ) {};
