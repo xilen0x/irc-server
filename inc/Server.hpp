@@ -49,6 +49,8 @@ class Server
 
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
+		
+		void		delClient( int fd );
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);

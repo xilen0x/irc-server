@@ -54,6 +54,7 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	
 	//Borrar cliente de server->clients , de server->_fdclients y cerrar el canal de cliente
 	std::cout << "Delete client : " << fd << std::endl;
+	server->delClient(fd);
 	server->deleteClientFromAnyChannel(fd);
-	server->clearClients(fd, "A client has QUIT from server !!!");
+	server->clearClients(fd, " client has QUIT from server !!!");
 }

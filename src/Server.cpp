@@ -114,7 +114,7 @@ void Server::clearClients(int fd, std::string msg)
         
         // Close the socket of the client
         close(fd);
-        std::cout << msg;
+        std::cout << "fd = " << fd << msg << std::endl;
 }
 
 std::vector<std::string> splitStr(const std::string& input, char separator)
@@ -256,6 +256,16 @@ std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
+
+void		Server::delClient( int fd )
+{
+	std::vector<Client>::iterator it = this->_clients.begin();
+	while (it != _clients.end() && it->getFdClient() != fd)
+		it++;
+	// If found, erase the client from the list
+	if (it != _clients.end())
+            _clients.erase(it);
+}
 
 // apardo-m need for QUIT
 void 		 Server::deleteClientFromAnyChannel(int fd)
