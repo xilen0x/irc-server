@@ -32,7 +32,7 @@ class Server
 		
 		void acceptClient();
 		void receiveData(int fd);
-	//	void clearClients(int fd, std::string msg);
+		void clearClients(int fd, std::string msg);
     
 	public:
 
@@ -49,18 +49,18 @@ class Server
 
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
-		
-		void		delClient( int fd );
+
+		void		deleteClient( int fd );
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
 		void sendBroad(std::string resp, int fd);
 
 // apardo-m need to be public
-		void clearClients(int fd, std::string msg);
+//		void clearClients(int fd, std::string msg);
 
 // apardo-m need for QUIT
-		void deleteClientFromAnyChannel(int fd);
+		void	clearClientFromClientsAndChanels( int fd, std::string msg);
 
 //For test proposal
 		Client	*getClientByFD(int fd);

@@ -26,7 +26,7 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	deleteRN(msg);
 	splitedStrVect = splitByDoublePoint(msg);
 	server->sendResp(ERR_QUIT_MSG, fd);
-// Parte A : Estas 4 lineaas se han de cambiar por la parte B
+// Parte A : Estas 4 lineas se han de cambiar por la parte B
 	if (splitedStrVect.size() == 2)
 		server->sendBroad(MSG_QUIT_CHANNEL_REASON(nick, user, splitedStrVect[1]), fd);
 	else
@@ -54,7 +54,5 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	
 	//Borrar cliente de server->clients , de server->_fdclients y cerrar el canal de cliente
 	std::cout << "Delete client : " << fd << std::endl;
-	server->delClient(fd);
-	server->deleteClientFromAnyChannel(fd);
-	server->clearClients(fd, " client has QUIT from server !!!");
+	server->clearClientFromClientsAndChanels(fd, " client has QUIT from server !!!");
 }

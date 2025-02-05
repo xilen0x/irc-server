@@ -230,7 +230,6 @@ void Server::sendBroad(std::string resp, int fd)
 			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;
 			sendResp(resp, actualFd);
 		}
-
 	}
 }
 
@@ -257,7 +256,7 @@ std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
 
-void		Server::delClient( int fd )
+void		Server::deleteClient( int fd )
 {
 	std::vector<Client>::iterator it = this->_clients.begin();
 	while (it != _clients.end() && it->getFdClient() != fd)
@@ -268,9 +267,10 @@ void		Server::delClient( int fd )
 }
 
 // apardo-m need for QUIT
-void 		 Server::deleteClientFromAnyChannel(int fd)
+void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
 {
-	(void)fd;
+	deleteClient( fd );
+	clearClients(fd, msg);
 	// Iterar sobre los canales para los que el cliente está registrado
 		// Borrar cliente del canal pertinente
 		// Si no hay administradores en el canal y hay miembros (asignar un nuevo administrador)
