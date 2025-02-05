@@ -6,7 +6,11 @@
 
 class User : public ICommand
 {
+	private:
+		bool welcomeMsg;
+		
 	public:
+		User( void );
 		~User( void );
 
 		void execute( Server*, std::string &, int );
