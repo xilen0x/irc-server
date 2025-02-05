@@ -34,13 +34,13 @@
 // #define ERR_NOTOPERATOR(channelname) (": 482 #" + channelname + " :You're not a channel operator" + CRLF)
 // #define ERR_NOSUCHNICK(channelname, name) (": 401 #" + channelname + " " + name + " :No such nick/channel" + CRLF )
 // #define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + CRLF )
-#define ERR_NICKINUSE(nickname) (": 433 " + nickname + " :Nickname is already in use" + CRLF)
-#define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + " :Erroneus nickname" + CRLF)
-#define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + " :You have not registered!" + CRLF)
+#define ERR_NICKINUSE(nickname) (": 433 " + nickname + YEL + " :Nickname is already in use" + RES + CRLF)
+#define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
+#define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + YEL + " :You have not registered!" + RES + CRLF)
 // #define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
 
-#define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + RED + " :Not enough parameters" + RES + CRLF
-#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + RED + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
+#define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + YEL + " :Not enough parameters" + RES + CRLF
+#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF
 
 #endif  

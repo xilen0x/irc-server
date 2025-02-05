@@ -1,6 +1,6 @@
 
 #include "User.hpp"
-
+#include "Messageprocessing.hpp"
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 /*
@@ -71,20 +71,26 @@ Note: Tiene que tener nick y pass antes de poder usar este comando
 
 void User::execute(Server* server, std::string& msg, int fd) 
 {
-    Client* client = server->getClient(fd);
+    Client*             client = server->getClient(fd);
+    Messageprocessing   parameters;
 
     msg = trimLeft(msg);
     msg = msg.substr(4);
     msg = trimLeft(msg);
 
-    if (!msg.empty() && msg[0] == ':')
+    if (!msg.empty() && msg[0] == ':')//
         msg = msg.substr(1);
 
     if (msg.empty()) {
         server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
         return;
     }
-
+    //verificar formato - Parameters: <username> 0 * <realname>
+    std::vector<std::string> params = parameters.split_msg(msg);
+    if (params.size() < 4) {
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
+        return;
+    }
     if (client->getHasUser()) {
         server->sendResp(ERR_ALREADYREGISTERED(std::string("*")), fd);  // 462
         return;

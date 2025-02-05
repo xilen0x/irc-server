@@ -220,6 +220,21 @@ Server::~Server( void )
 	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
 }
 
+//Client *Server::getClient(std::vector<Client> clients, int fd)
+Client *Server::getClient(int fd)
+{
+//	for (size_t i = 0; i < clients.size(); i++)
+	std::vector<Client>& clientsRef = getClients();
+	for (size_t i = 0; i < clientsRef.size(); i++)
+	{
+//		if (clients[i].getFdClient() == fd)
+		if (clientsRef[i].getFdClient() == fd)
+			return (&clientsRef[i]);
+//			return (&(clients[i]));
+	}
+	return (NULL);
+}
+
 //-----------------------------Getters & Setters-----------------------------//
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
