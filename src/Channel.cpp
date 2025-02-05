@@ -62,6 +62,10 @@ Channel &Channel::operator=( Channel const &src)
 		this->_operators = src._operators;
 		this->_memberClients = src._memberClients;
 		this->_invitedClients = src._invitedClients;
+
+		this->_operator = src._operator;
+		this->_memClients = src._memClients;
+		this->_invClients = src._invClients;
 	}
 	return (*this);
 

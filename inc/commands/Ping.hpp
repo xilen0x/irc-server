@@ -13,4 +13,3 @@ class Ping : public ICommand
 };
 
 #endif
-

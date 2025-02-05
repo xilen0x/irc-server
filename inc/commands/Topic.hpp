@@ -13,4 +13,3 @@ class Topic : public ICommand
 };
 
 #endif
-

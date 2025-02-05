@@ -23,14 +23,6 @@ std::string formatIRCMessage(const std::string& message)
     return timestamp + " -!- " + message;
 }
 
-/*
-void Server::sendResp(std::string resp, int fd)
-{
-	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << RED << "Response error!" << RES << std::endl;
-}
-*/
-
 int parseInput(std::string password, int port)
 {
     if (port < 1024 || port > 65535)

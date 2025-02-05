@@ -19,7 +19,7 @@
 // Public
 Messageprocessing::Messageprocessing( void )
 {
-	std::cout << "Messageprocessing => Creating _command Map" << std::endl;
+	// std::cout << "Messageprocessing => Creating _command Map" << std::endl;
 	this->_commands[CAP] = new Cap();
 	this->_commands[INVITE] = new Invite();
 	this->_commands[JOIN] = new Join();
@@ -58,6 +58,7 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	}
 	return (res);
 }
+
 /*
 char to_upper(char c)
 {

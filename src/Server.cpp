@@ -20,7 +20,7 @@ void Server::createSocket()
 	socketAddress.sin_addr.s_addr = INADDR_ANY;//Establece la dirección IP del socket, en este caso, INADDR_ANY, que indica que el socket escuchará en todas las interfaces de red.
 
     // Crear el df para el socket
-	_fdServer = socket(AF_INET, SOCK_STREAM, 0); 
+	_fdServer = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fdServer == -1)
 		throw(std::logic_error("Failed to create socket"));
 
@@ -37,7 +37,7 @@ void Server::createSocket()
     if (bind(_fdServer, reinterpret_cast<struct sockaddr*>(&socketAddress), sizeof(socketAddress)) == -1) {
         throw std::runtime_error("Failed to bind socket");
     }
-    std::cout << "Socket created successfully." << std::endl;
+    // std::cout << "Socket created successfully." << std::endl;
 }
 
 //Function that listens for incoming connections.
@@ -48,7 +48,7 @@ void Server::listenSocket()
 	{
         throw std::runtime_error("Failed to listen on socket");
     }
-    std::cout << "Server is now listening for incoming connections." << std::endl;
+    // std::cout << "Server is now listening for incoming connections." << std::endl;
 }
 
 //Function that fills the pollfd structure and adds it to the monitoring vector.
@@ -60,7 +60,7 @@ void Server::fillPollfd()
     serPoll.fd = _fdServer;//Establece el descriptor de archivo a monitorear.
     serPoll.events = POLLIN;//Establece los eventos a monitorear en el descriptor de archivo.
     _fdsClients.push_back(serPoll);//Agrega el pollfd al vector de monitoreo.
-    std::cout << "Server successfully connected on port " << _port << "." << std::endl;
+    std::cout << GRE << "Server successfully connected on port " << _port << "." << RES << std::endl;
 	std::cout << "Waiting for incoming connections..." << std::endl;
 }
 
@@ -85,7 +85,7 @@ void Server::acceptClient()
         }
 
         // Add the client to the list of monitored FDs
-        clientPoll.fd = connectionSocket;
+        clientPoll.fd = connectionSocket;//
         clientPoll.events = POLLIN;
         clientPoll.revents = 0;
 
@@ -98,7 +98,7 @@ void Server::acceptClient()
 
 // Function to remove a client based on its file descriptor
 void Server::clearClients(int fd, std::string msg)
-    {
+{
         // Manual find-if loop to find the client based on fd
         std::vector<struct pollfd>::iterator it = _fdsClients.begin();
         for (; it != _fdsClients.end(); ++it) {
@@ -114,10 +114,19 @@ void Server::clearClients(int fd, std::string msg)
         
         // Close the socket of the client
         close(fd);
+        std::cout << msg;
+}
 
-        //std::cout << msg;
-        std::cout << msg << std::endl;
-    }
+std::vector<std::string> splitStr(const std::string& input, char separator)
+{
+    std::istringstream          stream(input);
+    std::string                 token;
+    std::vector<std::string>    ret;
+
+    while (std::getline(stream, token, separator))
+        ret.push_back(token);
+    return (ret);
+}
 
 // Receive data from the client
 void Server::receiveData(int fd)
@@ -135,8 +144,15 @@ void Server::receiveData(int fd)
     }
     else {
         buffer[bytesRead] = '\0';
-        std::cout << "Received data: " << buffer << std::endl;
-        messageProcesing.processMessage(this, buffer, fd);
+        std::cout << "Received data: " << buffer;
+        std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
+        std::string message(buffer);//
+        std::vector<std::string> line = splitStr(message, '\n');
+        for (size_t i = 0; i < line.size(); i++)
+        {
+            std::cout << "line " << i << ": " << line[i] << std::endl;//debug
+            messageProcesing.processMessage(this, line[i], fd);
+        }
     }
 }
 
@@ -185,7 +201,7 @@ void Server::loop()
     }
 }
  
-void Server::runServer()
+void Server::   runServer()
 {
 	createSocket();
 	listenSocket();
@@ -233,7 +249,7 @@ Server::~Server( void )
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
-int	Server::getFdServer( void ) const { return (this->_fdServer); };
+int			Server::getFdServer( void ) const { return (this->_fdServer); };
 std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
 //std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }

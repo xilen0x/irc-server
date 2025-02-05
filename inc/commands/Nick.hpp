@@ -13,4 +13,3 @@ class Nick : public ICommand
 };
 
 #endif
-
