@@ -67,6 +67,8 @@ class Channel
 		// to get Client with nickname in a specific channel //Added by Lin
 		Client			*getCliInChannel(std::string &nick);
 
+		std::string 	getClientsList();
+
 		//_inviteChannel
 		bool			isInviteChannel( void ) const;
 		void			setInviteChannel ( void );

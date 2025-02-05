@@ -154,6 +154,30 @@ unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLim
 
 void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
 
+std::string 	Channel::getClientsList()
+{
+	std::string list;
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); ++it)
+	{
+		list += "@" + it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _operator.end())
+			list += " ";
+	}
+	if (!_operator.empty() && !_memClients.empty())
+		list += " ";
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); ++it)
+	{
+		list += it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _memClients.end())
+			list += " ";
+	}
+	return list;
+}
+
 // _operators
 bool 	Channel::isOperator( std::string nickClient )
 {
