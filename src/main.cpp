@@ -6,8 +6,6 @@
 
 int main(int argc, char const *argv[])
 {
-    signal(SIGINT, handleSIGINT);
-	signal(SIGQUIT, handleSIGQUIT);
     if (argc == 3)
     {
         int port = std::atoi(argv[1]);
@@ -15,6 +13,9 @@ int main(int argc, char const *argv[])
 
         try
         {
+            signal(SIGINT, handleSIGINT);//Ctrl+C
+	        signal(SIGQUIT, handleSIGQUIT);//Ctrl+\        /
+            signal(SIGPIPE, SIG_IGN);//Ignore SIGPIPE //Cuando un cliente se desconecta inesperadamente.
             if (!parseInput(password, port))
             {
                 Server server("ircserv", password, port);

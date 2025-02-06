@@ -21,7 +21,7 @@ class Server
 	    std::string	                _password;
 	    int			                _port;
 	    int			                _fdServer;
-	    bool		            _Signal;
+	    static bool		            	_Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
@@ -53,7 +53,7 @@ class Server
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
-		// void signalHandler();
+		static void signalsHandler(int signal);
 };
 
 int	 parseInput(std::string password, int port);

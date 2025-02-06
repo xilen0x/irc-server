@@ -249,3 +249,10 @@ std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
 
+bool Server::_Signal = false;
+void Server::signalsHandler(int signal)
+{
+    (void)signal;
+    std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
+    Server::_Signal = true;
+}

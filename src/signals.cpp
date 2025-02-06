@@ -1,8 +1,5 @@
 #include "Server.hpp"
 
-
-bool Server::_Signal = false;
-
 void cleanup() {
 
     Server server;
@@ -18,12 +15,14 @@ void cleanup() {
     // Cerrar el socket del servidor
     close(server.getFdServer());
     std::cout << "Conexiones cerradas." << std::endl;
+    return;
 }
 
 void handleSIGINT(int signal) {
-    std::cout << "\nSIGINT (" << signal << ") received. Shutting down the server..." << std::endl;
-    cleanup();
-    Server::_Signal = true;
+    (void)signal;
+    std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
+    // cleanup();
+    return;
 }
 
 
@@ -33,6 +32,8 @@ void handleSIGINT(int signal) {
 // }
 
 void handleSIGQUIT(int signal) {
-    std::cout << "\nSIGQUIT (" << signal << ") received. Shutting down the server..." << std::endl;
-    // Server::_Signal = true;
+    (void)signal;
+    std::cout << "\nSIGQUIT received. Shutting down the server..." << std::endl;
+    // cleanup();
+    // Server::_Signal = true;//
 }
