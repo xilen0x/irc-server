@@ -3,6 +3,7 @@
 # define CLIENT_HPP
 
 # include <iostream>
+# include "Server.hpp"
 
 class Client
 {
@@ -21,6 +22,8 @@ class Client
 		bool		_hasNick;
 		bool		_hasUser;
 		bool		_hasAuth;	  // Athenticated user with  password, nick, USER
+
+		std::vector<std::string> _inviteChannels; // the channels list that invite the client
 							   
 //	tipo lista  _channelsOperator;
 //	tipo lista  _channelsList;
@@ -57,6 +60,10 @@ class Client
 		void		setHasNick( void );
 		void		setHasUser( void );
 		void		setHasAuth( void );	
+
+		bool 		checkInviteChannel(std::string &channelName);
+		void		addInviteChannel(std::string &channelName);
+		void		deleteInviteChannel(std::string &channelName);
 
 // For debugging
 		void		printClientVars( void ); 

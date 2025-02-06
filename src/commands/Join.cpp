@@ -17,6 +17,17 @@ static int sumChannels(Server* server, std::string &nick)
 	return sum;
 }
 
+static bool isInvited(Client *cl, std::string channelName, int f)
+{
+	if (cl->checkInviteChannel(channelName))
+	{
+		if (f == 1)
+			cl->deleteInviteChannel(channelName);
+		return true;
+	}
+	return false;
+}
+
 static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
 {
 	std::vector<Channel> channels = server->getChannels();
@@ -31,9 +42,9 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		return ;
 	}
 	// if the password of channel input is incorrect
-	if (!channels[jchan].getPassword().empty() && channels[jchan].getPassword() != parVec[ipar].second)
+	if (!channels[jchan].getChannelKey().empty() && channels[jchan].getChannelKey() != parVec[ipar].second)
 	{
-		if (!isInvited(server, parVec[ipar].first, 0))
+		if (!isInvited(cl, parVec[ipar].first, 0))
 		{
 			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, channels[jchan].getChannelName()));
 			server->sendResp(chaErrMsg, fd);
@@ -41,16 +52,16 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		}
 	}
 	//if the channel is in only-invited mode
-	if (channels[jchan].getInviteOnly())
+	if (channels[jchan].isInviteChannel())
 	{
-		if (!isInvite(server, parVec[ipar].first, 1))
+		if (!isInvited(cl, parVec[ipar].first, 1))
 		{
 			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, channels[jchan].getChannelName()));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 	}
-	if (channels[jchan].getLimite() && channels[jchan].getClientSum() >= channels[jchan].getLimite())
+	if (channels[jchan].getUserLimitNumber() && channels[jchan].getClientSum() >= channels[jchan].getUserLimitNumber())
 	{
 		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, channels[jchan].getChannelName()));
 		server->sendResp(chaErrMsg, fd);
@@ -59,6 +70,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	channels[jchan].addMem(cl);
 	if (channels[jchan].getTopic().empty())
 	{
+		std::cout << "processJoin!" << std::endl;///////////////////////
 		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), channels[jchan].getChannelName()));
 		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, channels[jchan].getChannelName(), channels[jchan].getClientsList()));
 		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, channels[jchan].getChannelName()));
@@ -74,6 +86,28 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
 		server->sendResp(replyMsg, fd);
 	}
+}
+
+static void handleNonChannel(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int fd)
+{
+	Client *cl = server->getClient(fd);
+	std::string nick = cl->getNick();
+	if (sumChannels(server, nick) >= 10)
+	{
+		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));
+		server->sendResp(chaErrMsg, fd);
+		return ;
+	}
+	Channel newChan;
+	newChan.setChannelName(parVec[ipar].first);
+	newChan.addOpe(cl);
+	server->getChannels().push_back(newChan);
+	std::cout << "handleNonChannel!" << std::endl;///////////////////////////
+	std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), newChan.getChannelName()));
+	std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, newChan.getChannelName(), newChan.getClientsList()));
+	std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, newChan.getChannelName()));
+	std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
+	server->sendResp(replyMsg, fd);
 }
 
 bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, std::string &msg, int fd)
@@ -159,6 +193,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		std::cout << "getFD[" << i << "]:" << server->getClients()[i].getFdClient() << std::endl;
 	}
 	*/
+	std::cout << "JOIN processing..." << std::endl;
 	std::vector<std::pair<std::string, std::string> > parVec;
 	msg = trimLeft(msg);
 	std::string cmd = msg.substr(0, 4);
@@ -181,6 +216,6 @@ void Join::execute( Server* server, std::string &msg , int fd)
 			}
 		}
 		if (!f)
-			handleNonChannel(parVec, i, fd);
+			handleNonChannel(server, parVec, i, fd);
 	}
 }

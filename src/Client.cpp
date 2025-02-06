@@ -93,6 +93,32 @@ void	Client::setHasUser( void ) { this->_hasUser = true; }
 	
 void	Client::setHasAuth( void ) { this->_hasAuth = true; }	
 
+bool 	Client::checkInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+			return true;
+	}
+	return false;
+}
+
+void	Client::addInviteChannel(std::string &channelName)
+{
+	this->_inviteChannels.push_back(channelName);
+}
+
+void	Client::deleteInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+		{
+			this->_inviteChannels.erase(this->_inviteChannels.begin() + i);
+			return ;
+		}
+	}
+}
 
 // For debugging
 void	Client::printClientVars( void )

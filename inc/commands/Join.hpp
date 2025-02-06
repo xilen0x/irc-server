@@ -16,4 +16,3 @@ class Join : public ICommand
 };
 
 #endif
-
