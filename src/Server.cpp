@@ -245,3 +245,4 @@ std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
+

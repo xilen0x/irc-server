@@ -5,19 +5,19 @@
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
 //Client *Server::getClient(std::vector<Client> clients, int fd)
-Client *Server::getClient(int fd)
-{
-//	for (size_t i = 0; i < clients.size(); i++)
-	std::vector<Client>& clientsRef = getClients();
-	for (size_t i = 0; i < clientsRef.size(); i++)
-	{
-//		if (clients[i].getFdClient() == fd)
-		if (clientsRef[i].getFdClient() == fd)
-			return (&clientsRef[i]);
-//			return (&(clients[i]));
-	}
-	return (NULL);
-}
+// Client *Server::getClient(int fd)
+// {
+// //	for (size_t i = 0; i < clients.size(); i++)
+// 	std::vector<Client>& clientsRef = getClients();
+// 	for (size_t i = 0; i < clientsRef.size(); i++)
+// 	{
+// //		if (clients[i].getFdClient() == fd)
+// 		if (clientsRef[i].getFdClient() == fd)
+// 			return (&clientsRef[i]);
+// //			return (&(clients[i]));
+// 	}
+// 	return (NULL);
+// }
 
 static bool checkNickInUse(std::vector<Client> clients, std::string &s)
 {

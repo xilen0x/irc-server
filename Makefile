@@ -28,7 +28,8 @@ SRC_FILES = src/main.cpp \
 			src/commands/Quit.cpp \
 			src/commands/Topic.cpp \
 			src/commands/User.cpp \
-			src/commands/Test.cpp
+			src/commands/Test.cpp \
+			src/signals.cpp
 
 HDR_FILES = inc/Client.hpp \
 			inc/Channel.hpp \

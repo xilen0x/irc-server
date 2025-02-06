@@ -21,7 +21,7 @@ class Server
 	    std::string	                _password;
 	    int			                _port;
 	    int			                _fdServer;
-	    static bool                 _Signal;
+	    static bool		            _Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
@@ -38,6 +38,7 @@ class Server
 	public:
 
 		Server(std::string serverName, std::string password, int port);
+		~Server();
 
 		std::string	getServerName( void ) const;
 		std::string	getPassword( void ) const;
@@ -52,11 +53,14 @@ class Server
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
-		~Server();
+		// void signalHandler();
 };
 
 int	 parseInput(std::string password, int port);
 std::string trimLeft(std::string &str);
 std::string uppercase(std::string &s);
+
+void handleSIGINT(int signal);
+void handleSIGQUIT(int signal);
 
 #endif
