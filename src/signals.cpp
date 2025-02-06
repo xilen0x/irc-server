@@ -3,9 +3,27 @@
 
 bool Server::_Signal = false;
 
+void cleanup() {
+
+    Server server;
+    std::cout << "Cerrando conexiones..." << std::endl;
+
+    // Notificar a los clientes antes de cerrar
+    std::string msg = "Servidor cerrándose. Adiós!\n";
+    for (size_t i = 0; i < server.getClients().size(); ++i) {
+        server.sendResp(msg, server.getClients()[i].getFdClient());
+        close(server.getClients()[i].getFdClient());
+    }
+
+    // Cerrar el socket del servidor
+    close(server.getFdServer());
+    std::cout << "Conexiones cerradas." << std::endl;
+}
+
 void handleSIGINT(int signal) {
     std::cout << "\nSIGINT (" << signal << ") received. Shutting down the server..." << std::endl;
-    // Server::_Signal = true;
+    cleanup();
+    Server::_Signal = true;
 }
 
 

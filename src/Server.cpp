@@ -2,6 +2,9 @@
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 #include "Messageprocessing.hpp"
 
+Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
+{}
+
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
 {
 	// std::cout << "Server() => Set initial values" << std::endl;
@@ -159,7 +162,7 @@ void Server::receiveData(int fd)
 //Function that loops to monitor events on the fd.
 void Server::loop()
 {
-    while (true)
+    while (Server::_Signal == false)
     {
         int pollRet;  // Stores the return value of the poll() function
         int revents;  // Stores the events that occurred in the fd

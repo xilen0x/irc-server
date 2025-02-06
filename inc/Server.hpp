@@ -21,7 +21,7 @@ class Server
 	    std::string	                _password;
 	    int			                _port;
 	    int			                _fdServer;
-	    static bool		            _Signal;
+	    bool		            _Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
@@ -36,7 +36,7 @@ class Server
 		void clearClients(int fd, std::string msg);
     
 	public:
-
+		Server();
 		Server(std::string serverName, std::string password, int port);
 		~Server();
 
