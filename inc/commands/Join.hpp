@@ -12,7 +12,7 @@ class Join : public ICommand
 		~Join( void );
 
 		void execute(Server* server, std::string &msg , int fd);
+		bool parseJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, std::string &msg, int fd);
 };
 
 #endif
-

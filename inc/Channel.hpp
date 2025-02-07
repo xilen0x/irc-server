@@ -11,6 +11,8 @@
 # include "Server.hpp"
 # include "Client.hpp"
 
+class Client;
+
 class Channel
 {
 	private:
@@ -24,7 +26,8 @@ class Channel
 		std::string		_channelKey;//password channel
 
 		bool			_hasUserLimit;
-		unsigned long	_userLimitNumber;
+		int				_userLimitNumber;
+//		unsigned long	_userLimitNumber;
 
 		// DOUBT: 250119 - only store nicks o store Objects?
 		std::vector<std::string>	_operators;
@@ -57,6 +60,7 @@ class Channel
 		void	_printVectorStrings(std::vector<std::string> stringVector);
 
 	public:
+		Channel( void );
 		Channel( std::string channelName, std::string operatorNick );
 		Channel( std::string channelName, std::string operatorNick, Client *operatorClient);    // By Linnnnnnn
 		Channel( Channel const &src);
@@ -65,9 +69,12 @@ class Channel
 
 		//_channelName
 		std::string		getChannelName( void ) const;
+		void			setChannelName(std::string channelName);
 
 		// to get Client with nickname in a specific channel //Added by Lin
 		Client			*getCliInChannel(std::string &nick);
+
+		std::string 	getClientsList();
 
 		//_inviteChannel
 		bool			isInviteChannel( void ) const;
@@ -93,8 +100,11 @@ class Channel
 		void			unsetUserLimitActived( void );
 
 		// _userLimitNumber
-		unsigned long	getUserLimitNumber( void ) const;
+//		unsigned long	getUserLimitNumber( void ) const;
+		int				getUserLimitNumber( void ) const;
 		void			setUserLimitNumber( unsigned long limit);
+
+		int				getClientSum();
 
 		// _operators
 		bool 			isOperator( std::string nickClient );

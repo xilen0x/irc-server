@@ -8,6 +8,7 @@
 # include "irc.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
+# include <csignal>
 
 class Client;
 class Channel;
@@ -20,7 +21,7 @@ class Server
 	    std::string	                _password;
 	    int			                _port;
 	    int			                _fdServer;
-	    //static bool                 _Signal;
+	    static bool		           	_Signal;
 		std::vector<struct pollfd> 	_fdsClients;
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
@@ -35,9 +36,8 @@ class Server
 		void clearClients(int fd, std::string msg);
     
 	public:
-
+		Server();
 		Server(std::string serverName, std::string password, int port);
-
 		std::string	getServerName( void ) const;
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
@@ -59,6 +59,7 @@ class Server
 		void sendResp(std::string resp, int fd);
 		void sendBroad(std::string resp, int fd);
 
+		static void signalsHandler(int signal);
 // apardo-m need to be public
 //		void clearClients(int fd, std::string msg);
 
@@ -77,5 +78,8 @@ int	 parseInput(std::string password, int port);
 std::vector<std::string> splitByDoublePoint(const std::string & msg);
 std::string trimLeft(std::string &str);
 std::string uppercase(std::string &s);
+
+void handleSIGINT(int signal);
+void handleSIGQUIT(int signal);
 
 #endif

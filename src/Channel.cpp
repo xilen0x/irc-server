@@ -17,6 +17,10 @@ void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
 }
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
+Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey("")
+{}
+
+
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
 {
 	std::cout << "Channel => Object created" << std::endl;
@@ -82,6 +86,8 @@ Channel::~Channel( void )
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 //_channelName
 std::string	Channel::getChannelName( void ) const { return ( this->_channelName); }
+
+void Channel::setChannelName(std::string channelName) { this->_channelName = channelName; }
 
 /*
 // it will be modified in near future: clients should be those in this instance of channel instead of those in server
@@ -149,9 +155,36 @@ void	Channel::setUserLimitActived( void ) { this->_hasUserLimit = true; }
 void	Channel::unsetUserLimitActived( void ) { this->_hasUserLimit = false; }
 
 // _userLimitNumber
-unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
+int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
+//unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
 
 void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
+
+int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
+
+std::string 	Channel::getClientsList()
+{
+	std::string list;
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); ++it)
+	{
+		list += "@" + it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _operator.end())
+			list += " ";
+	}
+	if (!_operator.empty() && !_memClients.empty())
+		list += " ";
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); ++it)
+	{
+		list += it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _memClients.end())
+			list += " ";
+	}
+	return list;
+}
 
 // _operators
 bool 	Channel::isOperator( std::string nickClient )

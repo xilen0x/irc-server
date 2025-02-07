@@ -2,10 +2,12 @@
 
 #include "Client.hpp"
 
-Client::Client() :_fdClient(-1), _ipClient("")
+// Client::Client() :_fdClient(-1), _ipClient("")
+// {}
+Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
 {
 
-	//Comment to LIN and CARLOS
+// 250207   Ver si estas 5 lineas se han de cambiar
 	this->_nick = "*";
 	this->_userName = "*User";  
 	this->_realName = "*Real";
@@ -13,12 +15,7 @@ Client::Client() :_fdClient(-1), _ipClient("")
 	this->_bufferInMessage = "";
 	this->_bufferOutResponse = "";
 
-	this->_hasPass = false;
-	this->_hasNick = false;
-	this->_hasUser = false;
-	this->_hasAuth = false;
-
-	std::cout << "Client() => Set default values" << std::endl;
+//	std::cout << "Client() => Set default values" << std::endl;
 }
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)
@@ -119,6 +116,32 @@ void	Client::setHasUser( void ) { this->_hasUser = true; }
 	
 void	Client::setHasAuth( void ) { this->_hasAuth = true; }	
 
+bool 	Client::checkInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+			return true;
+	}
+	return false;
+}
+
+void	Client::addInviteChannel(std::string &channelName)
+{
+	this->_inviteChannels.push_back(channelName);
+}
+
+void	Client::deleteInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+		{
+			this->_inviteChannels.erase(this->_inviteChannels.begin() + i);
+			return ;
+		}
+	}
+}
 
 // For debugging
 void	Client::printClientVars( void )

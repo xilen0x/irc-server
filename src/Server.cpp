@@ -2,6 +2,9 @@
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 #include "Messageprocessing.hpp"
 
+Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
+{}
+
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
 {
 	// std::cout << "Server() => Set initial values" << std::endl;
@@ -159,7 +162,7 @@ void Server::receiveData(int fd)
 //Function that loops to monitor events on the fd.
 void Server::loop()
 {
-    while (true)
+    while (Server::_Signal == false)
     {
         int pollRet;  // Stores the return value of the poll() function
         int revents;  // Stores the events that occurred in the fd
@@ -212,7 +215,7 @@ void Server::   runServer()
 void Server::sendResp(std::string resp, int fd)
 {
 	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << "Response failed!" << std::endl;
+		std::cerr << RED << "Response error!" << RES << std::endl;
 }
 
 void Server::sendBroad(std::string resp, int fd)
@@ -242,6 +245,21 @@ Server::~Server( void )
 	this->_clients.clear();
 	this->_channels.clear();
 	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
+}
+
+//Client *Server::getClient(std::vector<Client> clients, int fd)
+Client *Server::getClient(int fd)
+{
+//	for (size_t i = 0; i < clients.size(); i++)
+	std::vector<Client>& clientsRef = getClients();
+	for (size_t i = 0; i < clientsRef.size(); i++)
+	{
+//		if (clients[i].getFdClient() == fd)
+		if (clientsRef[i].getFdClient() == fd)
+			return (&clientsRef[i]);
+//			return (&(clients[i]));
+	}
+	return (NULL);
 }
 
 //-----------------------------Getters & Setters-----------------------------//
@@ -299,4 +317,12 @@ Client*		Server::getClientByFD(int fd)
 Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 {
 	 return (&(this->_channels[pos]));
+}
+
+bool Server::_Signal = false;
+void Server::signalsHandler(int signal)
+{
+    (void)signal;
+    std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
+    Server::_Signal = true;
 }
