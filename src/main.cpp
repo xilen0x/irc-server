@@ -13,14 +13,13 @@ int main(int argc, char const *argv[])
 
         try
         {
-            signal(SIGINT, handleSIGINT);//Ctrl+C
-	        signal(SIGQUIT, handleSIGQUIT);//Ctrl+\        /
-            signal(SIGPIPE, SIG_IGN);//Ignore SIGPIPE //Cuando un cliente se desconecta inesperadamente.
+            signal(SIGINT, Server::signalsHandler);//Ctrl+C
+	        signal(SIGQUIT, Server::signalsHandler);//Ctrl+\    /
+            signal(SIGPIPE, SIG_IGN);//Ignore SIGPIPE, when a client disconnects, the server will not crash
             if (!parseInput(password, port))
             {
                 Server server("ircserv", password, port);
                 server.runServer();
-                std::cout << "IRC server is running. Press Ctrl+C to stop." << std::endl;
             }
         }
         catch (const std::exception &e)

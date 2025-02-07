@@ -1,15 +1,18 @@
 
 #include "User.hpp"
 #include "Messageprocessing.hpp"
+#include "Nick.hpp"
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-User::User( void ) : welcomeMsg(false) {};
+User::User( void ) : welcomeMsgUser(false) {};
+
 
 void User::execute(Server* server, std::string& msg, int fd) 
 {
     Client*             client = server->getClient(fd);
     Messageprocessing   parameters;
+    Nick                nick;
 
     msg = trimLeft(msg);
     msg = msg.substr(4);
@@ -40,16 +43,17 @@ void User::execute(Server* server, std::string& msg, int fd)
     {
         client->setUserName(msg);
         client->setHasUser();
-
-        if (!welcomeMsg)
-        {
-            welcomeMsg = true;
-            server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
-            server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
-            server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
+        if (client->getHasNick() && client->getHasUser() && client->getHasPass())
+	    {
+            if (welcomeMsgUser == false && nick.welcomeMsgNick == false)
+            {
+                welcomeMsgUser = true;
+                server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
+                server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
+                server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
+            }
         }
     }
 }
-
 
 User::~User( void ) {};

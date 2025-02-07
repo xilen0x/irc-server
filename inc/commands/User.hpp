@@ -6,10 +6,8 @@
 
 class User : public ICommand
 {
-	private:
-		bool welcomeMsg;
-		
 	public:
+		bool welcomeMsgUser;
 		User( void );
 		~User( void );
 
