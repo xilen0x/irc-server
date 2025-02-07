@@ -253,6 +253,8 @@ std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
 //std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
+size_t	Server::getChannelsSize( void ) { return (this->_channels.size()); }
+
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
 
@@ -266,20 +268,21 @@ void		Server::deleteClient( int fd )
             _clients.erase(it);
 }
 
+void		Server::deleteChannel( std::string chName )
+{
+	std::vector<Channel>::iterator it = this->_channels.begin();
+	while (it != _channels.end() && it->getChannelName() != chName)
+		it++;
+	// If found, erase the client from the list
+	if (it != _channels.end())
+            _channels.erase(it);
+}
+
 // apardo-m need for QUIT
 void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
 {
-	deleteClient( fd );
-	clearClients(fd, msg);
-	// Iterar sobre los canales para los que el cliente está registrado
-		// Borrar cliente del canal pertinente
-		// Si no hay administradores en el canal y hay miembros (asignar un nuevo administrador)
-		// 	Obtener el primer cliente de la lista de miembros
-		// 	Asignar el nuevo administrador
-		//  Notificar al nuevo administrador
-		// Si el canal queda vacío, lo eliminamos
-	std::cout << "TODO => deleteClientFromAnyChannel(int fd) " << std::endl;
-
+	deleteClient( fd ); //delete client from _clients
+	clearClients(fd, msg); //delete fd from _fdsClients
 }
 //For test proposal
 
@@ -293,7 +296,7 @@ Client*		Server::getClientByFD(int fd)
 	 return (NULL);
 }
 
-Channel*	Server::getChannelsByNumPosInVector(int pos)
+Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 {
 	 return (&(this->_channels[pos]));
 }

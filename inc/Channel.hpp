@@ -100,11 +100,13 @@ class Channel
 		bool 			isOperator( std::string nickClient );
 		void 			addOperator( std::string nickClient );
 		void 			deleteOperator( std::string nickClient );
+		size_t			sizeOperators( void );
 
 		// _memberClients
 		bool			isMember( std::string nickClient );
 		void			addMember( std::string nickClient );
 		void			deleteMember( std::string nickClient );
+		size_t			sizeMemberClients( void );
 
 		// _invitedClients
 		bool			isInvited( std::string nickClient );

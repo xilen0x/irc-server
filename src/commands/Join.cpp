@@ -38,6 +38,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 	client = server->getClientByFD(fd);
 	if (client != NULL)
 	{
+/*
 		std::ostringstream	str1;
 
 		str1 << fd;
@@ -47,7 +48,8 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		client->setNick(nick);
 		client->setUserName(nick);
 		std::cout << " added : " << client->getNick() << std::endl;
-
+*/
+		nick = client->getNick();
 		if (channels.size() == 0)
 		{
 			Channel newChannel(MY_CHANNEL_NAME, nick);

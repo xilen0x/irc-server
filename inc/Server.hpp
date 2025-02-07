@@ -47,10 +47,13 @@ class Server
 		std::vector<Client>& getClients( void );
 		Client 		*getClient(int fd);
 
+		size_t		getChannelsSize( void );
+
 		void		addClient( Client newClient );
 		void		addChannel( Channel newChannel );  
 
 		void		deleteClient( int fd );
+		void		deleteChannel( std::string chName );
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
@@ -64,7 +67,7 @@ class Server
 
 //For test proposal
 		Client	*getClientByFD(int fd);
-		Channel	*getChannelsByNumPosInVector(int pos);
+		Channel	*getChannelsByNumPosInVector(size_t pos);
 
 		~Server();
 };

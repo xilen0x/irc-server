@@ -172,6 +172,8 @@ void 	Channel::deleteOperator( std::string nickClient )
 
 }
 
+size_t	Channel::sizeOperators( void ) { return (this->_operators.size()); }
+
 // _memberClients
 bool	Channel::isMember( std::string nickClient )
 {
@@ -189,6 +191,8 @@ void	Channel::deleteMember( std::string nickClient )
 	if( !this->_deleteInVector(this->_memberClients, nickClient))
 		std::cout << nickClient << " is NOT  in _memberClients. CAN´T DELETE IT!!!" << std::endl;
 }
+
+size_t	Channel::sizeMemberClients( void ) { return (this->_memClients.size()); }
 
 // _invitedClients
 bool	Channel::isInvited( std::string nickClient )
