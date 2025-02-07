@@ -107,7 +107,8 @@ static void handleNonChannel(Server* server, std::vector<std::pair<std::string, 
 	Channel newChan;
 	newChan.setChannelName(parVec[ipar].first);
 	newChan.addOpe(cl);
-	server->getChannels().push_back(newChan);
+//	server->getChannels().push_back(newChan);
+	server->addChannel(newChan);
 	std::cout << "handleNonChannel!" << std::endl;///////////////////////////
 	std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), newChan.getChannelName()));
 	std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, newChan.getChannelName(), newChan.getClientsList()));
@@ -116,7 +117,7 @@ static void handleNonChannel(Server* server, std::vector<std::pair<std::string, 
 	server->sendResp(replyMsg, fd);
 }
 
-bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, std::string &msg, int fd)
+bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::string> >& parVec, std::string &msg, int fd)
 {
 	std::vector<std::string> vecStr;
 	std::string channelName, passWor, buff;
