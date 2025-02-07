@@ -195,6 +195,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
 		server->sendResp(joinMsg, fd);
 	}
+	std::cout << "JOIN processing... parVec: " << parVec[0].first << std::endl;
 	for (size_t i = 0; i < parVec.size(); i++)
 	{
 		bool f = false;
