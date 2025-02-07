@@ -43,8 +43,10 @@ class Channel
 
 		template <typename T>
 		bool	_addInMap(std::map<std::string, T*> &targetMap, std::string &nick, T *t);
+
 		template <typename T>
 		bool	_deleteInMap(std::map<std::string, T*> &targetMap, std::string &nick);
+
 		// End Added Linnnnnnnnnnnnnnnnn
 
 		template <typename T>
@@ -58,6 +60,8 @@ class Channel
 
 		// For debugging
 		void	_printVectorStrings(std::vector<std::string> stringVector);
+
+		void	_printMapKeys(std::map<std::string, Client *> mapVar);
 
 	public:
 		Channel( void );
@@ -130,6 +134,12 @@ class Channel
 		void			deleteMem(std::string &nick);
 		void			addInv(Client *client);
 		void			deleteInv(std::string &nick);
+
+		// 250207 by apardo-m
+		bool			isOpe(std::string &nick);
+		bool			isMem(std::string &nick);
+		size_t			sizeOpe( void );
+		size_t			sizeMem( void );
 
 // For debugging
 		void		printChannelVars( void ); 

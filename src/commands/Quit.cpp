@@ -62,29 +62,29 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	for( size_t i = 0; i < channelsSize; i++)
 	{
 		actualChannel = server->getChannelsByNumPosInVector(i);
-		if (actualChannel->isOperator(nick) || actualChannel->isMember(nick))
+		if (actualChannel->isOpe(nick) || actualChannel->isMem(nick))
 		{
 			std::cout << nick << " TODO  send chanelBroadcast to " << actualChannel->getChannelName() << std::endl;
 			if (splitedStrVect.size() == 2)
 				server->sendBroad(MSG_QUIT_CHANNEL_REASON(nick, user, splitedStrVect[1]), fd);
 			else
 				server->sendBroad(MSG_QUIT_CHANNEL_NO_REASON(nick, user), fd);
-			if (actualChannel->isOperator(nick))
+			if (actualChannel->isOpe(nick))
 			{
-				actualChannel->deleteOperator(nick);
-				if (actualChannel->sizeOperators() == 0)
+				actualChannel->deleteOpe(nick);
+				if (actualChannel->sizeOpe() == 0)
 				{
-					if ( actualChannel->sizeMemberClients() != 0 )
+					if ( actualChannel->sizeMem() != 0 )
 						std::cout << " TODO : Set a member as operator" << std::endl;
 					else
 						server->deleteChannel(actualChannel->getChannelName());
 				}
 				break;
 			}
-			else if (actualChannel->isMember(nick))
+			else if (actualChannel->isMem(nick))
 			{
-				actualChannel->deleteMember(nick);
-				if ( actualChannel->sizeMemberClients() == 0 )
+				actualChannel->deleteMem(nick);
+				if ( actualChannel->sizeMem() == 0 )
 					server->deleteChannel(actualChannel->getChannelName());
 				break;
 			}

@@ -7,12 +7,21 @@
 // Private For debugging
 void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
 {
-	
 	std::vector<std::string>::iterator it;
 
 	for (it=stringVector.begin();it != stringVector.end(); it++)
 	{
 		std::cout << "\t- " << *it << std::endl;
+	}
+}
+
+void	Channel::_printMapKeys(std::map<std::string, Client *> mapVar)
+{
+	std::map<std::string, Client *>::iterator it;
+
+	for (it=mapVar.begin();it != mapVar.end(); it++)
+	{
+		std::cout << "\t- " << it->first << std::endl;
 	}
 }
 
@@ -301,6 +310,27 @@ void	Channel::deleteInv(std::string &nick)
 }
 // End Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 
+// 250207 by apardo-m
+bool	Channel::isOpe(std::string &nick)
+{
+	if( this->_operator.find(nick) != this->_operator.end() )
+		return ( true );
+	return ( false );
+}
+
+bool	Channel::isMem(std::string &nick)
+{
+	if( this->_memClients.find(nick) != this->_memClients.end() )
+		return ( true );
+	return ( false );
+}
+
+size_t	Channel::sizeOpe( void ) { return (this->_operator.size()); }
+
+size_t	Channel::sizeMem( void ) { return (this->_memClients.size()); }
+
+// End 250207 by apardo-m
+
 // For debugging
 void	Channel::printChannelVars( void )
 {
@@ -313,10 +343,13 @@ void	Channel::printChannelVars( void )
 	std::cout << "_hasUserLimit = " << this->_hasUserLimit << std::endl;
 	std::cout << "_userLimitNumber = " << this->_userLimitNumber << std::endl;
 	std::cout << "- CHANNEL _operators:" << std::endl;
-	this->_printVectorStrings(this->_operators);
+	//this->_printVectorStrings(this->_operators);
+	this->_printMapKeys(this->_operator);
 	std::cout << "- CHANNEL _memberClients:" << std::endl;
-	this->_printVectorStrings(this->_memberClients);
+//	this->_printVectorStrings(this->_memberClients);
+	this->_printMapKeys(this->_memClients);
 	std::cout << "- CHANNEL _invitedClients:" << std::endl;
-	this->_printVectorStrings(this->_invitedClients);
+//	this->_printVectorStrings(this->_invitedClients);
+	this->_printMapKeys(this->_invClients);
 	std::cout << "----- CHANNEL DATA  (end)-----" << std::endl;
 }
