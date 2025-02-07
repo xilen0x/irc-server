@@ -7,6 +7,8 @@
 class Nick : public ICommand
 {
 	public:
+		bool welcomeMsgNick;
+		Nick( void );
 		~Nick( void );
 
 		void execute( Server*, std::string &, int );
