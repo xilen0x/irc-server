@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 #include "Messageprocessing.hpp"
+#include <cerrno>
 
 Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
 {}
@@ -162,14 +163,18 @@ void Server::receiveData(int fd)
 //Function that loops to monitor events on the fd.
 void Server::loop()
 {
-    while (Server::_Signal == false)
+    while (!Server::_Signal)
     {
         int pollRet;  // Stores the return value of the poll() function
         int revents;  // Stores the events that occurred in the fd
 
         // Wait for events on the file descriptors
-        pollRet = poll(_fdsClients.data(), _fdsClients.size(), -1);
+        pollRet = poll(_fdsClients.data(), _fdsClients.size(), 1000);// 1000 ms a timeout to avoid blocking indefinitely
         if (pollRet == -1) {
+            if (errno == EINTR) {
+                // poll() was interrupted by a signal
+                continue;
+            }
             throw std::runtime_error("The function poll() failed");
         }
 
@@ -208,8 +213,10 @@ void Server::   runServer()
 {
 	createSocket();
 	listenSocket();
+    std::cout << "IRC server is running. Press Ctrl+C to stop." << std::endl;
 	fillPollfd();
 	loop();
+
 }
 
 void Server::sendResp(std::string resp, int fd)
@@ -236,16 +243,6 @@ void Server::sendBroad(std::string resp, int fd)
 	}
 }
 
-Server::~Server( void )
-{
-	// TODO : Close connections if are open :
-	
-	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
-	this->_fdsClients.clear();
-	this->_clients.clear();
-	this->_channels.clear();
-	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
-}
 
 //Client *Server::getClient(std::vector<Client> clients, int fd)
 Client *Server::getClient(int fd)
@@ -319,10 +316,45 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 	 return (&(this->_channels[pos]));
 }
 
-bool Server::_Signal = false;
 void Server::signalsHandler(int signal)
 {
     (void)signal;
-    std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
-    Server::_Signal = true;
+    if (signal == SIGINT)
+    {
+        std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
+        _Signal = true;
+    }
+}
+
+// Server::~Server( void )
+// {
+// 	// TODO : Close connections if are open :
+	
+// 	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
+// 	this->_fdsClients.clear();
+// 	this->_clients.clear();
+// 	this->_channels.clear();
+// 	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
+// }
+
+Server::~Server()
+{
+    std::cout << "Closing connections..." << std::endl;
+
+    // Message to clients before closing
+    std::string msg = "Server is closing...!\n";
+    for (size_t i = 0; i < _clients.size(); ++i) {
+        sendResp(msg, _clients[i].getFdClient());
+        close(_clients[i].getFdClient());
+    }
+    
+    // Close the server socket
+    if (_fdServer != -1) {
+        close(_fdServer);
+    }
+
+    // Clear the vectors
+    _fdsClients.clear();
+    _clients.clear();
+    _channels.clear();
 }
