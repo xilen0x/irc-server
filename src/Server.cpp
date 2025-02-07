@@ -212,6 +212,12 @@ void Server::   runServer()
 	loop();
 }
 
+void Server::sendResp(std::string resp, int fd)
+{
+	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
+		std::cerr << RED << "Response error!" << RES << std::endl;
+}
+
 Server::~Server( void )
 {
 	// TODO : Close connections if are open 
