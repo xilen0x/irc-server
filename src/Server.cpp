@@ -316,15 +316,7 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 	 return (&(this->_channels[pos]));
 }
 
-void Server::signalsHandler(int signal)
-{
-    (void)signal;
-    if (signal == SIGINT)
-    {
-        std::cout << "\nSIGINT received. Shutting down the server..." << std::endl;
-        _Signal = true;
-    }
-}
+
 
 // Server::~Server( void )
 // {
