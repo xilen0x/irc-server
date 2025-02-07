@@ -101,7 +101,7 @@ void Server::acceptClient()
 
 // Function to remove a client based on its file descriptor
 void Server::clearClients(int fd, std::string msg)
-    {
+{
         // Manual find-if loop to find the client based on fd
         std::vector<struct pollfd>::iterator it = _fdsClients.begin();
         for (; it != _fdsClients.end(); ++it) {
@@ -117,8 +117,8 @@ void Server::clearClients(int fd, std::string msg)
         
         // Close the socket of the client
         close(fd);
-        std::cout << msg;
-    }
+        std::cout << "fd = " << fd << msg << std::endl;
+}
 
 std::vector<std::string> splitStr(const std::string& input, char separator)
 {
@@ -218,9 +218,27 @@ void Server::sendResp(std::string resp, int fd)
 		std::cerr << RED << "Response error!" << RES << std::endl;
 }
 
+void Server::sendBroad(std::string resp, int fd)
+{
+	int	actualFd;
+
+	std::cout << "sendBroad() :" << std::endl;
+
+	for (unsigned long i = 0; i < this->_clients.size(); i++)
+	{
+		actualFd = _clients[i].getFdClient();
+		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;
+		if (actualFd != fd)
+		{
+			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;
+			sendResp(resp, actualFd);
+		}
+	}
+}
+
 Server::~Server( void )
 {
-	// TODO : Close connections if are open 
+	// TODO : Close connections if are open :
 	
 	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
 	this->_fdsClients.clear();
@@ -249,11 +267,57 @@ std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
-std::vector<Channel> Server::getChannels( void ) const{ return (this->_channels); }
+std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
+//std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
+
+size_t	Server::getChannelsSize( void ) { return (this->_channels.size()); }
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
+
+void		Server::deleteClient( int fd )
+{
+	std::vector<Client>::iterator it = this->_clients.begin();
+	while (it != _clients.end() && it->getFdClient() != fd)
+		it++;
+	// If found, erase the client from the list
+	if (it != _clients.end())
+            _clients.erase(it);
+}
+
+void		Server::deleteChannel( std::string chName )
+{
+	std::vector<Channel>::iterator it = this->_channels.begin();
+	while (it != _channels.end() && it->getChannelName() != chName)
+		it++;
+	// If found, erase the client from the list
+	if (it != _channels.end())
+            _channels.erase(it);
+}
+
+// apardo-m need for QUIT
+void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
+{
+	deleteClient( fd ); //delete client from _clients
+	clearClients(fd, msg); //delete fd from _fdsClients
+}
+//For test proposal
+
+Client*		Server::getClientByFD(int fd)
+{
+	 for (unsigned long i = 0 ; i < this->_clients.size(); i++)
+	 {
+		if (this->_clients[i].getFdClient() == fd)
+			return (&(this->_clients[i]));
+	 }
+	 return (NULL);
+}
+
+Channel*	Server::getChannelsByNumPosInVector(size_t pos)
+{
+	 return (&(this->_channels[pos]));
+}
 
 bool Server::_Signal = false;
 void Server::signalsHandler(int signal)

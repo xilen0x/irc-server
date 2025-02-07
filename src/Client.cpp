@@ -1,16 +1,29 @@
+#include <sstream>
 
 #include "Client.hpp"
 
 // Client::Client() :_fdClient(-1), _ipClient("")
 // {}
 Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
-{}
+{
+
+// 250207   Ver si estas 5 lineas se han de cambiar
+	this->_nick = "*";
+	this->_userName = "*User";  
+	this->_realName = "*Real";
+
+	this->_bufferInMessage = "";
+	this->_bufferOutResponse = "";
+
+//	std::cout << "Client() => Set default values" << std::endl;
+}
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)
 {
-	this->_nick = "";
-	this->_userName = "";
-	this->_realName = "";
+	//Comment to LIN and CARLOS
+	this->_nick = "*";
+	this->_userName = "*User";  
+	this->_realName = "*Real";
 
 	this->_bufferInMessage = "";
 	this->_bufferOutResponse = "";
@@ -20,7 +33,7 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_hasUser = false;
 	this->_hasAuth = false;
 
-	std::cout << "Client() => Set initial values" << std::endl;
+	std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;
 }
 
 Client::Client( Client const &src){ *this = src; }
@@ -51,8 +64,16 @@ Client::~Client( void )
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
 
-void	Client::setFdClient( int fd ) { 
+void	Client::setFdClient( int fd )
+{ 
 	this->_fdClient = fd; 
+
+//TODO Delete the next lines
+	std::ostringstream	str1;
+
+
+	str1 << fd;
+	this->_nick = this->_nick + str1.str();   
 }
 
 std::string	Client::getIpClient( void ) const { return ( this->_ipClient ); }

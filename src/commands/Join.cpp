@@ -1,6 +1,12 @@
 
+#include <sstream>
+
 #include "Join.hpp"
 #include <sstream>
+
+#define MY_CHANNEL_NAME "MyChannel"
+#define BASE_NICK "nick_"
+#define BASE_USER_NAME "userName_"
 
 Join::~Join( void ) {};
 
@@ -179,20 +185,6 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 
 void Join::execute( Server* server, std::string &msg , int fd)
 {
-	/*
-	(void)fd;
-	(void)msg;
-	// std::cout << "    ----" << std::endl;
-	// std::cout << "JOIN  => TODO with message " << msg << std::endl;
-	// std::cout << "    ----" << std::endl;
-
-	std::cout << "getChannels: " << server->getChannels().size() << std::endl;
-	std::cout << "getClients:" << server->getClients().size() << std::endl;
-	for (unsigned long i=0; i < server->getClients().size(); i++)
-	{
-		std::cout << "getFD[" << i << "]:" << server->getClients()[i].getFdClient() << std::endl;
-	}
-	*/
 	std::cout << "JOIN processing..." << std::endl;
 	std::vector<std::pair<std::string, std::string> > parVec;
 	msg = trimLeft(msg);

@@ -3,10 +3,18 @@
 # define REPLIES_HPP
 
 # define CRLF "\r\n"
+# define LOCALHOST "127.0.0.1"
+# define SP " "
 
 // COMMANDS
 
-# define PONG(token) ("PONG 127.0.0.1 " + token + CRLF)
+# define PONG(token) ("PONG " + LOCALHOST + SP + token + CRLF)
+
+// MESSAGES SERVER TO CLIENT
+
+#define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
+#define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
+#define ERR_QUIT_MSG ": ERROR :You have QUIT\r\n"   // COMENTAR a LIN y CARLOS
 
 // RESPLIES
 
@@ -22,7 +30,6 @@
 #define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ #" + channelname + " :" + clientslist + CRLF)
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + CRLF)
 #define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
-
 
 // ERRORS
 

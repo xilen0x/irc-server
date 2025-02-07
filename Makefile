@@ -16,6 +16,8 @@ SRC_FILES = src/main.cpp \
 			src/Messageprocessing.cpp \
 			src/Server.cpp \
 			src/serverUtils.cpp \
+			src/splitDoublePoint.cpp \
+			src/deleteRN.cpp \
 			src/commands/Cap.cpp \
 			src/commands/Invite.cpp \
 			src/commands/Join.cpp \

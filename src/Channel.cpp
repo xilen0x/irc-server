@@ -77,7 +77,7 @@ Channel &Channel::operator=( Channel const &src)
 
 Channel::~Channel( void )
 {
-	std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
+	//std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
@@ -122,7 +122,6 @@ Client	*Channel::getCliInChannel(std::string &nick)
 		return (it->second);
 	return (NULL);
 }
-
 
 //_inviteChannel
 bool	Channel::isInviteChannel( void ) const { return (this->_inviteChannel); }
@@ -206,6 +205,8 @@ void 	Channel::deleteOperator( std::string nickClient )
 
 }
 
+size_t	Channel::sizeOperators( void ) { return (this->_operators.size()); }
+
 // _memberClients
 bool	Channel::isMember( std::string nickClient )
 {
@@ -223,6 +224,8 @@ void	Channel::deleteMember( std::string nickClient )
 	if( !this->_deleteInVector(this->_memberClients, nickClient))
 		std::cout << nickClient << " is NOT  in _memberClients. CAN´T DELETE IT!!!" << std::endl;
 }
+
+size_t	Channel::sizeMemberClients( void ) { return (this->_memClients.size()); }
 
 // _invitedClients
 bool	Channel::isInvited( std::string nickClient )
@@ -296,6 +299,7 @@ void	Channel::deleteInv(std::string &nick)
 	if (!this->_deleteInMap(this->_invClients, nick))
 		std::cout << nick << " is NOT in _invClients map. CAN'T DELETE IT!!!" << std::endl;
 }
+// End Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 
 // For debugging
 void	Channel::printChannelVars( void )

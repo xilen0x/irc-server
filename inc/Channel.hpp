@@ -5,6 +5,8 @@
 # include <algorithm> 
 # include <iostream>
 # include <vector>
+
+// includes by Linnnnnnnnnnnnnnnn
 # include <map>
 # include "Server.hpp"
 # include "Client.hpp"
@@ -43,7 +45,7 @@ class Channel
 		bool	_addInMap(std::map<std::string, T*> &targetMap, std::string &nick, T *t);
 		template <typename T>
 		bool	_deleteInMap(std::map<std::string, T*> &targetMap, std::string &nick);
-
+		// End Added Linnnnnnnnnnnnnnnnn
 
 		template <typename T>
 		bool	_isInVector(T &t, std::string nickClient );
@@ -60,7 +62,7 @@ class Channel
 	public:
 		Channel( void );
 		Channel( std::string channelName, std::string operatorNick );
-		Channel( std::string channelName, std::string operatorNick, Client *operatorClient);
+		Channel( std::string channelName, std::string operatorNick, Client *operatorClient);    // By Linnnnnnn
 		Channel( Channel const &src);
 		Channel &operator=( Channel const &src);
 		~Channel( void );
@@ -108,11 +110,13 @@ class Channel
 		bool 			isOperator( std::string nickClient );
 		void 			addOperator( std::string nickClient );
 		void 			deleteOperator( std::string nickClient );
+		size_t			sizeOperators( void );
 
 		// _memberClients
 		bool			isMember( std::string nickClient );
 		void			addMember( std::string nickClient );
 		void			deleteMember( std::string nickClient );
+		size_t			sizeMemberClients( void );
 
 		// _invitedClients
 		bool			isInvited( std::string nickClient );

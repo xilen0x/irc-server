@@ -9,9 +9,7 @@ class Nick : public ICommand
 	public:
 		~Nick( void );
 
-		// void execute( std::string & , int );
 		void execute( Server*, std::string &, int );
 };
 
 #endif
-

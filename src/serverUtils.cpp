@@ -25,6 +25,7 @@ std::string formatIRCMessage(const std::string& message)
 
 // Parse the input arguments
 //https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Dynamic.2C_private_or_ephemeral_ports
+
 int parseInput(std::string password, int port)
 {
     if (port < 49152 || port > 65535)

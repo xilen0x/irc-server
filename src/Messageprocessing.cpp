@@ -59,6 +59,19 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	return (res);
 }
 
+/*
+char to_upper(char c)
+{
+	return (std::toupper(static_cast<unsigned char>(c)));
+}
+
+std::string uppercase(std::string &s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), to_upper);
+	return (s);
+}
+*/
+
 // void	Messageprocessing::processMessage(std::string message, int fd)
 // {
 // 	// TODO
