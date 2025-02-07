@@ -8,6 +8,22 @@
 #define BASE_NICK "nick_"
 #define BASE_USER_NAME "userName_"
 
+// Start  apardo-m functions
+
+static printChannelsInfo(Server *server)
+{
+	Channel *channel;
+
+	std::cout << "========= Start Channels info =======" << std::endl;
+	for (size_t i = 0; i < server->getChannels().size(); i++)
+	{
+		channel = server->getChannelsByNumPosInVector(i);
+		channel->printChannelVars();
+	}   
+	std::cout << "========= Start Channels info =======" << std::endl;
+}
+// End  apardo-m functions
+
 Join::~Join( void ) {};
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
@@ -210,4 +226,6 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		if (!f)
 			handleNonChannel(server, parVec, i, fd);
 	}
+
+	printChannelsInfo(server);
 }
