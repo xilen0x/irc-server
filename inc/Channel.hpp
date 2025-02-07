@@ -6,6 +6,13 @@
 # include <iostream>
 # include <vector>
 
+// includes by Linnnnnnnnnnnnnnnn
+# include <map>
+# include "Server.hpp"
+# include "Client.hpp"
+
+class Client;
+
 class Channel
 {
 	private:
@@ -19,12 +26,26 @@ class Channel
 		std::string		_channelKey;//password channel
 
 		bool			_hasUserLimit;
-		unsigned long	_userLimitNumber;
+		int				_userLimitNumber;
+//		unsigned long	_userLimitNumber;
 
 		// DOUBT: 250119 - only store nicks o store Objects?
 		std::vector<std::string>	_operators;
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
+
+		// Added by Linnnnnnnnnnnnnnnnnn
+//		std::vector<Client> 		_clients; // including _memberClients and _invitedClients
+//		std::vector<Client> 		_operators;
+		std::map<std::string, Client *>	_memClients;
+		std::map<std::string, Client *>	_invClients;
+		std::map<std::string, Client *>	_operator;
+
+		template <typename T>
+		bool	_addInMap(std::map<std::string, T*> &targetMap, std::string &nick, T *t);
+		template <typename T>
+		bool	_deleteInMap(std::map<std::string, T*> &targetMap, std::string &nick);
+		// End Added Linnnnnnnnnnnnnnnnn
 
 		template <typename T>
 		bool	_isInVector(T &t, std::string nickClient );
@@ -39,13 +60,21 @@ class Channel
 		void	_printVectorStrings(std::vector<std::string> stringVector);
 
 	public:
+		Channel( void );
 		Channel( std::string channelName, std::string operatorNick );
+		Channel( std::string channelName, std::string operatorNick, Client *operatorClient);    // By Linnnnnnn
 		Channel( Channel const &src);
 		Channel &operator=( Channel const &src);
 		~Channel( void );
 
 		//_channelName
 		std::string		getChannelName( void ) const;
+		void			setChannelName(std::string channelName);
+
+		// to get Client with nickname in a specific channel //Added by Lin
+		Client			*getCliInChannel(std::string &nick);
+
+		std::string 	getClientsList();
 
 		//_inviteChannel
 		bool			isInviteChannel( void ) const;
@@ -71,28 +100,42 @@ class Channel
 		void			unsetUserLimitActived( void );
 
 		// _userLimitNumber
-		unsigned long	getUserLimitNumber( void ) const;
+//		unsigned long	getUserLimitNumber( void ) const;
+		int				getUserLimitNumber( void ) const;
 		void			setUserLimitNumber( unsigned long limit);
+
+		int				getClientSum();
 
 		// _operators
 		bool 			isOperator( std::string nickClient );
 		void 			addOperator( std::string nickClient );
 		void 			deleteOperator( std::string nickClient );
+		size_t			sizeOperators( void );
 
 		// _memberClients
 		bool			isMember( std::string nickClient );
 		void			addMember( std::string nickClient );
 		void			deleteMember( std::string nickClient );
+		size_t			sizeMemberClients( void );
 
 		// _invitedClients
 		bool			isInvited( std::string nickClient );
 		void			addInvited( std::string nickClient );
 		void			deleteInvited( std::string nickClient );
 
+		// _operator _memClients _invClients  Added by Linnnnnnnnnnnnnnnnnnnn
+		void 			addOpe(Client *client);
+		void 			deleteOpe(std::string &nick);
+		void			addMem(Client *client);
+		void			deleteMem(std::string &nick);
+		void			addInv(Client *client);
+		void			deleteInv(std::string &nick);
+
 // For debugging
 		void		printChannelVars( void ); 
 };
 
 # include "Channel.tpp"
+# include "Channel1.tpp"
 
 #endif

@@ -1,14 +1,29 @@
+#include <sstream>
 
 #include "Client.hpp"
 
-Client::Client() :_fdClient(-1), _ipClient("")
-{}
+// Client::Client() :_fdClient(-1), _ipClient("")
+// {}
+Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
+{
+
+// 250207   Ver si estas 5 lineas se han de cambiar
+	this->_nick = "*";
+	this->_userName = "*User";  
+	this->_realName = "*Real";
+
+	this->_bufferInMessage = "";
+	this->_bufferOutResponse = "";
+
+//	std::cout << "Client() => Set default values" << std::endl;
+}
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)
 {
-	this->_nick = "";
-	this->_userName = "";
-	this->_realName = "";
+	//Comment to LIN and CARLOS
+	this->_nick = "*";
+	this->_userName = "*User";  
+	this->_realName = "*Real";
 
 	this->_bufferInMessage = "";
 	this->_bufferOutResponse = "";
@@ -18,7 +33,7 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_hasUser = false;
 	this->_hasAuth = false;
 
-	std::cout << "Client() => Set initial values" << std::endl;
+	std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;
 }
 
 Client::Client( Client const &src){ *this = src; }
@@ -44,13 +59,21 @@ Client &Client::operator=( Client const &src )
 
 Client::~Client( void )
 {
-	std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
+	// std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
 }
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
 
-void	Client::setFdClient( int fd ) { 
+void	Client::setFdClient( int fd )
+{ 
 	this->_fdClient = fd; 
+
+//TODO Delete the next lines
+	std::ostringstream	str1;
+
+
+	str1 << fd;
+	this->_nick = this->_nick + str1.str();   
 }
 
 std::string	Client::getIpClient( void ) const { return ( this->_ipClient ); }
@@ -81,18 +104,44 @@ bool	Client::getHasPass( void ) const { return ( this->_hasPass ); }
 		
 bool	Client::getHasNick( void ) const { return ( this->_hasNick ); }
 	
-bool	Client::gethasUser( void ) const { return ( this->_hasUser ); }
+bool	Client::getHasUser( void ) const { return ( this->_hasUser ); }
 	
-bool	Client::gethasAuth( void ) const { return ( this->_hasAuth ); }
+bool	Client::getHasAuth( void ) const { return ( this->_hasAuth ); }
 	
 void	Client::setHasPass( void ) { this->_hasPass = true; }
 
 void	Client::setHasNick( void ) { this->_hasNick = true; }
 		
-void	Client::sethasUser( void ) { this->_hasUser = true; }
+void	Client::setHasUser( void ) { this->_hasUser = true; }
 	
-void	Client::sethasAuth( void ) { this->_hasAuth = true; }	
+void	Client::setHasAuth( void ) { this->_hasAuth = true; }	
 
+bool 	Client::checkInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+			return true;
+	}
+	return false;
+}
+
+void	Client::addInviteChannel(std::string &channelName)
+{
+	this->_inviteChannels.push_back(channelName);
+}
+
+void	Client::deleteInviteChannel(std::string &channelName)
+{
+	for (size_t i = 0; i < this->_inviteChannels.size(); i++)
+	{
+		if (this->_inviteChannels[i] == channelName)
+		{
+			this->_inviteChannels.erase(this->_inviteChannels.begin() + i);
+			return ;
+		}
+	}
+}
 
 // For debugging
 void	Client::printClientVars( void )

@@ -17,6 +17,10 @@ void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
 }
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
+Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey("")
+{}
+
+
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
 {
 	std::cout << "Channel => Object created" << std::endl;
@@ -28,6 +32,21 @@ Channel::Channel( std::string channelName, std::string operatorNick ) :_channelN
 	this->_hasUserLimit = false;
 	this->_userLimitNumber = DEFAULT_LIMIT;
 	this->_operators.push_back(operatorNick);
+}
+
+// Reloaded by Linnnnnnnnnnnnnnnnnnnnnn
+Channel::Channel( std::string channelName, std::string operatorNick, Client *operatorClient) :_channelName( channelName )
+{
+	std::cout << "Channel => Object Map created" << std::endl;
+
+	this->_inviteChannel = false;
+	this->_topic = "";
+	this->_topicRestricted = false;
+	this->_channelKey = "";
+	this->_hasUserLimit = false;
+	this->_userLimitNumber = DEFAULT_LIMIT;
+	this->_operators.push_back(operatorNick);
+	this->_operator[operatorNick] = operatorClient;
 }
 
 Channel::Channel( Channel const &src){ *this = src; }
@@ -47,6 +66,10 @@ Channel &Channel::operator=( Channel const &src)
 		this->_operators = src._operators;
 		this->_memberClients = src._memberClients;
 		this->_invitedClients = src._invitedClients;
+
+		this->_operator = src._operator;
+		this->_memClients = src._memClients;
+		this->_invClients = src._invClients;
 	}
 	return (*this);
 
@@ -54,7 +77,7 @@ Channel &Channel::operator=( Channel const &src)
 
 Channel::~Channel( void )
 {
-	std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
+	//std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
@@ -63,6 +86,42 @@ Channel::~Channel( void )
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 //_channelName
 std::string	Channel::getChannelName( void ) const { return ( this->_channelName); }
+
+void Channel::setChannelName(std::string channelName) { this->_channelName = channelName; }
+
+/*
+// it will be modified in near future: clients should be those in this instance of channel instead of those in server
+Client	*Channel::getCliInChannel(std::string &nick)
+{
+	for (std::vector<Client>::iterator it = _clients.begin(); it !=_clients.end(); it++)
+	{
+		std::string tmpCli = it->getNick();
+		if (uppercase(tmpCli) == uppercase(nick))
+			return (&(*it));
+	}
+	for (std::vector<Client>::iterator it = _operators.begin(); it != _operators.end(); it++)
+	{
+		std::string tmpOpe = it->getNick();
+		if (uppercase(tmpOpe) == uppercase(nick))
+			return (&(*it));
+	}
+	return (NULL);
+}
+*/
+
+Client	*Channel::getCliInChannel(std::string &nick)
+{
+	std::map<std::string, Client *>::iterator it = _memClients.find(nick);	
+	if (it != _memClients.end())
+		return (it->second);
+	it = _invClients.find(nick);
+	if (it != _invClients.end())
+		return (it->second);
+	it = _operator.find(nick);
+	if (it != _operator.end())
+		return (it->second);
+	return (NULL);
+}
 
 //_inviteChannel
 bool	Channel::isInviteChannel( void ) const { return (this->_inviteChannel); }
@@ -96,9 +155,36 @@ void	Channel::setUserLimitActived( void ) { this->_hasUserLimit = true; }
 void	Channel::unsetUserLimitActived( void ) { this->_hasUserLimit = false; }
 
 // _userLimitNumber
-unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
+int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
+//unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
 
 void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
+
+int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
+
+std::string 	Channel::getClientsList()
+{
+	std::string list;
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); ++it)
+	{
+		list += "@" + it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _operator.end())
+			list += " ";
+	}
+	if (!_operator.empty() && !_memClients.empty())
+		list += " ";
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); ++it)
+	{
+		list += it->second->getNick();
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _memClients.end())
+			list += " ";
+	}
+	return list;
+}
 
 // _operators
 bool 	Channel::isOperator( std::string nickClient )
@@ -119,6 +205,8 @@ void 	Channel::deleteOperator( std::string nickClient )
 
 }
 
+size_t	Channel::sizeOperators( void ) { return (this->_operators.size()); }
+
 // _memberClients
 bool	Channel::isMember( std::string nickClient )
 {
@@ -137,6 +225,8 @@ void	Channel::deleteMember( std::string nickClient )
 		std::cout << nickClient << " is NOT  in _memberClients. CAN´T DELETE IT!!!" << std::endl;
 }
 
+size_t	Channel::sizeMemberClients( void ) { return (this->_memClients.size()); }
+
 // _invitedClients
 bool	Channel::isInvited( std::string nickClient )
 {
@@ -154,6 +244,62 @@ void	Channel::deleteInvited( std::string nickClient )
 	if(!this->_deleteInVector(this->_invitedClients, nickClient))
 		std::cout << nickClient << " is NOT in _invitedClients. CAN´T DELETE IT!!!" << std::endl;
 }
+
+// Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
+//void 	Channel::addOpe(std::string &nick, Client *client)
+void 	Channel::addOpe(Client *client)
+{
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+//		if (!this->_addInMap(this->_operator, nick, client))
+		if (!this->_addInMap(this->_operator, nick, client))
+			std::cout << nick << " is already in _operator map. CAN'T ADD!!!" << std::endl;
+	}
+}
+
+void 	Channel::deleteOpe(std::string &nick)
+{
+	if (!this->_deleteInMap(this->_operator, nick))
+		std::cout << nick << " is NOT in _operator map. CAN'T DELETE IT!!!" << std::endl;
+}
+
+void	Channel::addMem(Client *client)
+{
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+		if (!this->_addInMap(this->_memClients, nick, client))
+			std::cout << nick << " is already in _memClients map. CAN'T ADD!!!" << std::endl;
+		else
+			std::cout << nick << " has been added in _memClients map! " << std::endl;
+	}
+}
+
+void	Channel::deleteMem(std::string &nick)
+{
+	if (!this->_deleteInMap(this->_memClients, nick))
+		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;
+}
+
+void	Channel::addInv(Client *client)
+{
+	if (!client->getNick().empty())
+	{
+		std::string nick = client->getNick();
+		if (!this->_addInMap(this->_invClients, nick, client))
+			std::cout << nick << " is in already _invClients map. CAN'T ADD!!!" << std::endl;
+		else
+			std::cout << nick << " has been added in _invClients map! " << std::endl;
+	}
+}
+		
+void	Channel::deleteInv(std::string &nick)
+{
+	if (!this->_deleteInMap(this->_invClients, nick))
+		std::cout << nick << " is NOT in _invClients map. CAN'T DELETE IT!!!" << std::endl;
+}
+// End Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 
 // For debugging
 void	Channel::printChannelVars( void )

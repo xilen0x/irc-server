@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef NICK_HPP
+# define NICK_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Nick : public ICommand
 {
 	public:
-		~Ping( void );
+		~Nick( void );
 
 		void execute( Server*, std::string &, int );
 };

@@ -1,15 +1,16 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef CAP_HPP
+# define CAP_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Cap : public ICommand
 {
 	public:
-		~Ping( void );
+		~Cap( void );
 
 		void execute( Server*, std::string &, int );
 };
 
 #endif
+

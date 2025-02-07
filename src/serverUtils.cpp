@@ -1,103 +1,62 @@
+
+#include "Messageprocessing.hpp"
 #include "Server.hpp"
-#include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
+#include <ctime>
+#include "irc.hpp"
 
-    // Function to accept a new client connection
-    void Server::acceptClient()
+// Get the current time as a formatted string (HH:MM)
+std::string getCurrentTime()
+{
+    std::time_t now = std::time(0);
+    std::tm* now_tm = std::localtime(&now);
+
+    char buffer[6]; // for "HH:MM"
+    std::strftime(buffer, sizeof(buffer), "%H:%M", now_tm);//formats the time
+
+    return std::string(buffer);
+}
+
+// Format an IRC message with a timestamp
+std::string formatIRCMessage(const std::string& message)
+{
+    std::string timestamp = getCurrentTime();
+    return timestamp + " -!- " + message;
+}
+
+// Parse the input arguments
+//https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Dynamic.2C_private_or_ephemeral_ports
+
+int parseInput(std::string password, int port)
+{
+    if (port < 49152 || port > 65535)
     {
-        struct sockaddr_in  clientAddress;
-        socklen_t           clientAddressSize;
-        int                 fdClient;
-        struct pollfd       clientPoll;
-        Client              newClient;
-
-        clientAddressSize = sizeof(clientAddress);
-        fdClient = accept(_fdServer, (struct sockaddr*)&clientAddress, &clientAddressSize);
-        if (fdClient == -1) {
-            throw std::runtime_error("Failed to accept new client");
-        }
-
-        // Configure the client socket as non-blocking
-        if (fcntl(fdClient, F_SETFL, O_NONBLOCK) == -1) {
-            throw std::runtime_error("Failed to set option (O_NONBLOCK) on client socket");
-        }
-
-        // Add the client to the list of monitored FDs
-        clientPoll.fd = fdClient;//
-        clientPoll.events = POLLIN;
-        clientPoll.revents = 0;
-
-        newClient.setFdClient(fdClient);
-        newClient.setIpClient(inet_ntoa(clientAddress.sin_addr));
-        _clients.push_back(newClient);
-        _fdsClients.push_back(clientPoll);
-        std::cout << "New client connected\n";
+        std::cerr << "Invalid port number. Must be beetwen 49152 and 65535" << std::endl;
+        return (1);
     }
-
-    // Function to remove a client based on its file descriptor
-    void Server::clearClients(int fd, std::string msg)
+    if (std::strlen(password.c_str()) < 4)
     {
-        // Manual find-if loop to find the client based on fd
-        std::vector<struct pollfd>::iterator it = _fdsClients.begin();
-        for (; it != _fdsClients.end(); ++it) {
-            if (it->fd == fd) {
-                break;  // Found the client
-            }
-        }
-
-        // If found, erase the client from the list
-        if (it != _fdsClients.end()) {
-            _fdsClients.erase(it);
-        }
-        
-        // Close the socket of the client
-        close(fd);
-        std::cout << msg;
+        std::cerr << "Password must be at least 4 characters long" << std::endl;
+        return (1);
     }
+    return (0);
+}
 
-    void Server::receiveData(int fd)
-    {
-        // Receive data from the client
-        char buffer[1024];
-        int bytesRead = recv(fd, buffer, sizeof(buffer), 0);
-        if (bytesRead == -1) {
-            throw std::runtime_error("Failed to receive data from client");
-        }
-        else if (bytesRead == 0) {
-            clearClients(fd, "Client disconnected\n");
-        }
-        else {
-            buffer[bytesRead] = '\0';
-            std::cout << "Received data: " << buffer << std::endl;
-        }
+// to remove the first white spaces of a string
+std::string trimLeft(std::string &str)
+{
+	size_t pos = str.find_first_not_of(" \t\v\r\n");
+	if (pos == std::string::npos)
+		return ("");
+	return (str.substr(pos));
+}
 
-        
-    }
+static char to_upper(char c)
+{
+	return (std::toupper(static_cast<unsigned char>(c)));
+}
 
-    // void Server::clean()
-    // {
-    //     // Cerrar el socket y limpiar recursos
-    //     if (_fdServer != -1) {
-    //         close(_fdServer);
-    //         _fdServer = -1;
-    //     }
-    //     std::cout << "Server resources cleaned up." << std::endl;
-    // }
-
-    int parseInput(std::string serverName, std::string password, int port)
-    {
-        (void)serverName;
-        (void)password;
-        
-        if (port <= 0 || port > 65535)
-        {
-            std::cerr << "Invalid port number." << std::endl;
-            return (1);
-        }
-        //... other checks
-
-
-
-
-
-        return (0);
-    }
+std::string uppercase(std::string &s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), to_upper);
+	return (s);
+}

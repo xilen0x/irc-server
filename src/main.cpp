@@ -6,27 +6,26 @@
 
 int main(int argc, char const *argv[])
 {
-    //signal(SIGINT, signalHandler); here//check if needed
-    //signal(SIGTERM, signalHandler); here//check if needed
-    //signal(SIGQUIT, signalHandler); here//check if needed
     if (argc == 3)
     {
         int port = std::atoi(argv[1]);
-        std::string serverName = "ircserv";
         std::string password = argv[2];
 
         try
         {
-            if (!parseInput(serverName, password, port))
+            signal(SIGINT, handleSIGINT);//Ctrl+C
+	        signal(SIGQUIT, handleSIGQUIT);//Ctrl+\        /
+            signal(SIGPIPE, SIG_IGN);//Ignore SIGPIPE //Cuando un cliente se desconecta inesperadamente.
+            if (!parseInput(password, port))
             {
-                Server server(serverName, password, port);
+                Server server("ircserv", password, port);
                 server.runServer();
+                std::cout << "IRC server is running. Press Ctrl+C to stop." << std::endl;
             }
         }
         catch (const std::exception &e)
         {
             std::cerr << e.what() << '\n';
-            //free resources if needed
         }
     }
     else

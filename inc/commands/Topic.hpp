@@ -1,13 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#ifndef TOPIC_HPP
+# define TOPIC_HPP
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Topic : public ICommand
 {
 	public:
-		~Ping( void );
+		~Topic( void );
 
 		void execute( Server*, std::string &, int );
 };

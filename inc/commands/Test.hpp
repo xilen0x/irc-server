@@ -1,15 +1,13 @@
-#ifndef PING_HPP
-# define PING_HPP
+#pragma once
 
 # include <iostream>
 # include "ICommand.hpp"
 
-class Ping : public ICommand
+class Test : public ICommand
 {
 	public:
-		~Ping( void );
+		~Test( void );
 
+		// void execute( std::string & , int );
 		void execute( Server*, std::string &, int );
 };
-
-#endif
