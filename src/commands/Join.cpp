@@ -10,7 +10,7 @@
 
 // Start  apardo-m functions
 
-static printChannelsInfo(Server *server)
+static void	printChannelsInfo(Server *server)
 {
 	Channel *channel;
 
@@ -20,7 +20,7 @@ static printChannelsInfo(Server *server)
 		channel = server->getChannelsByNumPosInVector(i);
 		channel->printChannelVars();
 	}   
-	std::cout << "========= Start Channels info =======" << std::endl;
+	std::cout << "========= End Channels info =======" << std::endl;
 }
 // End  apardo-m functions
 
