@@ -7,6 +7,6 @@ Ping::~Ping( void ) {};
 
 void Ping::execute( Server* server, std::string &msg , int fd)
 {
-	//TODO extract ping and espaces after ping and send the rest of message
+	//TODO extract ping and spaces after ping and send the rest of message
 	server->sendResp(PONG(msg),fd);
 }
