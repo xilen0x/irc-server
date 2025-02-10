@@ -10,6 +10,8 @@
 # include "Channel.hpp"
 # include <csignal>
 
+# define BUFFER_SIZE 1024
+
 class Client;
 class Channel;
 

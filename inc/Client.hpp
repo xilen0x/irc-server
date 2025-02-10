@@ -65,6 +65,11 @@ class Client
 		void		addInviteChannel(std::string &channelName);
 		void		deleteInviteChannel(std::string &channelName);
 
+		// for handling the buffer(ctrl-d)
+		void appendToBuffer(const std::string& data);
+		bool hasCompleteCommand() const;
+		std::string extractCommand();
+
 // For debugging
 		void		printClientVars( void ); 
 };
