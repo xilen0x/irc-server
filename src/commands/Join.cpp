@@ -36,10 +36,11 @@ static bool isInvited(Client *cl, std::string channelName, int f)
 
 static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
 {
-	std::vector<Channel> channels = server->getChannels();
+//	std::vector<Channel> channels = server->getChannels();
+	Channel *ch = server->getChannelsByNumPosInVector(jchan);
 	Client *cl = server->getClient(fd);
 	std::string nick = cl->getNick();
-	if (channels[jchan].getCliInChannel(nick)) // the client has already been in this channel
+	if (ch->getCliInChannel(nick)) // the client has already been in this channel
 		return ;
 	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
 	{
@@ -48,47 +49,47 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		return ;
 	}
 	// if the password of channel input is incorrect
-	if (!channels[jchan].getChannelKey().empty() && channels[jchan].getChannelKey() != parVec[ipar].second)
+	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)
 	{
 		if (!isInvited(cl, parVec[ipar].first, 0))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, channels[jchan].getChannelName()));
+			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, ch->getChannelName()));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 	}
 	//if the channel is in only-invited mode
-	if (channels[jchan].isInviteChannel())
+	if (ch->isInviteChannel())
 	{
 		if (!isInvited(cl, parVec[ipar].first, 1))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, channels[jchan].getChannelName()));
+			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, ch->getChannelName()));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 	}
-	if (channels[jchan].getUserLimitNumber() && channels[jchan].getClientSum() >= channels[jchan].getUserLimitNumber())
+	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, channels[jchan].getChannelName()));
+		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, ch->getChannelName()));
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
-	channels[jchan].addMem(cl);
-	if (channels[jchan].getTopic().empty())
+	ch->addMem(cl);
+	if (ch->getTopic().empty())
 	{
 		std::cout << "processJoin!" << std::endl;///////////////////////
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), channels[jchan].getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, channels[jchan].getChannelName(), channels[jchan].getClientsList()));
-		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, channels[jchan].getChannelName()));
+		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
+		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
 		server->sendResp(replyMsg, fd);
 	}
 	else
 	{
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), channels[jchan].getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_TOPICIS(cl->getNick(), channels[jchan].getChannelName(), channels[jchan].getTopic()));
-		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, channels[jchan].getChannelName(), channels[jchan].getClientsList()));
-		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, channels[jchan].getChannelName()));
+		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
+		std::string replyMsg2 = formatIRCMessage(RPL_TOPICIS(cl->getNick(), ch->getChannelName(), ch->getTopic()));
+		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
 		server->sendResp(replyMsg, fd);
 	}
