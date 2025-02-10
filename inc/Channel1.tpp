@@ -20,7 +20,7 @@ bool	Channel::_deleteInMap(std::map<std::string, T*> &targetMap, std::string &ni
 {
 	if (targetMap.find(nick) != targetMap.end())
 	{
-		delete targetMap[nick];
+	//	delete targetMap[nick];  // 250210 Delete is not necessary
 		targetMap.erase(nick);
 		return (true);
 	}
