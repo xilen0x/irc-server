@@ -1,3 +1,4 @@
+>Aparece cuando un segundo cliente se une a un canal
 
 Posible causa: 
 Usar el formato `user 2 * 0 :2d`  en lugar de `user 2 0 * :2u`
