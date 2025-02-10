@@ -8,7 +8,7 @@
 
 // COMMANDS
 
-# define PONG(token) ("PONG " + LOCALHOST + SP + token + CRLF)
+# define PONG(token) ("PONG 127.0.0.1 " + token + CRLF)
 
 // MESSAGES SERVER TO CLIENT
 
