@@ -138,6 +138,7 @@ class Channel
 		// 250207 by apardo-m
 		bool			isOpe(std::string &nick);
 		bool			isMem(std::string &nick);
+		Client 			*getFirstMem( void );
 		size_t			sizeOpe( void );
 		size_t			sizeMem( void );
 

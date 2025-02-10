@@ -118,7 +118,7 @@ Client	*Channel::getCliInChannel(std::string &nick)
 }
 */
 
-Client	*Channel::getCliInChannel(std::string &nick)
+Client*	Channel::getCliInChannel(std::string &nick)
 {
 	std::map<std::string, Client *>::iterator it = _memClients.find(nick);	
 	if (it != _memClients.end())
@@ -290,6 +290,10 @@ void	Channel::deleteMem(std::string &nick)
 	if (!this->_deleteInMap(this->_memClients, nick))
 		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;
 }
+
+
+Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second); }
+
 
 void	Channel::addInv(Client *client)
 {

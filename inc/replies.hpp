@@ -14,6 +14,7 @@
 
 #define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
 #define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
+#define MSG_QUIT_CHANGE_OPERATOR(nickname, channel) (":" + nickname + ", you are the new operator for Channel " + channel + CRLF)
 #define ERR_QUIT_MSG ": ERROR :You have QUIT\r\n"   // COMENTAR a LIN y CARLOS
 
 // RESPLIES
