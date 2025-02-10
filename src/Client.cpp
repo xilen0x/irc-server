@@ -150,18 +150,19 @@ void Client::appendToBuffer(const std::string& data) {
 
 // check if the buffer has a complete command
 bool Client::hasCompleteCommand() const {
-    return _bufferInMessage.find('\n') != std::string::npos;//if find '\n' and is not at the end of the string return true
+    return (_bufferInMessage.find('\n') != std::string::npos);//if find '\n' and is not at the end of the string return true
 }
 
 // extract a command from the buffer
 std::string Client::extractCommand() {
     size_t pos = _bufferInMessage.find('\n');//find the first '\n'
+
     if (pos == std::string::npos) {//if not found
-        return "";
+        return ("");
     }
     std::string command = _bufferInMessage.substr(0, pos);//extract the command
     _bufferInMessage.erase(0, pos + 1);//erase the command from the buffer
-    return command;
+    return (command);
 }
 
 // For debugging

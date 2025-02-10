@@ -16,7 +16,7 @@ class Client
 		std::string _realName;
 
 		std::string	_bufferInMessage;
-		std::string	_bufferOutResponse;
+		//std::string	_bufferOutResponse;
 
 		bool		_hasPass;
 		bool		_hasNick;
