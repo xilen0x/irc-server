@@ -2,6 +2,7 @@
 #include <arpa/inet.h>//para inet_ntoa que convierte una direccion ip en una cadena
 #include "Messageprocessing.hpp"
 #include <cerrno>
+#include <cstdio>
 
 Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
 {}
@@ -144,8 +145,8 @@ void Server::receiveData(int clientSocket)
         throw std::runtime_error("Failed to receive data from client");
     }
     else if (bytesRead == 0) {
-        clearClients(clientSocket, "Client disconnected\n");
-        // return;
+        clearClients(clientSocket, "Client disconnected1\n");
+        return;
     }
 
     buffer[bytesRead] = '\0';
@@ -198,7 +199,7 @@ void Server::loop()
             if ((revents & POLLERR) == POLLERR || (revents & POLLHUP) == POLLHUP) 
             {
                 std::cout << "Socket error or client disconnection\n";
-                clearClients(_fdsClients[i].fd, "Client disconnected\n");
+                clearClients(_fdsClients[i].fd, "Client disconnected2\n");
             }
             else if (revents & POLLIN) {  // There is data to read
                 if (_fdsClients[i].fd == _fdServer) {  // New incoming connection
@@ -226,11 +227,19 @@ void Server::   runServer()
 
 }
 
-void Server::sendResp(std::string resp, int fd)
-{
-	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-		std::cerr << RED << "Response error!" << RES << std::endl;
+// void Server::sendResp(std::string resp, int fd)
+// {
+// 	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
+// 		std::cerr << RED << "Response error!" << RES << std::endl;
+// }
+
+void Server::sendResp(std::string msg, int clientFd) {
+    ssize_t bytesSent = send(clientFd, msg.c_str(), msg.length(), 0);
+    if (bytesSent == -1) {
+        perror("sendResp failed"); // Muestra el error del sistema
+    }
 }
+
 
 void Server::sendBroad(std::string resp, int fd)
 {
@@ -339,21 +348,25 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 Server::~Server()
 {
     std::cout << "Closing connections..." << std::endl;
-
-    // Message to clients before closing
     std::string msg = "Server is closing...!\n";
+
     for (size_t i = 0; i < _clients.size(); ++i) {
-        sendResp(msg, _clients[i].getFdClient());
-        close(_clients[i].getFdClient());
+        int fd = _clients[i].getFdClient();
+        if (fd != -1) {
+            if (fcntl(fd, F_GETFD) != -1) { // Verificar si el socket aún está válido
+                sendResp(msg, fd);
+            }
+            close(fd);
+        }
     }
-    
-    // Close the server socket
+
     if (_fdServer != -1) {
         close(_fdServer);
     }
 
-    // Clear the vectors
     _fdsClients.clear();
     _clients.clear();
     _channels.clear();
 }
+
+
