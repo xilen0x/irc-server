@@ -43,6 +43,7 @@ void User::execute(Server* server, std::string& msg, int fd)
     {
         client->setUserName(msg);
         client->setHasUser();
+        std::cout << YEL << "Correct user format!" << RES << std::endl;  //added to test
         if (client->getHasNick() && client->getHasUser() && client->getHasPass())
 	    {
             if (welcomeMsgUser == false && nick.welcomeMsgNick == false)

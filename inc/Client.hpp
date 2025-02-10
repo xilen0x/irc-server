@@ -16,7 +16,7 @@ class Client
 		std::string _realName;
 
 		std::string	_bufferInMessage;
-		std::string	_bufferOutResponse;
+		//std::string	_bufferOutResponse;
 
 		bool		_hasPass;
 		bool		_hasNick;
@@ -64,6 +64,11 @@ class Client
 		bool 		checkInviteChannel(std::string &channelName);
 		void		addInviteChannel(std::string &channelName);
 		void		deleteInviteChannel(std::string &channelName);
+
+		// for handling the buffer(ctrl-d)
+		void appendToBuffer(const std::string& data);
+		bool hasCompleteCommand() const;
+		std::string extractCommand();
 
 // For debugging
 		void		printClientVars( void ); 

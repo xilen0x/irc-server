@@ -107,6 +107,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			{
 				cl->setNick(msg);
 				cl->setHasNick();
+				std::cout << YEL << "Correct nick format!" << RES << std::endl;//added to test
 				std::cout << "1st set a global nick: " << cl->getNick() << std::endl;////////////////
 				// std::string welcomeMsg = formatIRCMessage(RPL_WELCOME(server->getServerName(), std::string(msg)));
 				// server->sendResp(welcomeMsg, fd);

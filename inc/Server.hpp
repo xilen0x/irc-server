@@ -10,6 +10,8 @@
 # include "Channel.hpp"
 # include <csignal>
 
+# define BUFFER_SIZE 1024
+
 class Client;
 class Channel;
 
@@ -33,9 +35,9 @@ class Server
 		
 		void acceptClient();
 		void receiveData(int fd);
-		void clearClients(int fd, std::string msg);
     
 	public:
+		void clearClients(int fd, std::string msg);
 		Server();
 		Server(std::string serverName, std::string password, int port);
 		std::string	getServerName( void ) const;
@@ -80,6 +82,6 @@ std::string trimLeft(std::string &str);
 std::string uppercase(std::string &s);
 
 void handleSIGINT(int signal);
-void handleSIGQUIT(int signal);
+// void handleSIGQUIT(int signal);
 
 #endif

@@ -15,7 +15,7 @@ void Test::execute( Server* server, std::string &msg, int fd )
 	// std::cout << "Test command executed" << std::endl;
 
 	std::stringstream stream;
-	stream << ":localhost " << "88888" << " " << "clientname " << msg << fd << "\r\n";
+	stream << ":localhost " << "88888" << " " << "clientName " << msg << fd << "\r\n";
 	std::string resp = stream.str();
 	if(send(fd, resp.c_str(), resp.size(),0) == -1)
 		std::cerr << "send failed" << std::endl;
