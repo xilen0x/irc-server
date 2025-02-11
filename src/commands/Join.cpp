@@ -8,9 +8,23 @@
 #define BASE_NICK "nick_"
 #define BASE_USER_NAME "userName_"
 
-Join::~Join( void ) {};
+// Start  apardo-m functions
 
-/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
+static void	printChannelsInfo(Server *server)
+{
+	Channel *channel;
+
+	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;
+	for (size_t i = 0; i < server->getChannels().size(); i++)
+	{
+		channel = server->getChannelsByNumPosInVector(i);
+		channel->printChannelVars();
+	}   
+	std::cout << "========= End Channels info =======" << std::endl;
+}
+// End  apardo-m functions
+
+Join::~Join( void ) {};
 
 static int sumChannels(Server* server, std::string &nick)
 {
@@ -34,6 +48,8 @@ static bool isInvited(Client *cl, std::string channelName, int f)
 	return false;
 }
 
+/*
+// 250207 revisar por que no queda persistente
 static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
 {
 //	std::vector<Channel> channels = server->getChannels();
@@ -80,6 +96,70 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		std::cout << "processJoin!" << std::endl;///////////////////////
 		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
 		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
+		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
+		server->sendResp(replyMsg, fd);
+	}
+	else
+	{
+		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
+		std::string replyMsg2 = formatIRCMessage(RPL_TOPICIS(cl->getNick(), ch->getChannelName(), ch->getTopic()));
+		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
+		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
+		server->sendResp(replyMsg, fd);
+	}
+}
+*/
+
+// 250210 Done by apardo-m
+static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
+{
+	Channel	*ch = server->getChannelsByNumPosInVector(jchan);
+	Client *cl = server->getClient(fd);
+	std::string nick = cl->getNick();
+	if (ch->getCliInChannel(nick)) // the client has already been in this channel
+		return ;
+	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
+	{
+		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));
+		server->sendResp(chaErrMsg, fd);
+		return ;
+	}
+	// if the password of channel input is incorrect
+	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)
+	{
+		if (!isInvited(cl, parVec[ipar].first, 0))
+		{
+			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, ch->getChannelName()));
+			server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+	}
+	//if the channel is in only-invited mode
+	if (ch->isInviteChannel())
+	{
+		if (!isInvited(cl, parVec[ipar].first, 1))
+		{
+			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, ch->getChannelName()));
+				server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+	}
+	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
+	{
+		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, ch->getChannelName()));
+		server->sendResp(chaErrMsg, fd);
+		return ;
+	}
+	ch->addMem(cl);
+	if (ch->getTopic().empty())
+	{
+		std::cout << "processJoin!" << std::endl;///////////////////////
+		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
+		std::cout << "LLega 1!" << std::endl;///////////////////////
+		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::cout << "LLega 2!"  << std::endl;///////////////////////
 		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
 		server->sendResp(replyMsg, fd);
@@ -198,11 +278,14 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		server->sendResp(joinMsg, fd);
 	}
 	std::cout << "JOIN processing... parVec: " << parVec[0].first << std::endl;
+	std::cout << "antes del FOR  i " << std::endl;///////////////////////////
 	for (size_t i = 0; i < parVec.size(); i++)
 	{
 		bool f = false;
+	std::cout << "bucle FOR i=" << i << std::endl;///////////////////////////
 		for (size_t j = 0; j < server->getChannels().size(); j++)
 		{
+				std::cout << "FOR j=" << j << std::endl;///////////////////////////
 			if (server->getChannels()[j].getChannelName() == parVec[i].first)
 			{
 				processJoin(server, parVec, i, j, fd);
@@ -213,4 +296,6 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		if (!f)
 			handleNonChannel(server, parVec, i, fd);
 	}
+
+	printChannelsInfo(server); // apardo-m for test
 }

@@ -101,12 +101,12 @@ void Server::acceptClient()
 }
 
 // Function to remove a client based on its file descriptor
-void Server::clearClients(int fd, std::string msg)
+void Server::clearClients(int clientSocket, std::string msg)
 {
-        // Manual find-if loop to find the client based on fd
+        // Manual find-if loop to find the client based on clientSocket
         std::vector<struct pollfd>::iterator it = _fdsClients.begin();
         for (; it != _fdsClients.end(); ++it) {
-            if (it->fd == fd) {
+            if (it->fd == clientSocket) {
                 break;  // Found the client
             }
         }
@@ -117,8 +117,8 @@ void Server::clearClients(int fd, std::string msg)
         }
         
         // Close the socket of the client
-        close(fd);
-        std::cout << "fd = " << fd << msg << std::endl;
+        close(clientSocket);
+        std::cout << "fd = " << clientSocket << msg << std::endl;
 }
 
 std::vector<std::string> splitStr(const std::string& input, char separator)
@@ -133,32 +133,39 @@ std::vector<std::string> splitStr(const std::string& input, char separator)
 }
 
 // Receive data from the client
-void Server::receiveData(int fd)
+void Server::receiveData(int clientSocket)
 {
-    char                buffer[1024];
-    int                 bytesRead;
-    Messageprocessing   messageProcesing;
-    
-    bytesRead = recv(fd, buffer, sizeof(buffer), 0);
+    char buffer[BUFFER_SIZE + 1];
+    int bytesRead;
+    Messageprocessing messageProcessing;
+
+    bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
     if (bytesRead == -1) {
         throw std::runtime_error("Failed to receive data from client");
     }
     else if (bytesRead == 0) {
-        clearClients(fd, "Client disconnected\n");
+        clearClients(clientSocket, "Client disconnected\n");
+        // return;
     }
-    else {
-        buffer[bytesRead] = '\0';
-        std::cout << "Received data: " << buffer;
-        std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
-        std::string message(buffer);//
-        std::vector<std::string> line = splitStr(message, '\n');
-        for (size_t i = 0; i < line.size(); i++)
-        {
-            std::cout << "line " << i << ": " << line[i] << std::endl;//debug
-            messageProcesing.processMessage(this, line[i], fd);
-        }
+
+    buffer[bytesRead] = '\0';
+    std::cout << "Received data: " << buffer << std::endl;//debug
+    // std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
+    std::string message(buffer);
+
+    Client* client = getClient(clientSocket);//Get the client from the client list
+    if (!client) return;
+
+    // Append the received message to the client's buffer ----> _bufferInMessage
+    client->appendToBuffer(message);
+
+    // Process the message
+    while (client->hasCompleteCommand()) {
+        std::string command = client->extractCommand();
+        messageProcessing.processMessage(this, command, clientSocket);
     }
 }
+
 
 //Function that loops to monitor events on the fd.
 void Server::loop()
@@ -243,7 +250,7 @@ void Server::sendBroad(std::string resp, int fd)
 	}
 }
 
-
+//Function that returns the client based on the file descriptor.
 //Client *Server::getClient(std::vector<Client> clients, int fd)
 Client *Server::getClient(int fd)
 {

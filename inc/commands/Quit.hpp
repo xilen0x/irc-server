@@ -6,10 +6,12 @@
 
 class Quit : public ICommand
 {
+	private:
+		void _selectMemberAsOperator( Server* server, Channel* actualChannel);
+
 	public:
 		~Quit( void );
 
-		// void execute( std::string & , int );
 		void execute( Server*, std::string &, int );
 };
 
