@@ -47,7 +47,7 @@
 #define ERR_UNKNOWNCOMMAND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
 
 #define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + YEL + " :Not enough parameters" + RES + CRLF
-#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister - Need PASS and USER and/or NICK" + RES + CRLF )//( need PASS and NICK )
+#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF
 #define ERR_CHANNELISFULL(nickname, channelname) (": 471 " + nickname + " " + channelname + RED + " :Cannot join channel (+l)" + CRLF )
 #define ERR_INVITEONLYCHAN(nickname, channelname) (": 473 " + nickname + " " + channelname + RED + " :Cannot join channel (+i)" + CRLF )
