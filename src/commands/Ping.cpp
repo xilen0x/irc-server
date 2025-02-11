@@ -1,24 +1,36 @@
 
 #include "Ping.hpp"
 
-Ping::~Ping( void ) {};
+Ping::~Ping( void ) {}
 
-/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
+/* ------------------- PRIVATE FUNCTIONS ------------------*/
 
-void Ping::execute( Server* server, std::string &msg , int fd)
+/* Doesn´t check wrong parameter
+ * returns:
+ * true : No errors
+ * false: errors and error is sent to fd
+ */
+
+bool Ping::_extractParams(Server* server, std::string command, std::string &msg, int fd)
 {
-	//The next lines from 11 to 21 are equal to PASS (changue in line 19 where here is PING)
     msg = trimLeft(msg);
-    msg = msg.substr(4);
+    msg = msg.substr(command.size());
     msg = trimLeft(msg);
 
     if (!msg.empty() && msg[0] == ':')
         msg = msg.substr(1);
     if (msg.empty())
     {
-        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "PING"), fd);  // 461
-        return;
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), command), fd);  // 461  //Perhaps "*" must be changed
+        return (false);
     }
+	return(true);
+}
 
-	server->sendResp(PONG(msg),fd);
+/* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
+// Doesn´t check wrong parameter
+void Ping::execute( Server* server, std::string &msg , int fd)
+{
+	if (_extractParams(server, "PING", msg, fd))
+		server->sendResp(PONG(msg),fd);
 }
