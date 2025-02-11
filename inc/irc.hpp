@@ -6,6 +6,8 @@
 # include <cstdlib>
 # include <iostream>
 # include <string>
+# include "Client.hpp"
+# include "Server.hpp"
 
 /*-----------COLORS------------*/
 # define GRE "\e[1;32m"
@@ -14,8 +16,14 @@
 # define RES "\033[0m"
 # define WHI "\e[1;37m"
 
+class Server;
+class Client;
+
 int	 parseInput(std::string password, int port);
 std::string getCurrentTime();
 std::string formatIRCMessage(const std::string& message);
+int isAuthenticated(Client* client, Server* server, int fd);
+bool checkNickInUse(std::vector<Client> clients, std::string &s);
+bool validateNick(std::string &s);
 
 #endif

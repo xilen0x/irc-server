@@ -2,11 +2,11 @@
 #include "User.hpp"
 #include "Messageprocessing.hpp"
 #include "Nick.hpp"
+#include "irc.hpp"
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
 User::User( void ) : welcomeMsgUser(false) {};
-
 
 void User::execute(Server* server, std::string& msg, int fd) 
 {
@@ -53,6 +53,7 @@ void User::execute(Server* server, std::string& msg, int fd)
                 server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
                 server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
             }
+            client->setHasAuth();
         }
     }
 }

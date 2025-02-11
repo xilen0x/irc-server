@@ -7,10 +7,10 @@ Mode::~Mode( void ) {};
 
 void Mode::execute( Server* server, std::string &msg , int fd)
 {
-	(void)fd;
-	(void)server;
-
-	std::cout << "    ----" << std::endl;
-	std::cout << "MODE  => TODO wit message " << msg << std::endl;
-	std::cout << "    ----" << std::endl;
+	if (isAuthenticated(server->getClient(fd), server, fd))
+	{
+		std::cout << "    ----" << std::endl;
+		std::cout << "MODE  => TODO with message " << msg << std::endl;
+		std::cout << "    ----" << std::endl;
+	}
 }
