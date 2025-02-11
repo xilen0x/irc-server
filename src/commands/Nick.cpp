@@ -59,8 +59,10 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				{
 					Client *clt = channels[i].getCliInChannel(preNick);
 					if (clt)
+					{
 						clt->setNick(msg);
-					std::cout << "change nick in channel into: " << clt->getNick() << std::endl;////////////////
+						std::cout << "change nick in channel into: " << clt->getNick() << std::endl;////////////////
+					}
 				}
 				if (!preNick.empty() && preNick != msg)
 				{
