@@ -45,7 +45,7 @@ class Server
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
 //		std::vector<Channel> getChannels( void );
-		std::vector<Channel>& getChannels( void );
+		std::vector<Channel>& getChannels( void );//************** */
 //		std::vector<Client> getClients( void );
 		std::vector<Client>& getClients( void );
 		Client 		*getClient(int fd);
