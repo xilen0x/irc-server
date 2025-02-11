@@ -8,8 +8,8 @@
 class Client
 {
 	private:
-		int			_fdClient;//init ok
-		std::string	_ipClient;//init ok
+		int			_fdClient;//file descriptor of the client
+		std::string	_ipClient;
 
 		std::string	_nick;
 		std::string _userName;

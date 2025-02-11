@@ -13,7 +13,8 @@ Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(f
 	this->_realName = "*Real";
 
 	this->_bufferInMessage = "";
-	this->_bufferOutResponse = "";
+	// this->_bufferOutResponse = "";
+	this->_fdClient = -1;
 
 //	std::cout << "Client() => Set default values" << std::endl;
 }
@@ -26,7 +27,7 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_realName = "*Real";
 
 	this->_bufferInMessage = "";
-	this->_bufferOutResponse = "";
+	// this->_bufferOutResponse = "";
 
 	this->_hasPass = false;
 	this->_hasNick = false;
@@ -48,7 +49,7 @@ Client &Client::operator=( Client const &src )
 		this->_userName = src._userName;
 		this->_realName = src._realName;
 		this->_bufferInMessage = src._bufferInMessage;
-		this->_bufferOutResponse = src._bufferOutResponse;
+		// this->_bufferOutResponse = src._bufferOutResponse;
 		this->_hasPass = src._hasPass;
 		this->_hasNick = src._hasNick;
 		this->_hasUser = src._hasUser;
@@ -96,9 +97,9 @@ std::string	Client::getBufferInMessage( void ) const { return ( this->_bufferInM
 
 void	Client::setBufferInMessage( std::string inMessage ) { this->_bufferInMessage = inMessage; }
 	
-std::string	Client::getBufferOutResponse( void ) const { return ( this->_bufferOutResponse ); }
+// std::string	Client::getBufferOutResponse( void ) const { return ( this->_bufferOutResponse ); }
 
-void	Client::setBufferOutResponse( std::string outResponse ) { this->_bufferOutResponse = outResponse; }
+// void	Client::setBufferOutResponse( std::string outResponse ) { this->_bufferOutResponse = outResponse; }
 
 bool	Client::getHasPass( void ) const { return ( this->_hasPass ); }
 		
@@ -176,7 +177,7 @@ void	Client::printClientVars( void )
     std::cout << "_realName = " << this->_realName << std::endl;
 
     std::cout << "_bufferInMessage = " << this->_bufferInMessage << std::endl;
-    std::cout << "_bufferOutResponse = " << this->_bufferOutResponse << std::endl;
+    // std::cout << "_bufferOutResponse = " << this->_bufferOutResponse << std::endl;
 
     std::cout << "_hasPass = " << this->_hasPass << std::endl;
     std::cout << "_hasNick = " << this->_hasNick << std::endl;

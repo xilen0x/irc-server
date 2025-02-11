@@ -24,7 +24,7 @@ class Server
 	    int			                _port;
 	    int			                _fdServer;
 	    static bool		           	_Signal;
-		std::vector<struct pollfd> 	_fdsClients;
+		std::vector<struct pollfd> 	_fdsClients;//fds for poll 
     	std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
 
