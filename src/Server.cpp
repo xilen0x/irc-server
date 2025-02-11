@@ -280,7 +280,8 @@ std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
-std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
+//std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
+std::vector<Channel>& Server::getChannels( void ) { return (this->_channels); }
 //std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
