@@ -267,34 +267,33 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 
 void Join::execute( Server* server, std::string &msg , int fd)
 {
-	std::cout << "JOIN processing..." << std::endl;
-	std::vector<std::pair<std::string, std::string> > parVec;
-	msg = trimLeft(msg);
-	std::string cmd = msg.substr(0, 4);
+	if (isAuthenticated(server->getClient(fd), server, fd))
+	{
+		std::cout << "JOIN processing..." << std::endl;
+		std::vector<std::pair<std::string, std::string> > parVec;
+		msg = trimLeft(msg);
+		std::string cmd = msg.substr(0, 4);
 
-	if (!parseJoin(server, parVec, msg, fd))
-	{
-		std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
-		server->sendResp(joinMsg, fd);
-	}
-	std::cout << "JOIN processing... parVec: " << parVec[0].first << std::endl;
-	std::cout << "antes del FOR  i " << std::endl;///////////////////////////
-	for (size_t i = 0; i < parVec.size(); i++)
-	{
-		bool f = false;
-	std::cout << "bucle FOR i=" << i << std::endl;///////////////////////////
-		for (size_t j = 0; j < server->getChannels().size(); j++)
+		if (!parseJoin(server, parVec, msg, fd))
 		{
-				std::cout << "FOR j=" << j << std::endl;///////////////////////////
-			if (server->getChannels()[j].getChannelName() == parVec[i].first)
-			{
-				processJoin(server, parVec, i, j, fd);
-				f = true;
-				break ;
-			}
+			std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
+			server->sendResp(joinMsg, fd);
 		}
-		if (!f)
-			handleNonChannel(server, parVec, i, fd);
+		for (size_t i = 0; i < parVec.size(); i++)
+		{
+			bool f = false;
+			for (size_t j = 0; j < server->getChannels().size(); j++)
+			{
+				if (server->getChannels()[j].getChannelName() == parVec[i].first)
+				{
+					processJoin(server, parVec, i, j, fd);
+					f = true;
+					break ;
+				}
+			}
+			if (!f)
+				handleNonChannel(server, parVec, i, fd);
+		}
 	}
 
 	printChannelsInfo(server); // apardo-m for test

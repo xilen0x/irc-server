@@ -1,39 +1,11 @@
 
 #include "Nick.hpp"
 #include "User.hpp"
+#include "irc.hpp"
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
 Nick::Nick( void ) : welcomeMsgNick(false) {};
-
-static bool checkNickInUse(std::vector<Client> clients, std::string &s)
-{
-	for (size_t i = 0; i < clients.size(); i++)
-	{
-		std::string str = clients[i].getNick();
-		if (uppercase(str) == uppercase(s))
-			return (true);
-	}
-	return (false);
-}
-
-static bool validateNick(std::string &s)
-{
-	if (s.size() > 9 || s.size() <= 0)
-		return (false);
-	const std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_[]{}\\|^";
-	const std::string prohibited = " &#:@!*\t";
-	if (!s.empty() && prohibited.find_first_of(s[0]) != std::string::npos)
-		return (false);
-	for (size_t i = 1; i < s.size(); i++)
-	{
-		if (allowedChars.find(s[i]) == std::string::npos)
-			return (false);
-	}
-	if (uppercase(s) == "NICKSERV" || uppercase(s) == "CHANSERV")
-		return (false);
-	return (true);
-}
 
 void Nick::execute( Server* server, std::string &msg , int fd)
 {
@@ -42,20 +14,19 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
 	msg = trimLeft(msg);
-	if (!msg.empty() && msg[0] == ':')
-		msg = msg.substr(1);
-	if (msg.empty())
-	{
-		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "NICK"), fd);
-		std::cout << "input nick is empty, new nick is *" << std::endl;//////////////
-		return ;
-	}
-	
 	std::vector<Client> clients = server->getClients();
 	//	Client *cl = server->getClient(clients, fd);
 	Client *cl = server->getClient(fd);
 	if (cl->getHasPass())
-    {	
+    {
+		if (!msg.empty() && msg[0] == ':')
+			msg = msg.substr(1);
+		if (msg.empty())
+		{
+			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "NICK"), fd);
+			std::cout << "input nick is empty, new nick is *" << std::endl;//////////////
+			return ;
+		}
 		if (checkNickInUse(clients, msg) && cl->getNick() != msg)
 		{
 			if (cl->getNick().empty())
@@ -126,7 +97,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 	}
 	else
 	{
-		server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);
+		server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);//451
 	}
 	
 	if (cl->getHasNick() && cl->getHasUser() && cl->getHasPass())
@@ -138,6 +109,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
 			server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
 		}
+		cl->setHasAuth();
 	}
 }
 
