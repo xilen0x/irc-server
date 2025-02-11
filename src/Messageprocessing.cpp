@@ -13,7 +13,7 @@
 #define TOPIC "TOPIC"
 #define USER "USER"
 #define QUIT "QUIT"
-#define TEST "TEST"
+#define TEST "TEST"  // Delete before close project
 
 
 // Public
@@ -32,7 +32,7 @@ Messageprocessing::Messageprocessing( void )
 	this->_commands[TOPIC] = new Topic();
 	this->_commands[USER] = new User();
 	this->_commands[QUIT] = new Quit();
-	this->_commands[TEST] = new Test();
+	this->_commands[TEST] = new Test(); //To delete before close project
 }
 
 Messageprocessing::~Messageprocessing( void )

@@ -332,19 +332,6 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 	 return (&(this->_channels[pos]));
 }
 
-
-
-// Server::~Server( void )
-// {
-// 	// TODO : Close connections if are open :
-	
-// 	// std::cout << "------ ~Server() => Clear _fdServer, _clients, _channels" << std::endl;
-// 	this->_fdsClients.clear();
-// 	this->_clients.clear();
-// 	this->_channels.clear();
-// 	// std::cout << "------ ~Server() => End Clear _fdServer, _clients, _channels" << std::endl;
-// }
-
 Server::~Server()
 {
     std::cout << "Closing connections..." << std::endl;
