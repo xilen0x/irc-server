@@ -75,5 +75,4 @@ class Server
 		~Server();
 };
 
-
 #endif

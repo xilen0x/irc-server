@@ -340,7 +340,7 @@ Server::~Server()
     for (size_t i = 0; i < _clients.size(); ++i) {
         int fd = _clients[i].getFdClient();
         if (fd != -1) {
-            if (fcntl(fd, F_GETFD) != -1) { // Verificar si el socket aún está válido
+            if (fcntl(fd, F_GETFD) != -1) { // si el socket aún es válido
                 sendResp(msg, fd);
             }
             close(fd);
