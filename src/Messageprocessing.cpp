@@ -1,6 +1,8 @@
 
 #include "Messageprocessing.hpp"
-# include <sstream>//
+# include <sstream>
+# include "replies.hpp"
+
 #define CAP "CAP"
 #define INVITE "INVITE"
 #define JOIN "JOIN"
@@ -98,4 +100,6 @@ void Messageprocessing::processMessage(Server* server, std::string message, int 
 	}
 	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())
 		this->_commands[uppercase(str[0])]->execute(server, message, fd);
+	else if (!isAuthenticated(server->getClient(fd), server, fd))
+		return ;
 }

@@ -44,7 +44,7 @@
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + YEL + " :Nickname is already in use" + RES + CRLF)
 #define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
 #define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + YEL + " :You have not registered!" + RES + CRLF)
-// #define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
+#define ERR_UNKNOWNCOMMAND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
 
 #define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + YEL + " :Not enough parameters" + RES + CRLF
 #define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister - Need PASS and USER and/or NICK" + RES + CRLF )//( need PASS and NICK )

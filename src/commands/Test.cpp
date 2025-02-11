@@ -9,6 +9,8 @@ Test::~Test( void ) {};
 
 void Test::execute( Server* server, std::string &msg, int fd )
 {
-		std::cout << "TEST" << msg << std::endl;
+	(void)server;
+	(void)fd;
+	std::cout << "TEST command: " << msg << std::endl;
 }
 
