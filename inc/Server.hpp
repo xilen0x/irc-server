@@ -75,13 +75,5 @@ class Server
 		~Server();
 };
 
-void deleteRN(std::string &msg);
-int	 parseInput(std::string password, int port);
-std::vector<std::string> splitByDoublePoint(const std::string & msg);
-std::string trimLeft(std::string &str);
-std::string uppercase(std::string &s);
-
-void handleSIGINT(int signal);
-// void handleSIGQUIT(int signal);
 
 #endif

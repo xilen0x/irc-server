@@ -355,5 +355,3 @@ Server::~Server()
     _clients.clear();
     _channels.clear();
 }
-
-

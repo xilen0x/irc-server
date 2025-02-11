@@ -16,7 +16,9 @@ SRC_FILES = src/main.cpp \
 			src/Messageprocessing.cpp \
 			src/Server.cpp \
 			src/serverUtils.cpp \
+			src/extractParams.cpp \
 			src/splitDoublePoint.cpp \
+			src/split_msgAPM.cpp \
 			src/deleteRN.cpp \
 			src/commands/Cap.cpp \
 			src/commands/Invite.cpp \
@@ -54,6 +56,7 @@ HDR_FILES = inc/Client.hpp \
 			inc/commands/User.hpp \
 			inc/commands/ICommand.hpp \
 			inc/irc.hpp \
+			inc/replies.hpp \
 			inc/commands/Test.hpp
 
 # Archivos objeto
