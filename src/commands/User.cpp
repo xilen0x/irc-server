@@ -41,25 +41,19 @@ void User::execute(Server* server, std::string& msg, int fd)
         msg.erase(std::remove(msg.begin(), msg.end(), '\r'), msg.end());
         msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
 
-            client->setUserName(msg);
-            client->setHasUser();
-            std::cout << YEL << "Correct user format!" << RES << std::endl;  //added to test
-            if (client->getHasNick() && client->getHasUser() && client->getHasPass())
-            {
-                if (welcomeMsgUser == false && nick.welcomeMsgNick == false)
-                {
-                    welcomeMsgUser = true;
-                    server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
-                    server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
-                    server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
-                }
-                client->setHasAuth();
-            }
+        client->setUserName(msg);
+        client->setHasUser();
+        std::cout << YEL << "Correct user format!" << RES << std::endl;  //added to test
+        if (client->getHasNick()) //&& client->getHasUser() && client->getHasPass())
+        {
+            server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
+            server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
+            server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
+            client->setHasAuth();
+        }
     }
     else
-    {
         server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
-    }
 }
 
 User::~User( void ) {};

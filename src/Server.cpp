@@ -122,6 +122,7 @@ void Server::clearClients(int clientSocket, std::string msg)
         std::cout << "fd = " << clientSocket << msg << std::endl;
 }
 
+// Function to split a string into a vector of strings
 std::vector<std::string> splitStr(const std::string& input, char separator)
 {
     std::istringstream          stream(input);

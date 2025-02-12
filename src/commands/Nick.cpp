@@ -88,32 +88,22 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				// server->sendResp(welcomeMsg, fd);
 	//			server->sendResp(RPL_WELCOME(server->getServerName(), std::string(msg)), fd);
 	//			server->sendResp(ERR_NOTREGISTERED(std::string(msg)), fd);
+				if ( cl->getHasUser())
+				{
+					server->sendResp(RPL_WELCOME(server->getServerName(), cl->getNick()), fd);  // 001
+					server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
+					server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
+					cl->setHasAuth();
+				}
+				return ;
 			}
 			else
 				std::cout << "cl is empty!!!!!!" << std::endl;////////////////
 		}
-	// 	if (cl && cl->getHasNick() && !cl->getUserName().empty() && !cl->getNick().empty() && cl->getNick() != "*")
-	// 	{
-	// //		server->sendResp(RPL_CONNECTED(std::string(cl->getNick())), fd);
-	// 		std::string welcomeMsg = formatIRCMessage(RPL_WELCOME(server->getServerName(), std::string(msg)));
-	// 		server->sendResp(welcomeMsg, fd);
-	// 	}
 	}
 	else
 	{
 		server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);//451
-	}
-	
-	if (cl->getHasNick() && cl->getHasUser() && cl->getHasPass())
-	{
-		if (welcomeMsgNick == false && user.welcomeMsgUser == false)
-		{
-			welcomeMsgNick = true;
-			server->sendResp(RPL_WELCOME(server->getServerName(), cl->getNick()), fd);  // 001
-			server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
-			server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
-		}
-		cl->setHasAuth();
 	}
 }
 

@@ -83,7 +83,7 @@ bool validateNick(std::string &s)
 	for (size_t i = 1; i < s.size(); i++)
 	{
 		if (allowedChars.find(s[i]) == std::string::npos)
-			return (false);
+			return (false);//if the character is not in the allowedChars string
 	}
 	if (uppercase(s) == "NICKSERV" || uppercase(s) == "CHANSERV")
 		return (false);
