@@ -104,7 +104,7 @@ void Server::acceptClient()
 // Function to remove a client based on its file descriptor
 void Server::clearClients(int clientSocket, std::string msg)
 {
-        // Manual find-if loop to find the client based on clientSocket
+        // Find the client in the list of monitored FDs
         std::vector<struct pollfd>::iterator it = _fdsClients.begin();
         for (; it != _fdsClients.end(); ++it) {
             if (it->fd == clientSocket) {
@@ -123,7 +123,7 @@ void Server::clearClients(int clientSocket, std::string msg)
 }
 
 // Function to split a string into a vector of strings
-std::vector<std::string> splitStr(const std::string& input, char separator)
+std::vector<std::string> splitStr(const std::string& input, char separator)//no se utiliza aún(250207)
 {
     std::istringstream          stream(input);
     std::string                 token;
@@ -146,7 +146,7 @@ void Server::receiveData(int clientSocket)
         throw std::runtime_error("Failed to receive data from client");
     }
     else if (bytesRead == 0) {
-        clearClients(clientSocket, "Client disconnected1\n");
+        clearClientFromClientsAndChanels(clientSocket, "Client disconnected1\n");//solve the issue when a client disconnects abruptly & connect again
         return;
     }
 
@@ -228,12 +228,7 @@ void Server::   runServer()
 
 }
 
-// void Server::sendResp(std::string resp, int fd)
-// {
-// 	if(send(fd, resp.c_str(), resp.size(), 0) == -1)
-// 		std::cerr << RED << "Response error!" << RES << std::endl;
-// }
-
+//Function that sends a response to the client.
 void Server::sendResp(std::string msg, int clientFd) {
     ssize_t bytesSent = send(clientFd, msg.c_str(), msg.length(), 0);
     if (bytesSent == -1) {
@@ -241,7 +236,7 @@ void Server::sendResp(std::string msg, int clientFd) {
     }
 }
 
-
+//Function that sends a response to all clients except the one that sent the message.
 void Server::sendBroad(std::string resp, int fd)
 {
 	int	actualFd;

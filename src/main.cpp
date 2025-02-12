@@ -13,9 +13,9 @@ int main(int argc, char const *argv[])
 
         try
         {
-            signal(SIGINT, Server::signalsHandler);//Ctrl+C
-	        signal(SIGQUIT, Server::signalsHandler);//Ctrl+\    /
-            signal(SIGPIPE, SIG_IGN);//Ignore SIGPIPE, when a client disconnects, the server will not crash
+            signal(SIGINT, Server::signalsHandler);
+	        signal(SIGQUIT, Server::signalsHandler);
+            signal(SIGPIPE, SIG_IGN);
             if (!parseInput(password, port))
             {
                 Server server("ircserv", password, port);
