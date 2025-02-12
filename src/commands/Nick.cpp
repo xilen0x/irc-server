@@ -54,13 +54,17 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				std::string preNick = cl->getNick();
 				cl->setNick(msg);
 				std::cout << "change global nick into: " << cl->getNick() << std::endl;////////////////
-				std::vector<Channel> channels = server->getChannels();
-				for (size_t i = 0; i < channels.size(); i++)
+				// std::vector<Channel> channels = server->getChannels();
+				// for (size_t i = 0; i < channels.size(); i++)
+				for (size_t i = 0; i < server->getChannelsSize(); i++)
 				{
-					Client *clt = channels[i].getCliInChannel(preNick);
+					// Client *clt = channels[i].getCliInChannel(preNick);
+					Client *clt = server->getChannelsByNumPosInVector(i)->getCliInChannel(preNick);
 					if (clt)
+					{
 						clt->setNick(msg);
-					std::cout << "change nick in channel into: " << clt->getNick() << std::endl;////////////////
+						std::cout << "change nick in channel into: " << clt->getNick() << std::endl;//cambio que solvento el SEGV momentaneamente(mover esta linea aqui)
+					}
 				}
 				if (!preNick.empty() && preNick != msg)
 				{
