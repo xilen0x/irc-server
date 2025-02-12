@@ -183,6 +183,7 @@ void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber 
 
 int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
 
+/*
 std::string 	Channel::getClientsList()
 {
 	std::string list;
@@ -206,6 +207,32 @@ std::string 	Channel::getClientsList()
 	}
 	return list;
 }
+*/
+
+std::string 	Channel::getClientsList()
+{
+	std::string list;
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); ++it)
+	{
+		list += "@" + it->first;
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _operator.end())
+			list += " ";
+	}
+	if (!_operator.empty() && !_memClients.empty())
+		list += " ";
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); ++it)
+	{
+		list += it->first;
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _memClients.end())
+			list += " ";
+	}
+	return list;
+}
+
 
 /*
 // 250212 - Delete this part?????
@@ -349,6 +376,15 @@ size_t	Channel::sizeOpe( void ) { return (this->_operator.size()); }
 size_t	Channel::sizeMem( void ) { return (this->_memClients.size()); }
 
 // End 250207 by apardo-m
+
+// 250212 by apardo-m
+bool	Channel::isInv(std::string &nick)
+{
+	if( this->_invClients.find(nick) != this->_invClients.end() )
+		return ( true );
+	return ( false );
+}
+// End 250212 by apardo-m
 
 // For debugging
 void	Channel::printChannelVars( void )

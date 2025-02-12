@@ -61,6 +61,7 @@ std::string uppercase(std::string &s)
 	return (s);
 }
 
+//250212 checkNickInUse can be a public function on Server class
 bool checkNickInUse(std::vector<Client> clients, std::string &s)
 {
 	for (size_t i = 0; i < clients.size(); i++)

@@ -20,7 +20,7 @@ static void	printChannelsInfo(Server *server)
 		channel = server->getChannelsByNumPosInVector(i);
 		channel->printChannelVars();
 	}   
-	std::cout << "========= End Channels info =======" << std::endl;
+	std::cout << "========= End Channels info =======\n" << std::endl;
 }
 // End  apardo-m functions
 
@@ -153,6 +153,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		return ;
 	}
 	ch->addMem(cl);
+
 	if (ch->getTopic().empty())
 	{
 		std::cout << "processJoin!" << std::endl;///////////////////////
