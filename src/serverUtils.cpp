@@ -41,6 +41,14 @@ int parseInput(std::string password, int port)
     return (0);
 }
 
+std::string trimRight(std::string &str)
+{
+    size_t pos = str.find_last_not_of(" \t\v\r\n");//find the last character that is not a white space
+    if (pos == std::string::npos)//if there is no white space
+        return ("");
+    return (str.substr(0, pos + 1));//return the string from the beginning to the last character that is not a white space
+}
+
 // to remove the first white spaces of a string
 std::string trimLeft(std::string &str)
 {
