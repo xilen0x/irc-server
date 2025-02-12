@@ -30,6 +30,8 @@ Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey(
 {}
 
 
+/*
+// 250212 - Delete this part?????
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
 {
 	std::cout << "Channel => Object created" << std::endl;
@@ -42,6 +44,7 @@ Channel::Channel( std::string channelName, std::string operatorNick ) :_channelN
 	this->_userLimitNumber = DEFAULT_LIMIT;
 	this->_operators.push_back(operatorNick);
 }
+*/
 
 // Reloaded by Linnnnnnnnnnnnnnnnnnnnnn
 Channel::Channel( std::string channelName, std::string operatorNick, Client *operatorClient) :_channelName( channelName )
@@ -54,7 +57,7 @@ Channel::Channel( std::string channelName, std::string operatorNick, Client *ope
 	this->_channelKey = "";
 	this->_hasUserLimit = false;
 	this->_userLimitNumber = DEFAULT_LIMIT;
-	this->_operators.push_back(operatorNick);
+//	this->_operators.push_back(operatorNick);  // 250212 - Delete ????? 
 	this->_operator[operatorNick] = operatorClient;
 }
 
@@ -72,9 +75,12 @@ Channel &Channel::operator=( Channel const &src)
 		this->_hasUserLimit = src._hasUserLimit;
 		this->_userLimitNumber = src._userLimitNumber;
 
+/*
+// 250212 - Delete this part?????
 		this->_operators = src._operators;
 		this->_memberClients = src._memberClients;
 		this->_invitedClients = src._invitedClients;
+*/
 
 		this->_operator = src._operator;
 		this->_memClients = src._memClients;
@@ -87,9 +93,15 @@ Channel &Channel::operator=( Channel const &src)
 Channel::~Channel( void )
 {
 	//std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
+/*
+// 250212 - Delete this part?????
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
+*/
+	this->_memClients.clear();
+	this->_invClients.clear();
+	this->_operator.size();
 }
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
@@ -195,6 +207,8 @@ std::string 	Channel::getClientsList()
 	return list;
 }
 
+/*
+// 250212 - Delete this part?????
 // _operators
 bool 	Channel::isOperator( std::string nickClient )
 {
@@ -253,6 +267,7 @@ void	Channel::deleteInvited( std::string nickClient )
 	if(!this->_deleteInVector(this->_invitedClients, nickClient))
 		std::cout << nickClient << " is NOT in _invitedClients. CAN´T DELETE IT!!!" << std::endl;
 }
+*/
 
 // Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 //void 	Channel::addOpe(std::string &nick, Client *client)
@@ -355,5 +370,5 @@ void	Channel::printChannelVars( void )
 	std::cout << "- CHANNEL _invitedClients:" << std::endl;
 //	this->_printVectorStrings(this->_invitedClients);
 	this->_printMapKeys(this->_invClients);
-	std::cout << "----- CHANNEL DATA  (end)-----" << std::endl;
+	std::cout << "----- CHANNEL DATA  (end)-----\n" << std::endl;
 }

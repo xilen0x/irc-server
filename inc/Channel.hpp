@@ -29,10 +29,12 @@ class Channel
 		int				_userLimitNumber;
 //		unsigned long	_userLimitNumber;
 
-		// DOUBT: 250119 - only store nicks o store Objects?
+/*
+// 250212 - Delete this part?????
 		std::vector<std::string>	_operators;
 		std::vector<std::string>	_memberClients;
 		std::vector<std::string>	_invitedClients;
+*/
 
 		// Added by Linnnnnnnnnnnnnnnnnn
 //		std::vector<Client> 		_clients; // including _memberClients and _invitedClients
@@ -49,6 +51,8 @@ class Channel
 
 		// End Added Linnnnnnnnnnnnnnnnn
 
+/*
+// 250212 - Delete this part?????
 		template <typename T>
 		bool	_isInVector(T &t, std::string nickClient );
 
@@ -57,7 +61,7 @@ class Channel
 
 		template <typename T>
 		bool	_deleteInVector(T &t, std::string nickClient );
-
+*/
 		// For debugging
 		void	_printVectorStrings(std::vector<std::string> stringVector);
 
@@ -110,6 +114,8 @@ class Channel
 
 		int				getClientSum();
 
+/*
+// 250212 - Delete this part?????
 		// _operators
 		bool 			isOperator( std::string nickClient );
 		void 			addOperator( std::string nickClient );
@@ -126,7 +132,7 @@ class Channel
 		bool			isInvited( std::string nickClient );
 		void			addInvited( std::string nickClient );
 		void			deleteInvited( std::string nickClient );
-
+*/
 		// _operator _memClients _invClients  Added by Linnnnnnnnnnnnnnnnnnnn
 		void 			addOpe(Client *client);
 		void 			deleteOpe(std::string &nick);
@@ -146,7 +152,7 @@ class Channel
 		void		printChannelVars( void ); 
 };
 
-# include "Channel.tpp"
+// # include "Channel.tpp"  // 250212 - Delete ????? 
 # include "Channel1.tpp"
 
 #endif
