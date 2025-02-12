@@ -8,22 +8,6 @@
 #define BASE_NICK "nick_"
 #define BASE_USER_NAME "userName_"
 
-// Start  apardo-m functions
-
-static void	printChannelsInfo(Server *server)
-{
-	Channel *channel;
-
-	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;
-	for (size_t i = 0; i < server->getChannels().size(); i++)
-	{
-		channel = server->getChannelsByNumPosInVector(i);
-		channel->printChannelVars();
-	}   
-	std::cout << "========= End Channels info =======\n" << std::endl;
-}
-// End  apardo-m functions
-
 Join::~Join( void ) {};
 
 static int sumChannels(Server* server, std::string &nick)

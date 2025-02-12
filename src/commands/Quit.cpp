@@ -74,6 +74,7 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	std::cout << "Delete nick client from any channel. Number of Channels : " << channelsSize << std::endl;
 	for( size_t i = 0; i < channelsSize; i++)
 	{
+		std::cout << " - Start Channel number : " << i << std::endl;
 		actualChannel = server->getChannelsByNumPosInVector(i);
 		if (actualChannel->isOpe(nick) || actualChannel->isMem(nick))
 		{
@@ -86,13 +87,19 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 				actualChannel->deleteOpe(nick);
 				if (actualChannel->sizeOpe() == 0)
 					_selectMemberAsOperator( server, actualChannel);
+				std::cout << " Deleted as operator" << std::endl;
+				actualChannel->printChannelVars();
+				std::cout << " - End Channel number : " << i << std::endl;
 				break;
 			}
 			else if (actualChannel->isMem(nick))
 			{
 				actualChannel->deleteMem(nick);
-				if ( actualChannel->sizeMem() == 0 )
-					server->deleteChannel(actualChannel->getChannelName());
+	//			if (actualChannel->sizeOpe() == 0 && actualChannel->sizeMem() == 0 )
+	//				server->deleteChannel(actualChannel->getChannelName());
+				std::cout << " Deleted as member" << std::endl;
+				actualChannel->printChannelVars();
+				std::cout << " - End Channel number : " << i << std::endl;
 				break;
 			}
 		}

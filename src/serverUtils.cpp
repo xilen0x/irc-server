@@ -103,3 +103,17 @@ int isAuthenticated(Client* client, Server* server, int fd) {
     }
     return (1);
 }
+
+// by apardo-m  
+void	printChannelsInfo(Server *server)
+{
+	Channel *channel;
+
+	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;
+	for (size_t i = 0; i < server->getChannels().size(); i++)
+	{
+		channel = server->getChannelsByNumPosInVector(i);
+		channel->printChannelVars();
+	}   
+	std::cout << "========= End Channels info =======\n" << std::endl;
+}
