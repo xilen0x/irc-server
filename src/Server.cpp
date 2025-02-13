@@ -312,6 +312,18 @@ void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
 	deleteClient( fd ); //delete client from _clients
 	clearClients(fd, msg); //delete fd from _fdsClients
 }
+
+// apardo-m need for Topic
+bool		Server::isInChannels( std::string chName )
+{
+	for (size_t	i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i].getChannelName() ==  chName)
+			return ( true );
+	}
+	return ( false );
+}
+
 //For test proposal
 
 Client*		Server::getClientByFD(int fd)
