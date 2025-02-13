@@ -3,6 +3,7 @@
 #include "Messageprocessing.hpp"
 #include <cerrno>
 #include <cstdio>
+// #include "replies.hpp"
 
 Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
 {}
@@ -332,13 +333,13 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 Server::~Server()
 {
     std::cout << "Closing connections..." << std::endl;
-    std::string msg = "Server is closing...!\n";
+    // std::string msg = "Server is closing...!\n";
 
     for (size_t i = 0; i < _clients.size(); ++i) {
         int fd = _clients[i].getFdClient();
         if (fd != -1) {
             if (fcntl(fd, F_GETFD) != -1) { // si el socket aún es válido
-                sendResp(msg, fd);
+                sendResp(ERR_SERVERDOWN(_clients[i].getNick()), fd);
             }
             close(fd);
         }
