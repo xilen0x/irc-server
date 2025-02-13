@@ -30,6 +30,8 @@ Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey(
 {}
 
 
+/*
+// 250212 - Delete this part?????
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )
 {
 	std::cout << "Channel => Object created" << std::endl;
@@ -42,6 +44,7 @@ Channel::Channel( std::string channelName, std::string operatorNick ) :_channelN
 	this->_userLimitNumber = DEFAULT_LIMIT;
 	this->_operators.push_back(operatorNick);
 }
+*/
 
 // Reloaded by Linnnnnnnnnnnnnnnnnnnnnn
 Channel::Channel( std::string channelName, std::string operatorNick, Client *operatorClient) :_channelName( channelName )
@@ -54,7 +57,7 @@ Channel::Channel( std::string channelName, std::string operatorNick, Client *ope
 	this->_channelKey = "";
 	this->_hasUserLimit = false;
 	this->_userLimitNumber = DEFAULT_LIMIT;
-	this->_operators.push_back(operatorNick);
+//	this->_operators.push_back(operatorNick);  // 250212 - Delete ????? 
 	this->_operator[operatorNick] = operatorClient;
 }
 
@@ -72,9 +75,12 @@ Channel &Channel::operator=( Channel const &src)
 		this->_hasUserLimit = src._hasUserLimit;
 		this->_userLimitNumber = src._userLimitNumber;
 
+/*
+// 250212 - Delete this part?????
 		this->_operators = src._operators;
 		this->_memberClients = src._memberClients;
 		this->_invitedClients = src._invitedClients;
+*/
 
 		this->_operator = src._operator;
 		this->_memClients = src._memClients;
@@ -87,9 +93,15 @@ Channel &Channel::operator=( Channel const &src)
 Channel::~Channel( void )
 {
 	//std::cout << "~Channel => Clear vectors (_channelName=\"" << this->_channelName << "\")" << std::endl;
+/*
+// 250212 - Delete this part?????
 	this->_operators.clear();
 	this->_memberClients.clear();
 	this->_invitedClients.clear();
+*/
+	this->_memClients.clear();
+	this->_invClients.clear();
+	this->_operator.size();
 }
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
@@ -171,6 +183,7 @@ void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber 
 
 int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
 
+/*
 std::string 	Channel::getClientsList()
 {
 	std::string list;
@@ -194,7 +207,35 @@ std::string 	Channel::getClientsList()
 	}
 	return list;
 }
+*/
 
+std::string 	Channel::getClientsList()
+{
+	std::string list;
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); ++it)
+	{
+		list += "@" + it->first;
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _operator.end())
+			list += " ";
+	}
+	if (!_operator.empty() && !_memClients.empty())
+		list += " ";
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); ++it)
+	{
+		list += it->first;
+		std::map<std::string, Client *>::iterator next_it = it;
+		++next_it;
+		if (next_it != _memClients.end())
+			list += " ";
+	}
+	return list;
+}
+
+
+/*
+// 250212 - Delete this part?????
 // _operators
 bool 	Channel::isOperator( std::string nickClient )
 {
@@ -253,6 +294,7 @@ void	Channel::deleteInvited( std::string nickClient )
 	if(!this->_deleteInVector(this->_invitedClients, nickClient))
 		std::cout << nickClient << " is NOT in _invitedClients. CAN´T DELETE IT!!!" << std::endl;
 }
+*/
 
 // Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 //void 	Channel::addOpe(std::string &nick, Client *client)
@@ -293,6 +335,8 @@ void	Channel::deleteMem(std::string &nick)
 
 
 Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second); }
+
+Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second); }  // For test 251213
 
 
 void	Channel::addInv(Client *client)
@@ -335,6 +379,15 @@ size_t	Channel::sizeMem( void ) { return (this->_memClients.size()); }
 
 // End 250207 by apardo-m
 
+// 250212 by apardo-m
+bool	Channel::isInv(std::string &nick)
+{
+	if( this->_invClients.find(nick) != this->_invClients.end() )
+		return ( true );
+	return ( false );
+}
+// End 250212 by apardo-m
+
 // For debugging
 void	Channel::printChannelVars( void )
 {
@@ -355,5 +408,5 @@ void	Channel::printChannelVars( void )
 	std::cout << "- CHANNEL _invitedClients:" << std::endl;
 //	this->_printVectorStrings(this->_invitedClients);
 	this->_printMapKeys(this->_invClients);
-	std::cout << "----- CHANNEL DATA  (end)-----" << std::endl;
+	std::cout << "----- CHANNEL DATA  (end)-----\n" << std::endl;
 }

@@ -27,7 +27,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			std::cout << "input nick is empty, new nick is *" << std::endl;//debug
 			return ;
 		}
-		if (checkNickInUse(clients, msg) && cl->getNick() != msg)
+		if (checkNickInUse(clients, msg) && cl->getNick() != msg)  //250212 checkNickInUse can be a public function on Server class
 		{
 			if (cl->getNick().empty())
 				cl->setNick("*");
@@ -54,6 +54,10 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				std::string preNick = cl->getNick();
 				cl->setNick(msg);
 				std::cout << "change global nick into: " << cl->getNick() << std::endl;////////////////
+
+				// std::vector<Channel> channels = server->getChannels();
+				// for (size_t i = 0; i < channels.size(); i++)
+/*	250212 by apardo-m		
 				for (size_t i = 0; i < server->getChannelsSize(); i++)
 				{
 					Client *clt = server->getChannelsByNumPosInVector(i)->getCliInChannel(preNick);
@@ -63,6 +67,37 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 						std::cout << "change nick in channel into: " << clt->getNick() << std::endl;
 					}
 				}
+*/
+			 	std::cout << "channels size =" << server->getChannels().size() << ", " << server->getChannelsSize() << std::endl;
+				
+// Start 250212 by apardo-m
+				Channel	*ch;
+				for (size_t i = 0; i < server->getChannelsSize(); i++)
+				{
+					ch = server->getChannelsByNumPosInVector(i);
+					if ( ch->isOpe(preNick) )
+					{
+						std::cout << "-- isOpe" << std::endl;
+						ch->deleteOpe(preNick);
+						ch->addOpe(cl);
+					}
+					else if ( ch->isMem(preNick) )
+					{
+						std::cout << "-- isMem" << std::endl;
+						ch->deleteMem(preNick);
+						ch->addMem(cl);
+					}
+					else if ( ch->isInv(preNick) )
+					{
+						std::cout << "-- isInv" << std::endl;
+						ch->deleteInv(preNick);
+						ch->addInv(cl);
+					}
+					else
+						std::cout << "-- not found (" << preNick << ")" << std::endl;
+					ch->printChannelVars();
+				}
+// End 250212 by apardo-m
 				if (!preNick.empty() && preNick != msg)
 				{
 					if (preNick == "*" && !cl->getUserName().empty())

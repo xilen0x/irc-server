@@ -69,6 +69,7 @@ std::string uppercase(std::string &s)
 	return (s);
 }
 
+//250212 checkNickInUse can be a public function on Server class
 bool checkNickInUse(std::vector<Client> clients, std::string &s)
 {
 	for (size_t i = 0; i < clients.size(); i++)
@@ -142,3 +143,16 @@ int isAuthenticated(Client* client, Server* server, int fd) {
     return (1);
 }
 
+// by apardo-m  
+void	printChannelsInfo(Server *server)
+{
+	Channel *channel;
+
+	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;
+	for (size_t i = 0; i < server->getChannels().size(); i++)
+	{
+		channel = server->getChannelsByNumPosInVector(i);
+		channel->printChannelVars();
+	}   
+	std::cout << "========= End Channels info =======\n" << std::endl;
+}
