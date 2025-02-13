@@ -336,6 +336,8 @@ void	Channel::deleteMem(std::string &nick)
 
 Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second); }
 
+Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second); }  // For test 251213
+
 
 void	Channel::addInv(Client *client)
 {

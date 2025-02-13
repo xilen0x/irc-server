@@ -29,8 +29,8 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		 * si  No empieza con # o & error -> ERR_NOSUCHCHANNEL (403)
 		 * Mirar el nombre a partir del segundo char (evitar el primer # ó &)
 		 * Si canal no esta en la lista de canales -> ERR_NOSUCHCHANNEL (403)
-		 * Si el cliente no está en esté canal -> ERR_NOTONCHANNEL (442)
-		 *
+		 * Si el cliente no está en este canal -> ERR_NOTONCHANNEL (442)
+		 * Si el topic is protected -> ERR_CHANOPRIVSNEEDED (482)
 		 *
 		 *
 		 *

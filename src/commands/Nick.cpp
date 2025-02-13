@@ -54,6 +54,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				std::string preNick = cl->getNick();
 				cl->setNick(msg);
 				std::cout << "change global nick into: " << cl->getNick() << std::endl;////////////////
+
 				// std::vector<Channel> channels = server->getChannels();
 				// for (size_t i = 0; i < channels.size(); i++)
 /*	250212 by apardo-m		

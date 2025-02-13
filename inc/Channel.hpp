@@ -149,6 +149,7 @@ class Channel
 		size_t			sizeMem( void );
 		// 250212 by apardo-m
 		bool			isInv(std::string &nick);
+		Client			*getFirstOpe( void );  // For test 251213
 
 // For debugging
 		void		printChannelVars( void ); 

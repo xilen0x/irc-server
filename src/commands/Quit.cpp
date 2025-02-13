@@ -18,6 +18,11 @@ void Quit::_selectMemberAsOperator( Server* server, Channel* actualChannel)
 			actualChannel->deleteMem(nick);
 			actualChannel->printChannelVars();
 			server->sendResp(MSG_QUIT_CHANGE_OPERATOR(nick, actualChannel->getChannelName()), cl->getFdClient());
+// Start debug
+			cl = actualChannel->getFirstOpe();
+			std::cout << "---- Test acces new operator : " << cl->getNick() << std::endl;
+			cl->printClientVars();
+// end debug
 		}
 		else
 			server->deleteChannel(actualChannel->getChannelName());
