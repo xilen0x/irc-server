@@ -60,6 +60,7 @@ class Server
 
 		void runServer(void);
 		void sendResp(std::string resp, int fd);
+		void sendBroadAll(std::string resp);
 		void sendBroad(std::string resp, int fd);
 
 		static void signalsHandler(int signal);
@@ -70,6 +71,7 @@ class Server
 		void	clearClientFromClientsAndChanels( int fd, std::string msg);
 // apardo-m need for Topic
 		bool	isInChannels( std::string chName);
+		Channel	*getChannelByChannelName( std::string chName );
 
 //For test proposal
 		Client	*getClientByFD(int fd);

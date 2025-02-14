@@ -28,10 +28,11 @@
 // #define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
 // #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
+#define RPL_NOTOPIC(nickname, channelname) (": 331 " + nickname + " #" +channelname + " :No topic is set" + CRLF)
+#define RPL_TOPIC(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + CRLF)
 #define RPL_JOINMSG(hostname, ipaddress, channelname) (":" + hostname + "@" + ipaddress + " JOIN #" + channelname + CRLF)
 #define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ #" + channelname + " :" + clientslist + CRLF)
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + CRLF)
-#define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
 
 // ERRORS
 
@@ -54,7 +55,6 @@
 #define ERR_INVITEONLYCHAN(nickname, channelname) (": 473 " + nickname + " " + channelname + RED + " :Cannot join channel (+i)" + CRLF )
 #define ERR_BADCHANNELKEY(nickname, channelname) (": 475 " + nickname + " " + channelname + RED + " :Cannot join channel (+k)" + CRLF )
 #define ERR_SERVERDOWN(nickname) (": ERROR :Closing Link: " + nickname + " (Server shutdown)" + CRLF)
-#define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
 #define ERR_CHANOPRIVSNEEDED(nickname, channelname) (": 482 " + nickname + " #" + channelname + " :You're not a channel operator" + CRLF)
 
 #endif  
