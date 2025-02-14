@@ -359,14 +359,14 @@ void	Channel::deleteInv(std::string &nick)
 // End Added by Linnnnnnnnnnnnnnnnnnnnnnnnnn
 
 // 250207 by apardo-m
-bool	Channel::isOpe(std::string &nick)
+bool	Channel::isOpe(std::string nick)
 {
 	if( this->_operator.find(nick) != this->_operator.end() )
 		return ( true );
 	return ( false );
 }
 
-bool	Channel::isMem(std::string &nick)
+bool	Channel::isMem(std::string nick)
 {
 	if( this->_memClients.find(nick) != this->_memClients.end() )
 		return ( true );
@@ -380,7 +380,7 @@ size_t	Channel::sizeMem( void ) { return (this->_memClients.size()); }
 // End 250207 by apardo-m
 
 // 250212 by apardo-m
-bool	Channel::isInv(std::string &nick)
+bool	Channel::isInv(std::string nick)
 {
 	if( this->_invClients.find(nick) != this->_invClients.end() )
 		return ( true );
