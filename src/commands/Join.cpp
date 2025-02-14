@@ -240,7 +240,6 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	{
 		if (*(parVec[i].first.begin()) != '#' && *(parVec[i].first.begin()) != '&')
 		{
-			//std::string chaErrMsg = formatIRCMessage(ERR_CHANNELNOTFOUND(server->getClient(fd)->getNick(), parVec[i].first));
 			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(server->getClient(fd)->getNick(), parVec[i].first));
 			server->sendResp(chaErrMsg, fd);
 			parVec.erase(parVec.begin() + i--);
