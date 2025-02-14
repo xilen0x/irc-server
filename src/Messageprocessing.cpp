@@ -47,7 +47,7 @@ Messageprocessing::~Messageprocessing( void )
 }
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
-
+/*
 std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 {
 	std::vector<std::string> res;
@@ -60,7 +60,7 @@ std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
 	}
 	return (res);
 }
-
+*/
 /*
 char to_upper(char c)
 {
