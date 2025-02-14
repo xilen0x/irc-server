@@ -4,157 +4,137 @@
 
 Kick::~Kick( void ) {};
 
-// int	kickParsingIsCorrect(std::string &msg, Server* server, int fd)
-// {
-//     Client*             client;
-//     Messageprocessing   parameters;
-//     std::string         nick;
-// 	Channel				*channel;
+/*
+Casos cuando el usuario NO está en ningún canal
+Situación	Código IRC	Mensaje
+KICK sin parámetros	461	KICK :Not enough parameters
+KICK con solo canal	461	KICK :Not enough parameters
+KICK con solo usuario	461	KICK :Not enough parameters
+KICK con canal y usuario (pero el usuario que lo ejecuta no está en el canal)	442	#general :You're not on that channel
+KICK con canal inexistente	403	#general :No such channel
 
-//     msg = trimLeft(msg);
-//     msg = msg.substr(4);
-//     msg = trimLeft(msg);
-// 	client = server->getClient(fd);
-// 	nick = client->getNick();
-// 	// for (size_t i = 0; i < count; i++)
-// 	// {
-// 	// 	/* code */
-// 	// }
-	
-// 	channel = server->getChannelsByNumPosInVector(0);
-//     if (client->getHasAuth() && channel->isOpe(nick))
-//     {
-//         if (!msg.empty() && msg[0] == ':')
-//             msg = msg.substr(1);
+🔹 Casos cuando el usuario YA está en un canal
+Situación	Código IRC	Mensaje
+KICK sin parámetros	461	KICK :Not enough parameters
+KICK con solo canal	461	KICK :Not enough parameters
+KICK con solo usuario (sin especificar canal)	461	KICK :Not enough parameters
+KICK con canal inexistente	403	#general :No such channel
+KICK con canal y usuario inexistente	441	JohnDoe #general :They aren't on that channel
+KICK con canal y usuario, pero quien lo ejecuta no está en el canal	442	#general :You're not on that channel
+KICK con canal y usuario, pero quien lo ejecuta no es operador	482	#general :You're not channel operator
+KICK con canal y usuario válido, ejecutado correctamente	No error	Usuario es expulsado y se notifica a todos en el canal
 
-//         if (msg.empty()) {
-//             server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK2"), fd);  // 461
-//             return (0);
-//         }
-// 		std::vector<std::string> params = parameters.split_msg(msg);
-// 		if (params.size() < 2) {
-// 			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK3"), fd);  // 461
-// 			return (0);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
-
-// /* Syntax KICK message: 
-// 	KICK <channel> <KICK> *( "," <KICK> ) [<comment>]*/
-// void Kick::execute( Server* server, std::string &msg , int fd)
-// {
-// 	if (isAuthenticated(server->getClient(fd), server, fd))
-// 	{
-// 		//CHECK PARAMETERS(parsing)
-// 		if (!kickParsingIsCorrect(msg, server, fd))
-// 		{
-// 			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK1"), fd);  // 461
-// 			return;
-// 		}
-// std::cout << "KICK after kickParsingIsCorrect" << std::endl;
-// 		// 0.1 Check if the channel exists
-// 		// 0.2 Check if the KICK exists
-// 		// 1. Check if the KICK is in the channel
-// 		//IF (PERMISO)// 2. Check if the user(OPERATOR) has the permission to kick
-// 			// 3. Kick the user from the channel
-// 			// 4. Send the message to the channel
-// 			// 5. Send the message to the user
-
-// 		//ELSE(NO PERMISO)
-// 			// 6. Send ERR_CHANOPRIVSNEEDED //482
-// 	}
-// }
-
+🔹 Otros casos especiales
+Situación	Código IRC	Mensaje
+KICK con varios usuarios separados por , (ejemplo: KICK #general JohnDoe,JaneDoe)	Mensajes separados por usuario	KICK #general JohnDoe :Reason + KICK #general JaneDoe :Reason
+KICK a un operador del canal (si el servidor no lo permite)	482	#general :You're not channel operator (o un error personalizado)
+KICK a sí mismo (si el servidor no lo permite)	Opcional	Algunas implementaciones pueden bloquearlo con 482
+*/
+/* Syntax del mensaje KICK: 
+   KICK <channel> <user> *( "," <user> ) [<comment>] */
 int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 {
-    if (!server)
-        return (0);
-
-    Client* client = server->getClient(fd);
-    if (!client)
-        return (0);
-
-    msg = trimLeft(msg);  // Eliminar espacios al inicio
-    if (msg.size() < 4)
-        return (0); // Mensaje demasiado corto para ser un KICK válido
-
-    msg = msg.substr(4); // Eliminar "KICK"
     msg = trimLeft(msg);
-
-    std::string nick = client->getNick();
-    Channel* channel = server->getChannelsByNumPosInVector(0);
+    msg = msg.substr(4);
+    msg = trimLeft(msg);
     
-    if (!channel) {
-        server->sendResp(ERR_NOSUCHCHANNEL(std::string("*"), "UNKNOWN_CHANNEL"), fd);  // 403
+    if (!msg.empty() && msg[0] == ':')
+        msg = msg.substr(1);
+    if (msg.empty())
+    {
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK sin argumentos"), fd);  // 461 //modificar mensaje luego
         return (0);
     }
+    if (msg.size() < 4)
+    {
+        std::cout << "msg.size: " << msg.size() << std::endl;//debug
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK con argumentos insuficientes"), fd);  // 461 //modificar mensaje luego
+        return (0);
+    }
+    // 0.1 Verificar si el canal existe
+    // obtener channel: 
+
+
+
+
+
+
+    
+    // if (!channel) {
+    //     // server->sendResp(ERR_NOSUCHCHANNEL(std::string("*"), "UNKNOWN_CHANNEL"), fd);  // 403
+    //     server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK 1"), fd);  // 461
+    //     return (0);
+    // }
+
+
+
+    // if (!server)
+    //     return (0);
+
+    // Client* client = server->getClient(fd);
+    // if (!client)
+    //     return (0);
+
+    // msg = trimLeft(msg);  // Eliminar espacios al inicio
+    // msg = msg.substr(4);
+    // std::cout << "AFTER msg.substr(4): " << msg << std::endl;
+    // msg = trimLeft(msg);
+    // std::cout << "AFTER trimLeft: " << msg << std::endl;
+    // std::string nick = client->getNick();
 
     // Verificar si el cliente está autenticado y es operador en el canal
-    if (client->getHasAuth() && channel->isOpe(nick))
-    {
-        if (msg.empty()) {
-            server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK"), fd);  // 461
-            return (0);
-        }
+    // if (client->getHasAuth() && channel->isOpe(nick))
+    // {
+    //     if (msg.empty()) {
+    //         server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK 2"), fd);  // 461
+    //         return (0);
+    //     }
 
-        if (msg[0] == ':')
-            msg = msg.substr(1); // Eliminar ":" si está presente
+    //     if (msg[0] == ':')
+    //         msg = msg.substr(1); // Eliminar ":" si está presente
 
-        if (msg.empty()) {
-            server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK"), fd);  // 461
-            return (0);
-        }
+    //     Messageprocessing parameters;
+    //     std::vector<std::string> params = parameters.split_msg(msg);
 
-        Messageprocessing parameters;
-        std::vector<std::string> params = parameters.split_msg(msg);
-
-        if (params.size() < 2) {
-            server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK"), fd);  // 461
-            return (0);
-        }
-    }
-    else
-    {
-        server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
-        return (0);
-    }
+    //     if (params.size() < 2) {
+    //         server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK 3"), fd);  // 461
+    //         return (0);
+    //     }
+    // }
+    // else
+    // {
+    //     server->sendResp(ERR_NOTREGISTERED(std::string("* 1")), fd);  // 451
+    //     return (0);
+    // }
 
     return (1);
 }
 
-/* Syntax del mensaje KICK: 
-   KICK <channel> <user> *( "," <user> ) [<comment>] */
 
 void Kick::execute(Server* server, std::string &msg, int fd)
 {
-    if (!server || !server->getClient(fd)) {
-        server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
-        return;
+    if (isAuthenticated(server->getClient(fd), server, fd)) 
+    {
+        // Verificar si la sintaxis del KICK es correcta
+        if (kickParsingIsCorrect(msg, server, fd)) {
+            std::cout << "kickParsingIsCorrect INSIDE" << std::endl;//debug
+            return;
+        }
+        //si esta en un canal
+        // if (!server->getChannels().size()) {//
+        //     server->sendResp(ERR_NOSUCHCHANNEL(std::string("*"), "UNKNOWN_CHANNEL"), fd);  // 403
+        //     return;
+        // }
+        // if (!server || !server->getClient(fd)) {
+        //     server->sendResp(ERR_NOTREGISTERED(std::string("* 2")), fd);  // 451
+        //     return;
+        // }
+
+        // Verificar si el usuario está autenticado
+        // std::cout << "after kickParsingIsCorrect INSIDE" << std::endl;//debug
     }
+    std::cout << "after kickParsingIsCorrect OUTSIDE" << std::endl;//debug
 
-    // Verificar si el usuario está autenticado
-    if (!isAuthenticated(server->getClient(fd), server, fd)) {
-        server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
-        return;
-    }
-
-    // Verificar si la sintaxis del KICK es correcta
-    if (!kickParsingIsCorrect(msg, server, fd)) {
-        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "KICK"), fd);  // 461
-        return;
-    }
-
-    std::cout << "KICK after kickParsingIsCorrect" << std::endl;
-
-    // TODO: Implementar la lógica para manejar el KICK correctamente
-    // 0.1 Verificar si el canal existe
     // 0.2 Verificar si el usuario a ser expulsado existe
     // 1. Verificar si el usuario está en el canal
     // 2. Verificar si el usuario que ejecuta el comando tiene permisos de operador

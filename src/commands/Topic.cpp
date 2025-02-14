@@ -18,7 +18,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		std::cout << "TOPIC  => TODO : Check if client is auth to continue " << msg << std::endl;
 		deleteRN(msg);
 		splitedStrVect = splitByDoublePoint(msg);
-		str = split_msgAPM(splitedStrVect[0]);
+		str = split_msg(splitedStrVect[0]);
 		if (str.size() != 2)
 		{
 			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "TOPIC"), fd);  // 461  //Perhaps "*" must be changed
