@@ -26,7 +26,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		deleteRN(msg);
 		splitedStrVect = splitByDoublePoint(msg);
 		str = split_msg(splitedStrVect[0]);
-		if (str.size() == 1)
+		if (str.size() != 2)
 		{
 			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "TOPIC"), fd);  // 461  
 			return;

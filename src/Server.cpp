@@ -281,6 +281,17 @@ Client *Server::getClient(int fd)
 	return (NULL);
 }
 
+Client *Server::getClientByNick(std::string &nick)
+{
+    std::vector<Client>& clientsRef = getClients();
+    for (size_t i = 0; i < clientsRef.size(); i++)
+	{
+        if (clientsRef[i].getNick() == nick)
+            return (&clientsRef[i]);
+    }
+    return (NULL);
+}
+
 //-----------------------------Getters & Setters-----------------------------//
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
@@ -292,6 +303,16 @@ std::vector<Channel>& Server::getChannels( void ) { return (this->_channels); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
 size_t	Server::getChannelsSize( void ) { return (this->_channels.size()); }
+
+Channel *Server::getChannelByChanName(std::string channelName)
+{
+    for (size_t i = 0; i < this->getChannels().size(); i++)
+    {
+        if (this->getChannels()[i].getChannelName() == channelName)
+            return (&(this->getChannels()[i]));
+    }
+    return (NULL);
+}
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
