@@ -48,7 +48,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		 */
 		for (size_t i=0; i < str.size(); ++i)
 			std::cout << "- str[" << i << "]=" << str[i] << std::endl;
-
+/*
 		chName = str[1];
 		if ((chName[0] != '#' || chName[0] != '&') && chName.size() == 1 )
 		{
@@ -58,21 +58,35 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		chName = chName.substr(1);
 		if (!server->isInChannels(chName))
 		{
-			server->sendResp(ERR_NOTONCHANNEL(cl->getNick(), chName), fd);
+			server->sendResp(ERR_NOSUCHCHANNEL(cl->getNick(), chName), fd);
+			return;
+		}
+*/
+		if (str[1].size() >1)
+			chName = str[1].substr(1);
+		if ( ((str[1][0] != '#' || str[1][0] != '&') && str[1].size() == 1) \
+			   	|| !server->isInChannels(chName)) 
+		{
+			server->sendResp(ERR_NOSUCHCHANNEL(cl->getNick(), chName), fd);
 			return;
 		}
 
 		ch = server->getChannelByChannelName(chName);
 		ch->setTopicRestricted();  //  For test 
-		if (ch->isTopicRestricted() && !ch->isOpe(cl->getNick()))
+		if (!ch->isOpe(cl->getNick()) && !ch->isMem(cl->getNick()))
 		{
-			std::cout << "TODO : rigth evaluation for topicResticted" << std::endl;
-			server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);
+			server->sendResp(ERR_NOTONCHANNEL(cl->getNick(), chName), fd);
 			return;
 		}
 		std::cout << "Channel name = " << ch->getChannelName() << std::endl;
 		if (splitedStrVect.size() == 2)
 		{
+			if (ch->isTopicRestricted() && !ch->isOpe(cl->getNick()))
+			{
+				std::cout << "TODO : rigth evaluation for topicResticted" << std::endl;
+				server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);
+				return;
+			}
 			topic = splitedStrVect[1];
 			if (topic.empty())
 			{
@@ -81,7 +95,10 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			}
 			else
 				ch->setTopic(topic);
-			std::cout << "TODO : topic=" << topic << std::endl;
+			//No se implementa RPL_TOPICWHOTIME (en https://modern.ircdocs.horse/#topic-message indica  SHOULD y en https://datatracker.ietf.org/doc/html/rfc2812 no lo comentan.
+			server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
+			// See : https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.4 
+			server->sendBroadAll(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic));
 		}
 		else
 		{
@@ -91,11 +108,9 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 				server->sendResp(RPL_NOTOPIC(cl->getNick(), chName),fd);
 			else
 			{
-			//No se implementa RPL_TOPICWHOTIME (en https://modern.ircdocs.horse/#topic-message indica  SHOULD y en https://datatracker.ietf.org/doc/html/rfc2812 no lo comentan.
+			//No se implementa RPL_TOPICWHOTIME (en https://modern.ircdocs.horse/#topic-message indica  SHOULD y en https://datatracker.ietf.org/doc/html/rfc2812 no lo comentan.
 				server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
-			// See : https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.4 
-				server->sendBroadAll(
-
+			}
 		}
 		std::cout << "    ----" << std::endl;
 //	}
