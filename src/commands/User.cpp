@@ -28,7 +28,7 @@ void User::execute(Server* server, std::string& msg, int fd)
             return;
         }
         //verificar formato - Parameters: <username> 0 * <realname>
-        std::vector<std::string> params = parameters.split_msg(msg);
+        std::vector<std::string> params = split_msg(msg);
         if (params.size() < 4) {
             server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
             return;

@@ -38,7 +38,7 @@ std::string uppercase(std::string &s);
 // void handleSIGQUIT(int signal);
 
 bool extractParams(Server* server, std::string command, std::string &msg, int fd); // by apardo-m
-std::vector<std::string> split_msgAPM(std::string &msg); //by apardo-m
+std::vector<std::string> split_msg(std::string &msg); //by apardo-m
 void deleteRN(std::string &msg);
 int	 parseInput(std::string password, int port);
 std::vector<std::string> splitByDoublePoint(const std::string & msg);

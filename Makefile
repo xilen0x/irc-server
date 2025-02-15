@@ -19,7 +19,7 @@ SRC_FILES = src/main.cpp \
 			src/serverUtils.cpp \
 			src/extractParams.cpp \
 			src/splitDoublePoint.cpp \
-			src/split_msgAPM.cpp \
+			src/split_msg.cpp \
 			src/deleteRN.cpp \
 			src/commands/Cap.cpp \
 			src/commands/Invite.cpp \

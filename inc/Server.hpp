@@ -49,6 +49,9 @@ class Server
 //		std::vector<Client> getClients( void );
 		std::vector<Client>& getClients( void );
 		Client 		*getClient(int fd);
+		Client		*getClientByNick(std::string &nick);
+
+		Channel *getChannelByChanName(std::string channelName); // by Linnnnnnnnn
 
 		size_t		getChannelsSize( void );
 
@@ -81,3 +84,6 @@ class Server
 };
 
 #endif
+
+
+//get

@@ -25,8 +25,8 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		std::cout << "TOPIC  => TODO : Check if client is auth to continue " << msg << std::endl;
 		deleteRN(msg);
 		splitedStrVect = splitByDoublePoint(msg);
-		str = split_msgAPM(splitedStrVect[0]);
-		if (str.size() == 1)
+		str = split_msg(splitedStrVect[0]);
+		if (str.size() != 2)
 		{
 			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "TOPIC"), fd);  // 461  
 			return;
@@ -113,5 +113,5 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			}
 		}
 		std::cout << "    ----" << std::endl;
-//	}
+	//}
 }
