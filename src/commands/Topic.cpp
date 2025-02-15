@@ -70,7 +70,8 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			else
 				ch->setTopic(topic);
 			server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
-			server->sendBroadAll(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic));
+//			server->sendBroadAll(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic));
+			server->sendBroadAllInChannel(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic), ch);
 		}
 		else
 		{

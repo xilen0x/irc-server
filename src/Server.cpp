@@ -238,7 +238,25 @@ void Server::sendResp(std::string msg, int clientFd) {
 }
 
 //Function that sends a response to all clients from a Channel.
+//en el canal Para cada cliente en _operator 
+//	obtener su fd y enviar mensaje
+//PAra cada cliente en _menClients
+//	obtener su fd y enviar mensaje
+//
+//
+//	Para el canal
+//	Obtener un mapa de _operator como puntero 
 void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
+{
+	for ( size_t i = 0; i < ch->sizeOpe(); i++)
+		sendResp(resp, ch->getFdOperatorByPosInOperators(i));
+	for ( size_t i = 0; i < ch->sizeMem(); i++)
+		sendResp(resp, ch->getFdMemberByPosInMemClients(i));
+}
+
+
+//Function that sends a response to all clients in Server
+void Server::sendBroadAll(std::string resp)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)
 		sendResp(resp, _clients[i].getFdClient());
