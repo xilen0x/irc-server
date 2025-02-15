@@ -132,13 +132,16 @@ Client	*Channel::getCliInChannel(std::string &nick)
 
 Client*	Channel::getCliInChannel(std::string &nick)
 {
-	std::map<std::string, Client *>::iterator it = _memClients.find(nick);	
+	std::cout << "nick1111111: " << nick << std::endl;
+	std::string nickCopy = nick;
+	nickCopy = uppercase(nickCopy);
+	std::map<std::string, Client *>::iterator it = _memClients.find(nickCopy);	
 	if (it != _memClients.end())
 		return (it->second);
-	it = _invClients.find(nick);
+	it = _invClients.find(nickCopy);
 	if (it != _invClients.end())
 		return (it->second);
-	it = _operator.find(nick);
+	it = _operator.find(nickCopy);
 	if (it != _operator.end())
 		return (it->second);
 	return (NULL);
