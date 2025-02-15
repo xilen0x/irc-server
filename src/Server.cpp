@@ -279,10 +279,14 @@ Client *Server::getClient(int fd)
 
 Client *Server::getClientByNick(std::string &nick)
 {
+    std::string s;
+    std::string nickCopy = nick;
+    nickCopy = uppercase(nickCopy);
     std::vector<Client>& clientsRef = getClients();
     for (size_t i = 0; i < clientsRef.size(); i++)
 	{
-        if (clientsRef[i].getNick() == nick)
+        s = clientsRef[i].getNick();
+        if (uppercase(s) == nickCopy)
             return (&clientsRef[i]);
     }
     return (NULL);
