@@ -237,11 +237,9 @@ void Server::sendResp(std::string msg, int clientFd) {
     }
 }
 
-//Function that sends a response to all clients except the one that sent the message.
-void Server::sendBroadAll(std::string resp)
+//Function that sends a response to all clients from a Channel.
+void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
 {
-	std::cout << "sendBroadAll() :" << std::endl;
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 		sendResp(resp, _clients[i].getFdClient());
 }
@@ -250,8 +248,6 @@ void Server::sendBroadAll(std::string resp)
 void Server::sendBroad(std::string resp, int fd)
 {
 	int	actualFd;
-
-	std::cout << "sendBroad() :" << std::endl;
 
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
