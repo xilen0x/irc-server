@@ -142,13 +142,13 @@ class Channel
 		void			deleteInv(std::string &nick);
 
 		// 250207 by apardo-m
-		bool			isOpe(std::string &nick);
-		bool			isMem(std::string &nick);
+		bool			isOpe(std::string nick);
+		bool			isMem(std::string nick);
 		Client 			*getFirstMem( void );
 		size_t			sizeOpe( void );
 		size_t			sizeMem( void );
 		// 250212 by apardo-m
-		bool			isInv(std::string &nick);
+		bool			isInv(std::string nick);
 		Client			*getFirstOpe( void );  // For test 251213
 
 // For debugging

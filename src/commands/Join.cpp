@@ -152,7 +152,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	else
 	{
 		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_TOPICIS(cl->getNick(), ch->getChannelName(), ch->getTopic()));
+		std::string replyMsg2 = formatIRCMessage(RPL_TOPIC(cl->getNick(), ch->getChannelName(), ch->getTopic()));
 		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
 		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
@@ -240,7 +240,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	{
 		if (*(parVec[i].first.begin()) != '#' && *(parVec[i].first.begin()) != '&')
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANNELNOTFOUND(server->getClient(fd)->getNick(), parVec[i].first));
+			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(server->getClient(fd)->getNick(), parVec[i].first));
 			server->sendResp(chaErrMsg, fd);
 			parVec.erase(parVec.begin() + i--);
 		}

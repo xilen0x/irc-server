@@ -77,6 +77,8 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		server->getChannelByChanName(channelName)->addInv(server->getClientByNick(vec[1]));
 		std::string chaInvMsg = formatIRCMessage(RPL_INVITING(nick, channelName, vec[1]));
 		server->sendResp(chaInvMsg, fd);
+		std::string chaInvitedMsg = formatIRCMessage(MSG_INVITED(nick, server->getClientByFD(fd)->getUserName(), vec[1], channelName));
+		server->sendResp(chaInvitedMsg, server->getClientByNick(vec[1])->getFdClient());
 
 		printChannelsInfo(server); // linnnnnnnnn for test
 	}
