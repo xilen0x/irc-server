@@ -392,6 +392,8 @@ Channel*   	Server::getChannelByChannelName( std::string chName )
 	std::vector<Channel>::iterator it = this->_channels.begin();
 	while (it != _channels.end() && it->getChannelName() != chName)
 		it++;
+	if (it == _channels.end())  // Si no se encontró el canal
+        return (NULL); 
 	return (&(*it));
 }
 

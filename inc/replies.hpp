@@ -12,6 +12,8 @@
 
 // MESSAGES SERVER TO CLIENT
 #define MSG_TOPIC_BROAD_ALL(nickAuthor, channel, topic) (":" + nickAuthor + "!" + LOCALHOST + " TOPIC #" + channel + " :" + topic + CRLF)
+
+#define MSG_INVITED(invitingnick, username, invitedname, channelname) (":" + invitingnick + "!" + username + "@" + LOCALHOST +" INVITE " + invitedname + " #" + channelname + CRLF)
 #define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
 #define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
 #define MSG_QUIT_CHANGE_OPERATOR(nickname, channel) (":" + nickname + ", you are the new operator for Channel " + channel + CRLF)
@@ -61,5 +63,5 @@
 #define ERR_BADCHANNELKEY(nickname, channelname) (": 475 " + nickname + " " + channelname + RED + " :Cannot join channel (+k)" + CRLF )
 #define ERR_SERVERDOWN(nickname) (": ERROR :Closing Link: " + nickname + " (Server shutdown)" + CRLF)
 #define ERR_CHANOPRIVSNEEDED(nickname, channelname) (": 482 " + nickname + " #" + channelname + " :You're not a channel operator" + CRLF)
-
-#endif  
+#define ERR_USERNOTINCHANNEL(nickname, channelname) (": 441 " + nickname + " " + channelname + " :They aren't on that channel" + CRLF)
+#endif
