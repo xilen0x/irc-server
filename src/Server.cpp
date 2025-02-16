@@ -238,13 +238,22 @@ void Server::sendResp(std::string msg, int clientFd) {
 }
 
 //Function that sends a response to all clients except the one that sent the message.
+void Server::sendBroadAll(std::string resp)
+{
+	std::cout << "sendBroadAll() :" << std::endl;
+
+	for (size_t i = 0; i < this->_clients.size(); i++)
+		sendResp(resp, _clients[i].getFdClient());
+}
+
+//Function that sends a response to all clients except the one that sent the message.
 void Server::sendBroad(std::string resp, int fd)
 {
 	int	actualFd;
 
 	std::cout << "sendBroad() :" << std::endl;
 
-	for (unsigned long i = 0; i < this->_clients.size(); i++)
+	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		actualFd = _clients[i].getFdClient();
 		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;
@@ -272,6 +281,17 @@ Client *Server::getClient(int fd)
 	return (NULL);
 }
 
+Client *Server::getClientByNick(std::string &nick)
+{
+    std::vector<Client>& clientsRef = getClients();
+    for (size_t i = 0; i < clientsRef.size(); i++)
+	{
+        if (clientsRef[i].getNick() == nick)
+            return (&clientsRef[i]);
+    }
+    return (NULL);
+}
+
 //-----------------------------Getters & Setters-----------------------------//
 std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
@@ -283,6 +303,16 @@ std::vector<Channel>& Server::getChannels( void ) { return (this->_channels); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
 size_t	Server::getChannelsSize( void ) { return (this->_channels.size()); }
+
+Channel *Server::getChannelByChanName(std::string channelName)
+{
+    for (size_t i = 0; i < this->getChannels().size(); i++)
+    {
+        if (this->getChannels()[i].getChannelName() == channelName)
+            return (&(this->getChannels()[i]));
+    }
+    return (NULL);
+}
 
 void 		Server::addClient( Client newClient ) { this->_clients.push_back(newClient); }
 void 		Server::addChannel( Channel newChannel ){ this->_channels.push_back(newChannel); }
@@ -315,14 +345,23 @@ void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
 }
 
 // apardo-m need for Topic
+//Function that checks if a channel is in the list of channels.
 bool		Server::isInChannels( std::string chName )
 {
-	for (size_t	i = 0; i < this->_channels.size(); i++)
-	{
-		if (this->_channels[i].getChannelName() ==  chName)
-			return ( true );
-	}
+	std::vector<Channel>::iterator it = this->_channels.begin();
+	while (it != _channels.end() && it->getChannelName() != chName)
+		it++;
+	if (it != _channels.end())    // found Channel
+		return (true);
 	return ( false );
+}
+
+Channel*   	Server::getChannelByChannelName( std::string chName )
+{
+	std::vector<Channel>::iterator it = this->_channels.begin();
+	while (it != _channels.end() && it->getChannelName() != chName)
+		it++;
+	return (&(*it));
 }
 
 //For test proposal

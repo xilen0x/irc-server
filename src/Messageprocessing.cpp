@@ -48,18 +48,18 @@ Messageprocessing::~Messageprocessing( void )
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
-std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
-{
-	std::vector<std::string> res;
-	std::istringstream stream(msg);
-	std::string s;
-	while (stream >> s)
-	{
-		res.push_back(s);
-		s.clear();
-	}
-	return (res);
-}
+// std::vector<std::string> Messageprocessing::split_msg(std::string &msg)
+// {
+// 	std::vector<std::string> res;
+// 	std::istringstream stream(msg);
+// 	std::string s;
+// 	while (stream >> s)
+// 	{
+// 		res.push_back(s);
+// 		s.clear();
+// 	}
+// 	return (res);
+// }
 
 /*
 char to_upper(char c)

@@ -13,6 +13,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 	std::string					chName;
 	std::string					topic = "";
 	Client						*cl;
+	Channel						*ch;
 
 
 	cl = server->getClient(fd);
@@ -24,10 +25,10 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		std::cout << "TOPIC  => TODO : Check if client is auth to continue " << msg << std::endl;
 		deleteRN(msg);
 		splitedStrVect = splitByDoublePoint(msg);
-		str = split_msgAPM(splitedStrVect[0]);
-		if (str.size() == 1)
+		str = split_msg(splitedStrVect[0]);
+		if (str.size() != 2)
 		{
-			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "TOPIC"), fd);  // 461  //Perhaps "*" must be changed
+			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "TOPIC"), fd);  // 461  
 			return;
 		}
 		else if (str.size() > 2)
@@ -45,19 +46,58 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		 * Si el topic is protected -> ERR_CHANOPRIVSNEEDED(nickname, channelname) //482
 		 *
 		 */
-		if (splitedStrVect.size() == 2)
-		{
-			topic = splitedStrVect[1];
-			std::cout << "TODO : topic=" << topic << std::endl;
-		}
-		chName = str[1];
 		for (size_t i=0; i < str.size(); ++i)
 			std::cout << "- str[" << i << "]=" << str[i] << std::endl;
-		if (chName[0] != '#' || chName[0] != '&')
+
+		chName = str[1];
+		if ((chName[0] != '#' || chName[0] != '&') && chName.size() == 1 )
 		{
 			server->sendResp(ERR_NOSUCHCHANNEL(cl->getNick(), chName), fd);
 			return;
 		}
+		chName = chName.substr(1);
+		if (!server->isInChannels(chName))
+		{
+			server->sendResp(ERR_NOTONCHANNEL(cl->getNick(), chName), fd);
+			return;
+		}
+
+		ch = server->getChannelByChannelName(chName);
+		ch->setTopicRestricted();  //  For test 
+		if (ch->isTopicRestricted() && !ch->isOpe(cl->getNick()))
+		{
+			std::cout << "TODO : rigth evaluation for topicResticted" << std::endl;
+			server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);
+			return;
+		}
+		std::cout << "Channel name = " << ch->getChannelName() << std::endl;
+		if (splitedStrVect.size() == 2)
+		{
+			topic = splitedStrVect[1];
+			if (topic.empty())
+			{
+				ch->setTopic("");
+				std::cout << "----- Clear Topic" << std::endl;
+			}
+			else
+				ch->setTopic(topic);
+			std::cout << "TODO : topic=" << topic << std::endl;
+		}
+		else
+		{
+			std::cout << "TODO : Send topic=" << topic << std::endl;
+			topic = ch->getTopic();
+			if (topic.empty())
+				server->sendResp(RPL_NOTOPIC(cl->getNick(), chName),fd);
+			else
+			{
+			//No se implementa RPL_TOPICWHOTIME (en https://modern.ircdocs.horse/#topic-message indica  SHOULD y en https://datatracker.ietf.org/doc/html/rfc2812 no lo comentan.
+				server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
+			// See : https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.4 
+				// server->sendBroadAll(
+
+		}
 		std::cout << "    ----" << std::endl;
-//	}
+	}
 }
+
