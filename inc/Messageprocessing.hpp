@@ -21,7 +21,6 @@
 # include "Quit.hpp"
 # include "Topic.hpp"
 # include "User.hpp"
-# include "Test.hpp"
 
 class Messageprocessing
 {
