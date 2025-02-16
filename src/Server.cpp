@@ -237,6 +237,16 @@ void Server::sendResp(std::string msg, int clientFd) {
     }
 }
 
+
+int	Server::getFdClientByNick( std::string nick )
+{
+	int	fd = 0;
+	(void) nick;
+// TODO
+
+	return (fd);
+}
+
 //Function that sends a response to all clients from a Channel.
 //en el canal Para cada cliente en _operator 
 //	obtener su fd y enviar mensaje
@@ -244,8 +254,11 @@ void Server::sendResp(std::string msg, int clientFd) {
 //	obtener su fd y enviar mensaje
 //
 //
-//	Para el canal
-//	Obtener un mapa de _operator como puntero 
+//	Para el canal ch
+//	Obtener un vector de strings con los nicks de los clientes en _operators y _memclients
+//	Para cada nick 
+//	   Obtener el fd  del cliente buscanodlo por su nick en _clients
+//	   enviar el mensaje a ese fd
 void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
 {
 	for ( size_t i = 0; i < ch->sizeOpe(); i++)

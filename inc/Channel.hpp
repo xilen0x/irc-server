@@ -155,6 +155,7 @@ class Channel
 		bool			isInv(std::string nick);
 		Client			*getFirstOpe( void );  // For test 251213
 		// 250215 by apardo-m
+		std::vector<std::string>	getNicksInChannel( void );
 		int				getFdOperatorByPosInOperators(size_t pos);
 		int				getFdMemberByPosInMemClients(size_t pos);
 

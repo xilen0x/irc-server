@@ -76,7 +76,8 @@ class Server
 // apardo-m need for Topic
 		bool	isInChannels( std::string chName);
 		Channel	*getChannelByChannelName( std::string chName );
-
+		int		getFdClientByNick( std::string nick );   //TODO 
+			
 //For test proposal
 		Client	*getClientByFD(int fd);
 		Channel	*getChannelsByNumPosInVector(size_t pos);

@@ -342,6 +342,17 @@ Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second);
 
 // Start  250215 by apardo-m
 
+
+std::vector<std::string>	Channel::getNicksInChannel( void )
+{
+	std::vector<std::string>	allNicks;
+//TODO
+	return (allNicks)
+
+}
+
+
+
 // Returns:
 // fd from client in position _operator[position]
 // -1 if position is not in Range of _operator.size()
