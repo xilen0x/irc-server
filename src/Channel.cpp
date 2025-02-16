@@ -3,7 +3,6 @@
 
 # define DEFAULT_LIMIT 100
 
-
 // Private For debugging
 void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
 {
@@ -132,13 +131,16 @@ Client	*Channel::getCliInChannel(std::string &nick)
 
 Client*	Channel::getCliInChannel(std::string &nick)
 {
-	std::map<std::string, Client *>::iterator it = _memClients.find(nick);	
+	std::cout << "nick1111111: " << nick << std::endl;
+	std::string nickCopy = nick;
+	nickCopy = uppercase(nickCopy);
+	std::map<std::string, Client *>::iterator it = _memClients.find(nickCopy);	
 	if (it != _memClients.end())
 		return (it->second);
-	it = _invClients.find(nick);
+	it = _invClients.find(nickCopy);
 	if (it != _invClients.end())
 		return (it->second);
-	it = _operator.find(nick);
+	it = _operator.find(nickCopy);
 	if (it != _operator.end())
 		return (it->second);
 	return (NULL);
@@ -338,6 +340,59 @@ Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second
 
 Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second); }  // For test 251213
 
+// Start  250215 by apardo-m
+
+
+std::vector<std::string>	Channel::getNicksInChannel( void )
+{
+	std::vector<std::string>	allNicks;
+//TODO
+	return (allNicks)
+
+}
+
+
+
+// Returns:
+// fd from client in position _operator[position]
+// -1 if position is not in Range of _operator.size()
+int	Channel::getFdOperatorByPosInOperators(size_t pos)
+{
+
+	std::map<std::string, Client *>::iterator it;
+
+	it = _operator.begin();
+
+	if (pos <= _operator.size())
+	{	
+		for (size_t i = 1; i <= pos; i++)
+			it++;
+
+		return ( it->second->getFdClient() );
+	}
+	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _operator.size()=" << _operator.size() << std::endl;
+	return (-1);
+
+//	return (this->_getFdInMapSctringClient(pos, this->_operator));
+}
+
+int	Channel::getFdMemberByPosInMemClients(size_t pos)
+{
+	std::map<std::string, Client *>::iterator it;
+
+	it = _memClients.begin();
+
+	if (pos <= _memClients.size())
+	{
+		for (size_t i = 1; i <= pos; i++)
+			it++;
+
+		return ( it->second->getFdClient());
+	}
+	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _memClients.size()=" << _memClients.size() << std::endl;
+	return (-1);
+}
+// End  250215 by apardo-m
 
 void	Channel::addInv(Client *client)
 {

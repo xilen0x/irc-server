@@ -11,7 +11,7 @@
 # define PONG(token) ("PONG 127.0.0.1 " + token + CRLF)
 
 // MESSAGES SERVER TO CLIENT
-
+#define MSG_TOPIC_BROAD_ALL(nickAuthor, channel, topic) (":" + nickAuthor + "!" + LOCALHOST + " TOPIC #" + channel + " :" + topic + CRLF)
 #define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
 #define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
 #define MSG_QUIT_CHANGE_OPERATOR(nickname, channel) (":" + nickname + ", you are the new operator for Channel " + channel + CRLF)
@@ -33,6 +33,8 @@
 #define RPL_JOINMSG(hostname, ipaddress, channelname) (":" + hostname + "@" + ipaddress + " JOIN #" + channelname + CRLF)
 #define RPL_NAMREPLY(nickname, channelname, clientslist) (": 353 " + nickname + " @ #" + channelname + " :" + clientslist + CRLF)
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + CRLF)
+#define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
+#define RPL_INVITING(invitingnick, channelname, invitednick) (": 341 " + invitingnick + " " + invitednick + " #" + channelname + " :" + invitingnick + " INVITE " + invitednick + " into #" + channelname + CRLF)
 
 // ERRORS
 
@@ -47,10 +49,10 @@
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + YEL + " :Nickname is already in use" + RES + CRLF)
 #define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
-#define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + YEL + " :You have not registered!" + RES + CRLF)
 #define ERR_UNKNOWNCOMMAND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
 #define ERR_NOTONCHANNEL(nickname, channelname) (": 442 " + nickname + " " + channelname + " :You're not on that channel" + CRLF)
 #define ERR_USERONCHANNEL(nickname, channelname) (": 443 " + nickname + " " + channelname + " :is already on channel" + CRLF)
+#define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + YEL + " :You have not registered!" + RES + CRLF)
 #define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + YEL + " :Not enough parameters" + RES + CRLF
 #define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF

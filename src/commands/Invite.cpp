@@ -55,5 +55,29 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 				server->sendResp(chaErrMsg, fd);
 			return ;
 		}
+		//if the channel is invite-only mode and invitor isn't operator 482
+		if (server->getChannelByChanName(channelName)->isInviteChannel() && \
+									!server->getChannelByChanName(channelName)->isOpe(nick))
+		{
+			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(vec[1], channelName));
+				server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		//if client number exceeds the limit of the channel 471
+		if (server->getChannelByChanName(channelName)->getUserLimitNumber() && \
+					server->getChannelByChanName(channelName)->getClientSum() \
+					>= server->getChannelByChanName(channelName)->getUserLimitNumber())
+		{
+			std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(vec[1], channelName));
+				server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		// Add new nick into the channel inviting-list 341
+		server->getClientByNick(vec[1])->addInviteChannel(channelName);
+		server->getChannelByChanName(channelName)->addInv(server->getClientByNick(vec[1]));
+		std::string chaInvMsg = formatIRCMessage(RPL_INVITING(nick, channelName, vec[1]));
+		server->sendResp(chaInvMsg, fd);
+
+		printChannelsInfo(server); // linnnnnnnnn for test
 	}
 }

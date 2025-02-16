@@ -237,11 +237,40 @@ void Server::sendResp(std::string msg, int clientFd) {
     }
 }
 
-//Function that sends a response to all clients except the one that sent the message.
+
+int	Server::getFdClientByNick( std::string nick )
+{
+	int	fd = 0;
+	(void) nick;
+// TODO
+
+	return (fd);
+}
+
+//Function that sends a response to all clients from a Channel.
+//en el canal Para cada cliente en _operator 
+//	obtener su fd y enviar mensaje
+//PAra cada cliente en _menClients
+//	obtener su fd y enviar mensaje
+//
+//
+//	Para el canal ch
+//	Obtener un vector de strings con los nicks de los clientes en _operators y _memclients
+//	Para cada nick 
+//	   Obtener el fd  del cliente buscanodlo por su nick en _clients
+//	   enviar el mensaje a ese fd
+void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
+{
+	for ( size_t i = 0; i < ch->sizeOpe(); i++)
+		sendResp(resp, ch->getFdOperatorByPosInOperators(i));
+	for ( size_t i = 0; i < ch->sizeMem(); i++)
+		sendResp(resp, ch->getFdMemberByPosInMemClients(i));
+}
+
+
+//Function that sends a response to all clients in Server
 void Server::sendBroadAll(std::string resp)
 {
-	std::cout << "sendBroadAll() :" << std::endl;
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 		sendResp(resp, _clients[i].getFdClient());
 }
@@ -250,8 +279,6 @@ void Server::sendBroadAll(std::string resp)
 void Server::sendBroad(std::string resp, int fd)
 {
 	int	actualFd;
-
-	std::cout << "sendBroad() :" << std::endl;
 
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
@@ -283,10 +310,14 @@ Client *Server::getClient(int fd)
 
 Client *Server::getClientByNick(std::string &nick)
 {
+    std::string s;
+    std::string nickCopy = nick;
+    nickCopy = uppercase(nickCopy);
     std::vector<Client>& clientsRef = getClients();
     for (size_t i = 0; i < clientsRef.size(); i++)
 	{
-        if (clientsRef[i].getNick() == nick)
+        s = clientsRef[i].getNick();
+        if (uppercase(s) == nickCopy)
             return (&clientsRef[i]);
     }
     return (NULL);
