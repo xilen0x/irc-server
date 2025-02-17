@@ -334,10 +334,12 @@ void	Channel::deleteMem(std::string &nick)
 		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;
 }
 
+std::string	Channel::getFirstMemNick( void ) { return (this->_memClients.begin()->first); }
+std::string Channel::getFirstOpeNick( void ) { return (this->_operator.begin()->first); }
 
-Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second); }
+Client*	Channel::getFirstMem( void ) { return (this->_memClients.begin()->second); } //Delete ???
 
-Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second); }  // For test 251213
+Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second); }  // For test 251213  Delete ??
 
 // Start  250215 by apardo-m
 

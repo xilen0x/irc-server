@@ -380,6 +380,19 @@ void		Server::clearClientFromClientsAndChanels( int fd, std::string msg)
 	clearClients(fd, msg); //delete fd from _fdsClients
 }
 
+void		Server::deleteEmptyChannels( void )
+{
+	std::vector<std::string>	emptyChannels;
+
+	for (size_t i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i].sizeOpe() == 0 && _channels[i].sizeMem() == 0)
+			emptyChannels.push_back(_channels[i].getChannelName());
+	}
+	for (size_t i = 0; i < emptyChannels.size(); i++)
+		deleteChannel(emptyChannels[i]);
+}
+
 // apardo-m need for Topic
 //Function that checks if a channel is in the list of channels.
 bool		Server::isInChannels( std::string chName )

@@ -73,6 +73,7 @@ class Server
 
 // apardo-m need for QUIT
 		void	clearClientFromClientsAndChanels( int fd, std::string msg);
+		void	deleteEmptyChannels( void );
 // apardo-m need for Topic
 		bool	isInChannels( std::string chName);
 		Channel	*getChannelByChannelName( std::string chName );

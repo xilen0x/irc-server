@@ -26,7 +26,7 @@ Messageprocessing::Messageprocessing( void )
 	this->_commands[INVITE] = new Invite();
 	this->_commands[JOIN] = new Join();
 	this->_commands[KICK] = new Kick();
-	this->_commands[MODE] = new Mode();
+//	this->_commands[MODE] = new Mode();
 	this->_commands[NICK] = new Nick();
  	this->_commands[PASS] = new Pass();
 	this->_commands[PING] = new Ping();
