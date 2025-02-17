@@ -72,7 +72,7 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 	}
 //--------- KICK sintaxis correcta pero con canal o usuario inexistente -----------------------
 	user = str[1]; // Segundo parámetro debe ser el usuario
-	std::cout << "userrrrrrrr " << user << std::endl;//debug
+	// std::cout << "userrrrrrrr " << user << std::endl;//debug
 	if (!server->getClientByNick(user))
 	{
 		server->sendResp(ERR_USERNOTINCHANNEL(cl->getNick(), chName), fd);
@@ -84,12 +84,13 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 		server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);//482
 		return (0);
 	}
-	
     return (1);
 }
 
 void Kick::execute(Server* server, std::string &msg, int fd)
 {
+    Channel	*ch = server->getChannelsByNumPosInVector(jchan);
+    std::vector<std::pair<std::string, std::string> > parVec;//aki voyy!!!!!!!!!
     if (!isAuthenticated(server->getClient(fd), server, fd)) {
         return;
     }
@@ -100,7 +101,22 @@ void Kick::execute(Server* server, std::string &msg, int fd)
 	//si todo va bien, se ejecuta el comando
     std::cout << "KICK processing continues..." << std::endl;
 
-    // ...
+    //deleteMem
+    for (size_t i = 0; i < parVec.size(); i++)
+	{
+		bool f = false;
+		for (size_t j = 0; j < server->getChannels().size(); j++)
+		{
+			if (server->getChannels()[j].getChannelName() == parVec[i].first)
+			{
+				processUnjoin(server, parVec, i, j, fd);
+				f = true;
+				break ;
+			}
+		}
+		// if (!f)
+			// handleNonChannel(server, parVec, i, fd);
+		}
 }
 
 /*
