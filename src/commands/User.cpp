@@ -8,52 +8,67 @@
 
 User::User( void ) : welcomeMsgUser(false) {};
 
+/*
+Sobre los valores 0 y * de USER:
+    El valor 0 históricamente representaba el modo de usuario, pero en la mayoría de los servidores modernos no tiene efecto.
+    El * era un campo originalmente usado para el hostname, pero tampoco tiene impacto en servidores actuales.
+    Tu servidor solo necesita verificar que estos valores existan, pero puede ignorarlos.
+*/
+
 void User::execute(Server* server, std::string& msg, int fd) 
 {
-    Client*             client = server->getClient(fd);
-    Messageprocessing   parameters;
-    Nick                nick;
+    Client* client = server->getClient(fd);
 
+    msg = trimLeft(msg);  
+    if (msg.substr(0, 4) == "USER" || msg.substr(0, 4) == "user")
+        msg.erase(0, 4);
+    else {
+        server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
+        return;
+    }
     msg = trimLeft(msg);
-    msg = msg.substr(4);
-    msg = trimLeft(msg);
-
     if (client->getHasPass())
     {
-        if (!msg.empty() && msg[0] == ':')//
-            msg = msg.substr(1);
-
-        if (msg.empty()) {
-            server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
+        if (client->getHasUser()) {
+            server->sendResp(ERR_ALREADYREGISTERED(std::string("*")), fd);  // 462
             return;
         }
-        //verificar formato - Parameters: <username> 0 * <realname>
         std::vector<std::string> params = split_msg(msg);
         if (params.size() < 4) {
             server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
             return;
         }
-        if (client->getHasUser()) {
-            server->sendResp(ERR_ALREADYREGISTERED(std::string("*")), fd);  // 462
+        std::string username = params[0];
+        std::string mode = params[1];   // Debe ser "0"
+        std::string unused = params[2]; // Debe ser "*"
+        std::string realname;
+        std::size_t pos = msg.find(" :");
+        if (pos != std::string::npos) {
+            realname = msg.substr(pos + 2); // se extrae realname
+            // std::cout << "Realname------------->: " << realname << std::endl;//debug
+        } else {
+            server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "USER"), fd);  // 461
             return;
         }
-
-        msg.erase(std::remove(msg.begin(), msg.end(), '\r'), msg.end());
-        msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
-
-        client->setUserName(msg);
+        if (mode != "0" || unused != "*") {
+                server->sendResp(ERR_USERSYNTAXERROR(std::string("*"), "USER"), fd);
+            return;
+        }
+        realname.erase(std::remove(realname.begin(), realname.end(), '\r'), realname.end());
+        realname.erase(std::remove(realname.begin(), realname.end(), '\n'), realname.end());
+        client->setUserName(username);
         client->setHasUser();
-        std::cout << YEL << "Correct user format!" << RES << std::endl;  //added to test
-        if (client->getHasNick()) //&& client->getHasUser() && client->getHasPass())
-        {
+        std::cout << YEL << "Correct user format!" << RES << std::endl;  //debug
+        if (client->getHasNick()) {
             server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
             server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002
             server->sendResp(RPL_CREATED(server->getServerName()), fd);  // 003
             client->setHasAuth();
         }
     }
-    else
+    else {
         server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);  // 451
+    }
 }
 
 User::~User( void ) {};

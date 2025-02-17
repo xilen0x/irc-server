@@ -83,6 +83,14 @@ void	Client::setIpClient( std::string ip ) {	this->_ipClient = ip; }
 
 std::string	Client::getNick( void ) const { return ( this->_nick ); }
 
+// Function to get the nick from a user string
+std::string	Client::getNickByUser( std::string user ) const
+{
+	std::string nick = user;
+	nick = nick.substr(0, nick.find("!"));
+	return (nick);
+}
+
 void	Client::setNick( std::string nick ) { this->_nick = nick;}
 		
 std::string Client::getUserName( void ) const { return ( this->_userName ); }

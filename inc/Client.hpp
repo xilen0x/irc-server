@@ -41,6 +41,7 @@ class Client
 		void		setIpClient( std::string ip );
 
 		std::string	getNick( void ) const;
+		std::string	getNickByUser( std::string user ) const;
 		void		setNick( std::string nick );
 		std::string getUserName( void ) const;
 		void		setUserName( std::string user );

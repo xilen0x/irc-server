@@ -37,9 +37,10 @@ stuffs/
 stuffs/repos_irc
 
 #scripts
-git_pull_branches.sh
 git_commit_push.sh
 git_merge_apardo-250125.sh
+git_merge_castorga.sh
+git_merge_lin.sh
 
 #docs
 commandsForTests

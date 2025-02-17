@@ -31,6 +31,7 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
     std::vector<std::string>	splitedMsg;
     std::string                 chName;
 	std::string					user;
+	std::string					kickedNick;
     Client						*cl;
 
     cl = server->getClient(fd);
@@ -72,8 +73,9 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 	}
 //--------- KICK sintaxis correcta pero con canal o usuario inexistente -----------------------
 	user = str[1]; // Segundo parámetro debe ser el usuario
-	std::cout << "userrrrrrrr " << user << std::endl;//debug
-	if (!server->getClientByNick(user))
+	kickedNick = cl->getNickByUser(str[1]);
+	std::cout << "kickedNick: " << kickedNick << std::endl;//debug
+	if (!server->getClientByNick(kickedNick))
 	{
 		server->sendResp(ERR_USERNOTINCHANNEL(cl->getNick(), chName), fd);
 		return (0);
@@ -84,7 +86,10 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 		server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);//482
 		return (0);
 	}
-	
+	//si todo va bien, se procede con el KICK
+	kickedNick = uppercase(kickedNick);
+	channel->deleteMem(kickedNick);
+	server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked"), fd);
     return (1);
 }
 
@@ -97,10 +102,10 @@ void Kick::execute(Server* server, std::string &msg, int fd)
     if (!kickParsingIsCorrect(msg, server, fd)) {
         return;
     }
-	//si todo va bien, se ejecuta el comando
-    std::cout << "KICK processing continues..." << std::endl;
-
-    // ...
+	printChannelsInfo(server);
+    std::cout << YEL << "User " << server->getClient(fd)->getNick() << " has executed KICK command" << RES << std::endl;
+	//:source KICK <channel> <user> :<comment>
+	// server->sendBroadAllInChannel(msg, server->getChannelByChannelName("general"));//SEGV
 }
 
 /*

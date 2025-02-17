@@ -18,6 +18,7 @@ bool	Channel::_addInMap(std::map<std::string, T*> &targetMap, std::string &nick,
 template <typename T>
 bool	Channel::_deleteInMap(std::map<std::string, T*> &targetMap, std::string &nick)
 {
+	std::cout << "nick: " << nick << std::endl;
 	if (targetMap.find(nick) != targetMap.end())
 	{
 	//	delete targetMap[nick];  // 250210 Delete is not necessary

@@ -2,7 +2,7 @@
 
 # Check if we are inside a Git repository
 if [ ! -d .git ]; then
-    echo "Error: Not a Git repository."
+    echo "❌ Error: Not a Git repository."
     exit 1
 fi
 
@@ -11,24 +11,47 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # Check if the current branch is 'castorga'
 if [ "$current_branch" == "castorga" ]; then
-    echo "You are already on the 'castorga' branch. Cannot merge with itself."
+    echo "❌ You are already on the 'castorga' branch. Cannot merge with itself."
     exit 1
 fi
 
 # Check if the 'castorga' branch exists
 if ! git show-ref --verify --quiet refs/heads/castorga; then
-    echo "Error: The 'castorga' branch does not exist."
+    echo "❌ Error: The 'castorga' branch does not exist."
     exit 1
 fi
 
-echo "Merging branch '$current_branch' with 'castorga'..."
+# Switch to the target branch to pull the latest changes
+echo "🔄 Switching to 'castorga' and pulling latest changes..."
+git checkout castorga
 
-# Perform the merge with 'castorga'
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Could not switch to 'castorga'."
+    exit 1
+fi
+
+git pull origin castorga
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Failed to pull the latest changes from 'castorga'."
+    exit 1
+fi
+
+# Switch back to the original branch
+echo "🔄 Switching back to '$current_branch'..."
+git checkout "$current_branch"
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Could not switch back to '$current_branch'."
+    exit 1
+fi
+
+echo "🔀 Merging 'castorga' into '$current_branch'..."
 git merge castorga
 
 # Check if there were conflicts
 if [ $? -ne 0 ]; then
-    echo "⚠️  Merge conflicts detected. Resolve them and commit manually."
+    echo "⚠️ Merge conflicts detected. Resolve them and commit manually."
     exit 1
 fi
 
