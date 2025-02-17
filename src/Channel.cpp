@@ -328,7 +328,7 @@ void	Channel::addMem(Client *client)
 	}
 }
 
-void	Channel::deleteMem(std::string &nick)
+void	Channel::deleteMem(std::string &nick)//uppercase
 {
 	if (!this->_deleteInMap(this->_memClients, nick))
 		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;
@@ -456,7 +456,7 @@ void	Channel::printChannelVars( void )
 	std::cout << "- CHANNEL _operators:" << std::endl;
 	//this->_printVectorStrings(this->_operators);
 	this->_printMapKeys(this->_operator);
-	std::cout << "- CHANNEL _memberClients:" << std::endl;
+	std::cout << "- CHANNEL _memClients:" << std::endl;
 //	this->_printVectorStrings(this->_memberClients);
 	this->_printMapKeys(this->_memClients);
 	std::cout << "- CHANNEL _invitedClients:" << std::endl;
