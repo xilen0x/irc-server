@@ -131,7 +131,6 @@ Client	*Channel::getCliInChannel(std::string &nick)
 
 Client*	Channel::getCliInChannel(std::string &nick)
 {
-	std::cout << "nick1111111: " << nick << std::endl;
 	std::string nickCopy = nick;
 	nickCopy = uppercase(nickCopy);
 	std::map<std::string, Client *>::iterator it = _memClients.find(nickCopy);	
