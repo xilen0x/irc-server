@@ -29,6 +29,9 @@
 // #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 // #define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
 // #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+#define RPL_CHANNELMODEIS(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
+#define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
 #define RPL_NOTOPIC(nickname, channelname) (": 331 " + nickname + " #" +channelname + " :No topic is set" + CRLF)
 #define RPL_TOPIC(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + CRLF)
@@ -59,6 +62,7 @@
 #define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF
 #define ERR_CHANNELISFULL(nickname, channelname) (": 471 " + nickname + " " + channelname + RED + " :Cannot join channel (+l)" + CRLF )
+#define ERR_UNKNOWNMODE(nickname, channelname, mode) ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + CRLF
 #define ERR_INVITEONLYCHAN(nickname, channelname) (": 473 " + nickname + " " + channelname + RED + " :Cannot join channel (+i)" + CRLF )
 #define ERR_BADCHANNELKEY(nickname, channelname) (": 475 " + nickname + " " + channelname + RED + " :Cannot join channel (+k)" + CRLF )
 #define ERR_SERVERDOWN(nickname) (": ERROR :Closing Link: " + nickname + " (Server shutdown)" + CRLF)
