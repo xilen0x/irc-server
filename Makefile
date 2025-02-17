@@ -32,8 +32,7 @@ SRC_FILES = src/main.cpp \
 			src/commands/Privmsg.cpp \
 			src/commands/Quit.cpp \
 			src/commands/Topic.cpp \
-			src/commands/User.cpp \
-			src/commands/Test.cpp
+			src/commands/User.cpp
 
 HDR_FILES = inc/Client.hpp \
 			inc/Channel.hpp \
@@ -56,8 +55,7 @@ HDR_FILES = inc/Client.hpp \
 			inc/commands/User.hpp \
 			inc/commands/ICommand.hpp \
 			inc/irc.hpp \
-			inc/replies.hpp \
-			inc/commands/Test.hpp
+			inc/replies.hpp
 
 # Archivos objeto
 OBJ_FILES = $(patsubst src/%.cpp, $(OBJS_DIR)%.o, $(SRC_FILES))

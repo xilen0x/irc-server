@@ -51,7 +51,7 @@ class Server
 		Client 		*getClient(int fd);
 		Client		*getClientByNick(std::string &nick);
 
-		Channel *getChannelByChanName(std::string channelName); // by Linnnnnnnnn
+		Channel		*getChannelByChanName(std::string channelName); // by Linnnnnnnnn
 
 		size_t		getChannelsSize( void );
 
@@ -65,6 +65,7 @@ class Server
 		void sendResp(std::string resp, int fd);
 		void sendBroadAll(std::string resp);
 		void sendBroad(std::string resp, int fd);
+		void sendBroadAllInChannel(std::string resp, Channel *ch);
 
 		static void signalsHandler(int signal);
 // apardo-m need to be public
@@ -75,7 +76,8 @@ class Server
 // apardo-m need for Topic
 		bool	isInChannels( std::string chName);
 		Channel	*getChannelByChannelName( std::string chName );
-
+		int		getFdClientByNick( std::string nick );   //TODO 
+			
 //For test proposal
 		Client	*getClientByFD(int fd);
 		Channel	*getChannelsByNumPosInVector(size_t pos);

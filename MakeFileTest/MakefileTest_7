@@ -30,8 +30,7 @@ SRC_FILES = test/mainTest_7.cpp \
 	src/commands/Privmsg.cpp \
 	src/commands/Quit.cpp \
 	src/commands/Topic.cpp \
-	src/commands/User.cpp \
-	src/commands/Test.cpp
+	src/commands/User.cpp
 
 # Archivos objeto
 OBJ_FILES = $(SRC_FILES:.cpp=.o)

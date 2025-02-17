@@ -3,6 +3,27 @@
 
 # include "Channel.hpp"
 
+/*
+template <typename T>
+int		Channel::_getFdInMapSctringClient(size_t pos, T &t)
+{
+	std::map<std::string, Client *>::iterator it;
+
+	it = t.begin();
+
+	if (pos <= t.size())
+	{	
+		for (size_t i = 1; i <= pos; i++)
+			it++;
+
+		return ( it->second->getFdClient() );
+	}
+	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , t.size()=" << _operator.size() << std::endl;
+	return (-1);
+}
+*/
+
+/*
 template <typename T>
 bool	Channel::_isInVector(T &t, std::string nickClient )
 {
@@ -37,5 +58,6 @@ bool	Channel::_deleteInVector(T &t, std::string nickClient )
 	t.erase(it);
 	return (true);
 }	
+*/
 
 #endif

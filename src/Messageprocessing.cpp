@@ -34,7 +34,6 @@ Messageprocessing::Messageprocessing( void )
 	this->_commands[TOPIC] = new Topic();
 	this->_commands[USER] = new User();
 	this->_commands[QUIT] = new Quit();
-	this->_commands[TEST] = new Test(); //To delete before close project
 }
 
 Messageprocessing::~Messageprocessing( void )
