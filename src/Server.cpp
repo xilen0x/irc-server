@@ -240,10 +240,10 @@ void Server::sendResp(std::string msg, int clientFd) {
 
 int	Server::getFdClientByNick( std::string nick )
 {
-	int	fd = 0;
-	(void) nick;
-// TODO
-
+	int	fd = -1;
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		if (it->getNick() == nick)
+			return (it->getFdClient());
 	return (fd);
 }
 
@@ -261,10 +261,15 @@ int	Server::getFdClientByNick( std::string nick )
 //	   enviar el mensaje a ese fd
 void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
 {
-	for ( size_t i = 0; i < ch->sizeOpe(); i++)
-		sendResp(resp, ch->getFdOperatorByPosInOperators(i));
-	for ( size_t i = 0; i < ch->sizeMem(); i++)
-		sendResp(resp, ch->getFdMemberByPosInMemClients(i));
+	std::vector<std::string>	allNicks;
+	int							fd;
+
+	allNicks = ch->getNicksInChannel();
+	for ( size_t i = 0; i < allNicks.size(); i++)
+	{
+		fd = getFdClientByNick(allNicks[i]);
+		sendResp(resp, fd);
+	}
 }
 
 

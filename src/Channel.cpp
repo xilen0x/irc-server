@@ -342,16 +342,16 @@ Client*	Channel::getFirstOpe( void ) { return (this->_operator.begin()->second);
 
 // Start  250215 by apardo-m
 
-
 std::vector<std::string>	Channel::getNicksInChannel( void )
 {
 	std::vector<std::string>	allNicks;
-//TODO
-	return (allNicks)
 
+	for (std::map<std::string, Client *>::iterator it = _operator.begin(); it != _operator.end(); it++)
+		allNicks.push_back(it->first);
+	for (std::map<std::string, Client *>::iterator it = _memClients.begin(); it != _memClients.end(); it++)
+		allNicks.push_back(it->first);
+	return (allNicks);
 }
-
-
 
 // Returns:
 // fd from client in position _operator[position]
@@ -367,7 +367,6 @@ int	Channel::getFdOperatorByPosInOperators(size_t pos)
 	{	
 		for (size_t i = 1; i <= pos; i++)
 			it++;
-
 		return ( it->second->getFdClient() );
 	}
 	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _operator.size()=" << _operator.size() << std::endl;
@@ -386,7 +385,6 @@ int	Channel::getFdMemberByPosInMemClients(size_t pos)
 	{
 		for (size_t i = 1; i <= pos; i++)
 			it++;
-
 		return ( it->second->getFdClient());
 	}
 	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _memClients.size()=" << _memClients.size() << std::endl;
