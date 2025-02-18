@@ -26,7 +26,7 @@ Messageprocessing::Messageprocessing( void )
 	this->_commands[INVITE] = new Invite();
 	this->_commands[JOIN] = new Join();
 	this->_commands[KICK] = new Kick();
-//	this->_commands[MODE] = new Mode();
+	this->_commands[MODE] = new Mode();
 	this->_commands[NICK] = new Nick();
  	this->_commands[PASS] = new Pass();
 	this->_commands[PING] = new Ping();
@@ -91,7 +91,7 @@ std::string uppercase(std::string &s)
 
 void Messageprocessing::processMessage(Server* server, std::string message, int fd)
 {
-	std::vector<std::string> str = split_msg(message);
+ 	std::vector<std::string> str = split_msg(message);
 	if (str.empty())
 	{
 		std::cout << YEL << "Empty message" << RES << std::endl;//debug
@@ -100,5 +100,8 @@ void Messageprocessing::processMessage(Server* server, std::string message, int 
 	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())
 		this->_commands[uppercase(str[0])]->execute(server, message, fd);
 	else if (!isAuthenticated(server->getClient(fd), server, fd))
+	{
+		// server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
 		return ;
+	}
 }

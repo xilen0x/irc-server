@@ -28,17 +28,19 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 {
 	/* // the following is the example of the format of channel mode command:
 	MODE #mychannel +i
-	MODE #mychannel +o Bob
+	MODE #mychannel +o Bob / MODE #mychannel -o Bob
 	MODE #mychannel +k secret123
 	MODE #mychannel +l 25
 	mode #mychannel +t
 	MODE #mychannel -i
 	*/
-	std::string channelName;
-	std::string option;
-	std::string param;
-	std::stringstream optionChain;
-	char		sign = '\0';
+	std::string 		channelName;
+	std::string 		option;
+	std::string 		param;
+	std::stringstream 	optionChain;
+	char				sign = '\0';
+	
+	std::cout << "Mode command is called!" << std::endl;//debug
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
 	msg = trimLeft(msg);
@@ -81,7 +83,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	//if the option of MODE is empty
 	if (option.empty())
 	{
-		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, " * "));
+		//#define                                    RPL_CHANNELMODEIS(nickname, channelname, modes, arguments) (": 324 " + nickname + " #" + channelname + " " + modes + " " + arguments + CRLF)
+		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, msg.substr(0, 2), ""));
 		server->sendResp(chaErrMsg, fd);
         return ;
 	}
@@ -89,7 +92,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	{
 		for (size_t i = 0; i < option.size(); i++)
 		{
-			if (option[i] == '+' || option[i] == '-')
+			if (option[i] == '+' || option[i] == '-')//*o
 				sign = option[i];
 			else
 			{
@@ -99,8 +102,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{}
 				else if (option[i] == 'k')
 				{}
-				else if (option[i] == 'o')
-				{}
+				else if (option[i] == 'o')//WIP by castorga
+				{
+					std::cout << "option[i] aki voy!!!!!!!!!!!!!!!!!!!! = " << option[i] << std::endl;//debug
+				}
 				else if (option[i] == 'l')
 				{}
 				else

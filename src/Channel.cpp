@@ -100,7 +100,7 @@ Channel::~Channel( void )
 */
 	this->_memClients.clear();
 	this->_invClients.clear();
-	this->_operator.size();
+	this->_operator.clear();
 }
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
