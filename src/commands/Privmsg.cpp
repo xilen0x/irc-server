@@ -20,9 +20,9 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 	nick = client->getNick();
 	deleteRN(msg);
 	splitedStrVect = splitByDoublePoint(msg);
+	std::cout << "PRIVMSG  => WIP" << std::endl;
 	if (splitedStrVect.size() == 2)
 	{
-		std::cout << "PRIVMSG  => WIP" << std::endl;
 	}
 	else
 		server->sendResp(ERR_NOTEXTTOSEND(nick), fd);
