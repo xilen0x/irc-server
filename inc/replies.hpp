@@ -52,6 +52,7 @@
 // #define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + CRLF )
 #define ERR_NOSUCHCHANNEL(nickname, channelname) (": 403 " + nickname + " " + channelname + " :No such channel" + CRLF)
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
+#define ERR_NOTEXTTOSEND(nickname) (": 412 " + nickname + RED + " :No text to send" + RES + CRLF)
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + YEL + " :Nickname is already in use" + RES + CRLF)
 #define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
 #define ERR_UNKNOWNCOMMAND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
