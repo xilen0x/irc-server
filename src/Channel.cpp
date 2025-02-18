@@ -26,7 +26,11 @@ void	Channel::_printMapKeys(std::map<std::string, Client *> mapVar)
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
 Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey("")
-{}
+{
+	char cha[5] = {'i', 't', 'k', 'o', 'l'};
+	for (int i = 0; i < 5; i++)
+		this->_modeOptions.push_back(std::make_pair(cha[i], false));
+}
 
 
 /*
@@ -58,6 +62,9 @@ Channel::Channel( std::string channelName, std::string operatorNick, Client *ope
 	this->_userLimitNumber = DEFAULT_LIMIT;
 //	this->_operators.push_back(operatorNick);  // 250212 - Delete ????? 
 	this->_operator[operatorNick] = operatorClient;
+	char cha[5] = {'i', 't', 'k', 'o', 'l'};
+	for (int i = 0; i < 5; i++)
+		this->_modeOptions.push_back(std::make_pair(cha[i], false));
 }
 
 Channel::Channel( Channel const &src){ *this = src; }
@@ -73,6 +80,7 @@ Channel &Channel::operator=( Channel const &src)
 		this->_channelKey = src._channelKey;
 		this->_hasUserLimit = src._hasUserLimit;
 		this->_userLimitNumber = src._userLimitNumber;
+		this->_modeOptions = src._modeOptions;
 
 /*
 // 250212 - Delete this part?????
@@ -100,7 +108,7 @@ Channel::~Channel( void )
 */
 	this->_memClients.clear();
 	this->_invClients.clear();
-	this->_operator.size();
+	this->_operator.clear();
 }
 
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
@@ -146,6 +154,8 @@ Client*	Channel::getCliInChannel(std::string &nick)
 }
 
 //_inviteChannel
+void	Channel::setModeOption(size_t index, bool option){this->_modeOptions[index].second = option;}
+bool	Channel::getModeOption(size_t index){return this->_modeOptions[index].second;}
 bool	Channel::isInviteChannel( void ) const { return (this->_inviteChannel); }
 
 void	Channel::setInviteChannel ( void ) { this->_inviteChannel = true; }
