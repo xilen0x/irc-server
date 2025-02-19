@@ -38,7 +38,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		}
 		else if (str.size() > 2)
 		{
-			std::cout << "TODO : a lot of params =" << splitedStrVect[0] << std::endl;
+			std::cout << "TODO : a lot of elements =" << splitedStrVect[0] << std::endl;
 			return;
 		}
 		if (str[1].size() >1)
