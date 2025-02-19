@@ -41,6 +41,25 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
+std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
+{
+	std::string strOption;
+	strOption.clear();
+	if (sign == '+' && !ch->isTopicRestricted() && !ch->getModeOption(1))
+	{
+		ch->setTopicRestricted();
+		ch->setModeOption(1, true);
+		strOption = modeOption_push(optionChain, sign, 't');
+	}
+	else if (sign == '-' && ch->isTopicRestricted() && ch->getModeOption(1))
+	{
+		ch->unsetTopicRestricted();
+		ch->setModeOption(1, false);
+		strOption = modeOption_push(optionChain, sign, 't');
+	}
+	return strOption;
+}
+
 void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
 	std::istringstream ss(msg);
@@ -74,7 +93,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	msg = trimLeft(msg);
 	// #mychannel +i/+i/-i
 	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i")))
+	{
+		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
 		return ;
+	}
 	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 || (msg.size() >= 2 && (msg[0] != '#' && msg[0] != '&')))))
 	{
 		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
@@ -128,7 +150,9 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				if (option[i] == 'i')
 					optionChain << inviteOnly_mode(channel, sign, optionChain.str());
 				else if (option[i] == 't')
-				{}
+				{
+					optionChain << topic_mode(channel, sign, optionChain.str());
+				}
 				else if (option[i] == 'k')
 				{}
 				else if (option[i] == 'o')//WIP by castorga

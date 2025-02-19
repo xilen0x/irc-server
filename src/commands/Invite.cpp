@@ -26,6 +26,12 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
+		if (vec.size() > 3)
+		{
+			std::string chaMsg = formatIRCMessage(RPL_INVITEINFO(nick));
+			server->sendResp(chaMsg, fd);
+			return ;
+		}
 		std::string channelName = vec[2].substr(1);
 		//if the input channelname doesn't exist 403
 		if ((vec[2][0] != '#' && vec[2][0] != '&') || !server->getChannelByChanName(channelName))
@@ -59,7 +65,13 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		if (server->getChannelByChanName(channelName)->isInviteChannel() && \
 									!server->getChannelByChanName(channelName)->isOpe(nick))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(vec[1], channelName));
+			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
+			server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		else if (!server->getChannelByChanName(channelName)->isOpe(nick))
+		{
+			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}

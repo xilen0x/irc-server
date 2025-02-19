@@ -41,6 +41,8 @@
 #define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + CRLF)
 #define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
 #define RPL_INVITING(invitingnick, channelname, invitednick) (": 341 " + invitingnick + " " + invitednick + " #" + channelname + " :" + invitingnick + " INVITE " + invitednick + " into #" + channelname + CRLF)
+#define RPL_INFO(nickname) (nickname + " : 371 " + " :can join ONLY ONE channel at a time" + CRLF)
+#define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
 
 // ERRORS
 

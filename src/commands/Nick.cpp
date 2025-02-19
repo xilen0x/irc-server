@@ -27,6 +27,9 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			std::cout << "input nick is empty, new nick is *" << std::endl;//debug
 			return ;
 		}
+		msg.erase(std::remove(msg.begin(), msg.end(), '\r'), msg.end());
+    	msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
+    	msg = trimRight(msg);
 		if (checkNickInUse(clients, msg) && cl->getNick() != msg)  //250212 checkNickInUse can be a public function on Server class
 		{
 			if (cl->getNick().empty())

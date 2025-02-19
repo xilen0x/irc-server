@@ -14,6 +14,7 @@ class Mode : public ICommand
 		void getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param);
 		std::string inviteOnly_mode(Channel *ch, char sign, std::string optionChain);
 		std::string modeOption_push(std::string optionChain, char sign, char option);
+		std::string topic_mode(Channel *ch, char sign, std::string optionChain);
 };
 
 #endif

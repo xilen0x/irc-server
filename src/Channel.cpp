@@ -153,6 +153,19 @@ Client*	Channel::getCliInChannel(std::string &nick)
 	return (NULL);
 }
 
+Client*	Channel::getCliExceptInv(std::string &nick)
+{
+	std::string nickCopy = nick;
+	nickCopy = uppercase(nickCopy);
+	std::map<std::string, Client *>::iterator it = _memClients.find(nickCopy);
+	if (it != _memClients.end())
+		return (it->second);
+	it = _operator.find(nickCopy);
+	if (it != _operator.end())
+		return (it->second);
+	return (NULL);
+}
+
 //_inviteChannel
 void	Channel::setModeOption(size_t index, bool option){this->_modeOptions[index].second = option;}
 bool	Channel::getModeOption(size_t index){return this->_modeOptions[index].second;}

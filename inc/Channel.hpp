@@ -86,6 +86,7 @@ class Channel
 
 		// to get Client with nickname in a specific channel //Added by Lin
 		Client			*getCliInChannel(std::string &nick);
+		Client			*getCliExceptInv(std::string &nick);
 
 		std::string 	getClientsList();
 
