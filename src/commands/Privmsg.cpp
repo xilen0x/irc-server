@@ -16,6 +16,7 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 	Client						*cl;
 	std::string					nick;
 	std::string					target;
+	Channel						*ch;
 
 	if (isAuthenticated(server->getClient(fd), server, fd))
 	{
@@ -28,7 +29,7 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 		str = split_msg(splitedStrVect[0]);
 		if (str.size() == 1)
 		{
-			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "TOPIC"), fd);  // 461  
+			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "PRIVMSG"), fd);  // 461 
 			return;
 		}
 		else if (str.size() > 2)
@@ -36,12 +37,41 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 			std::cout << "TODO : a lot of elements =" << splitedStrVect[0] << std::endl;
 			return;
 		}
-
-		if (splitedStrVect.size() == 2)
+		std::cout << "--- target : " << str[1] << std::endl;
+		//channel
+		if ((str[1][0] == '#' || str[1][0] == '&'))
 		{
+			str[1] = str[1].substr(1);
+			if (!server->isInChannels(str[1])) 
+			{
+				server->sendResp(ERR_NOSUCHNICK(("#" + str[1])), fd); // 401
+				return;
+			}
+			if (splitedStrVect.size() == 1)
+			{
+				server->sendResp(ERR_NOTEXTTOSEND(nick), fd);
+				return;
+			}
+			ch = server->getChannelByChanName(str[1]);
+			server->sendBroadOthersInChannel(MSG_PRIVMSG_TO_CHANNEL(cl->getNick(), str[1], splitedStrVect[1]), ch, fd);
 		}
+		// nick
 		else
-			server->sendResp(ERR_NOTEXTTOSEND(nick), fd);
+		{
+			str[1] = uppercase(str[1]);
+			if (!server->isInClients(str[1])) 
+			{
+				server->sendResp(ERR_NOSUCHNICK(str[1]), fd); // 401
+				return;
+			}
+			if (splitedStrVect.size() == 1)
+			{
+				server->sendResp(ERR_NOTEXTTOSEND(nick), fd);
+				return;
+			}
+			std::cout << "TODO nick part" << std::endl;
+			server->sendResp(MSG_PRIVMSG_TO_NICK(cl->getNick(), str[1], splitedStrVect[1]), server->getFdClientByNick(str[1]));
+		}
 		std::cout << "    ----\n" << std::endl;
 	}
 }

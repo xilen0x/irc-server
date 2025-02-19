@@ -41,6 +41,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			std::cout << "TODO : a lot of elements =" << splitedStrVect[0] << std::endl;
 			return;
 		}
+		//Check str.size  great than 1 char
 		if (str[1].size() >1)
 			chName = str[1].substr(1);
 		if ( ((str[1][0] != '#' || str[1][0] != '&') && str[1].size() == 1) \

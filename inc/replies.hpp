@@ -17,6 +17,8 @@
 #define MSG_QUIT_CHANNEL_REASON(nickname, username, reason) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + reason + CRLF)
 #define MSG_QUIT_CHANNEL_NO_REASON(nickname, username) (":" + nickname + "!" + username + "@" + LOCALHOST +" QUIT :" + CRLF)
 #define MSG_QUIT_CHANGE_OPERATOR(nickname, channel) (":" + nickname + ", you are the new operator for Channel " + channel + CRLF)
+#define MSG_PRIVMSG_TO_CHANNEL(nickSender, channel, msg) (":" + nickSender + " PRIVMSG #" + channel + " :" + msg + CRLF)
+#define MSG_PRIVMSG_TO_NICK(nickSender, nickname, msg) (":" + nickSender + " PRIVMSG " + nickname + " :" + msg + CRLF)
 #define ERR_QUIT_MSG ": ERROR :You have QUIT\r\n"   // COMENTAR a LIN y CARLOS
 #define ERR_KICK_MSG ": ERROR :You have been KICKED\r\n"
 
@@ -48,9 +50,9 @@
 // #define ERR_INVALIDMODEPARM(channelname, mode) ": 696 #" + channelname + " Invalid mode parameter. " + mode + CRLF
 // #define ERR_KEYSET(channelname) ": 467 #" + channelname + " Channel key already set. " + CRLF
 // #define ERR_UNKNOWNMODE(nickname, channelname, mode) ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + CRLF
-#define ERR_CHANNELNOTFOUND(nickname, channelname) (": 403 " + nickname + " " + channelname + " :No such channel" + CRLF)
-#define ERR_NOSUCHNICK(nickname) (": 401 #" + nickname + " :No such nick/channel" + CRLF )
 // #define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + CRLF )
+#define ERR_NOSUCHNICK(nickname) (": 401 " + nickname + " :No such nick/channel" + CRLF )
+//#define ERR_CHANNELNOTFOUND(nickname, channelname) (": 403 " + nickname + " " + channelname + " :No such channel" + CRLF)
 #define ERR_NOSUCHCHANNEL(nickname, channelname) (": 403 " + nickname + " " + channelname + " :No such channel" + CRLF)
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
 #define ERR_NOTEXTTOSEND(nickname) (": 412 " + nickname + RED + " :No text to send" + RES + CRLF)

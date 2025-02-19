@@ -90,7 +90,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	// the channelName doesn't exist 403
 	if (!server->getChannelByChannelName(channelName))
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELNOTFOUND(nick, channelName));
+		std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(nick, channelName));
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}

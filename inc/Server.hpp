@@ -66,6 +66,7 @@ class Server
 		void sendBroadAll(std::string resp);
 		void sendBroad(std::string resp, int fd);
 		void sendBroadAllInChannel(std::string resp, Channel *ch);
+		void sendBroadOthersInChannel(std::string resp, Channel *ch, int fd);
 
 		static void signalsHandler(int signal);
 // apardo-m need to be public
@@ -78,6 +79,8 @@ class Server
 		bool	isInChannels( std::string chName);
 		Channel	*getChannelByChannelName( std::string chName );
 		int		getFdClientByNick( std::string nick );
+// apardo-m need for Privmsg
+		bool	isInClients( std::string nick );
 			
 //For test proposal
 		Client	*getClientByFD(int fd);
