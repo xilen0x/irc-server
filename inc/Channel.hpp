@@ -28,6 +28,7 @@ class Channel
 		bool			_hasUserLimit;
 		int				_userLimitNumber;
 //		unsigned long	_userLimitNumber;
+		std::vector<std::pair<char, bool> > _modeOptions;
 
 /*
 // 250212 - Delete this part?????
@@ -89,6 +90,8 @@ class Channel
 		std::string 	getClientsList();
 
 		//_inviteChannel
+		void			setModeOption(size_t index, bool option);
+		bool			getModeOption(size_t index);
 		bool			isInviteChannel( void ) const;
 		void			setInviteChannel ( void );
 		void			unsetInviteChannel ( void );
