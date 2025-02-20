@@ -78,6 +78,10 @@
 #define RPL_KICK(nickname, channelname, user, comment) (": " + nickname + " KICK #" + channelname + " " + user + " :" + comment + CRLF)
 #define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
 #define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
-#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
+//#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
+
+//FAILS
+#define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)
+#define FAIL_BADPARAMSFORMAT(msg) (": FAIL " + msg + " :" + YEL + "Bad Parameters Format!" + RES + CRLF)
 
 #endif
