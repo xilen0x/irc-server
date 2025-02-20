@@ -146,6 +146,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
 	msg = trimLeft(msg);
+	msg = trimRight(msg);
 	// #mychannel +i/+i/-i
 	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i")))
 	{
@@ -197,7 +198,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	{
 		for (size_t i = 0; i < option.size(); i++)
 		{
-			param = sanitizeInput(param);///added by castorga to tried something
+			// param = sanitizeInput(param);///added by castorga to tried something
 			if (option[i] == '+' || option[i] == '-')//*o
 				sign = option[i];
 			else
