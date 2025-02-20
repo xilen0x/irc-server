@@ -41,54 +41,43 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
+// Function to handle the change of operator privilege(MODE #channel +(-)o nick)
 std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain)
 {
-	// (void)optionChain;
-
 	std::string strOption;
 	strOption.clear();
-	nick = uppercase(nick);//debug
-	std::cout << "--- changeOperatorPrivilege() - nick=" << nick << std::endl;
-	ch->printChannelVars();//debug:w
-	
+	nick = uppercase(nick);
+	ch->printChannelVars();//debug
 	Client *client = server->getClientByNick(nick);
-	if (sign == '+' && !ch->getModeOption(3))
+	if (!client) {
+    	std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
+    	return "";
+	}
+	if (sign == '+')
 	{
-		//chek if nick is in memClients
-		if (!ch->isMem(nick))
-		{
-			std::cout << "NO SOY MIEMBRO" << std::endl;
-			std::cout << "Error: Client with nick " << nick << " not found in channel!" << std::endl;
-			return "";
-		}
-		else
-		{
-			std::cout << "NO VERDAD ESPERO QUE NO" << std::endl;
-			std::cout << "Is in channel!" << std::endl;
-		}
-		if (!client)
-		{
-    		std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
-    		return "";
-		}
 		ch->addOpe(client);
 		std::cout << "PRIVILEGE ADDED" << std::endl;//debug
 		printChannelsInfo(server);//debug
 		//quitar desdd memClients
 		ch->deleteMem(nick);
 		std::cout << "MEMBER DELETED FROM CHANNEL" << std::endl;//debug
-		ch->setModeOption(3, true);
+		if (!ch->getModeOption(3))
+			ch->setModeOption(3, true);
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
 	}
-	else if (sign == '-' && ch->getModeOption(3))
+	else if (sign == '-')//error: luego de mode #3 +o dos, mode #3 +o tres e intentar regresarlos a miembros, no lo hace
 	{
 		ch->deleteOpe(nick);
-		std::cout << "PRIVILEGE DELETED" << std::endl;
+		std::cout << "PRIVILEGE DELETED" << std::endl;//debug
+		printChannelsInfo(server);//debug
+		//agregar a memClients
 		ch->addMem(client);
-		ch->setModeOption(3, false);
+		std::cout << "MEMBER ADDED TO CHANNEL" << std::endl;//debug
+		if (!ch->getModeOption(3))
+			ch->setModeOption(3, false);
 		strOption = modeOption_push(optionChain, sign, 'o');
-		printChannelsInfo(server);
+		printChannelsInfo(server);//debug
 	}
 	else {
 		std::cout << "invalid sign!" << std::endl;
@@ -159,18 +148,16 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	msg = trimLeft(msg);
 	msg = trimRight(msg);
 	// #mychannel +i/+i/-i
-	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i")))
-	{
+	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) {
 		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
 		return ;
 	}
-	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 || (msg.size() >= 2 && (msg[0] != '#' && msg[0] != '&')))))
-	{
+	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 || (msg.size() >= 2 && (msg[0] != '#' && msg[0] != '&'))))) {
 		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
 		std::cout << "input channelname and channel mode option are incorrect!" << std::endl;//debug
 		return ;
 	}
-	else 
+	else
 		msg = msg.substr(1); // mychannel +i remove the first # or &
 	std::cout << "mode msg: " << msg << std::endl; //debug
 	getModeArgs(msg, channelName, option, param); // mychannel +i
@@ -222,13 +209,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				}
 				else if (option[i] == 'k')
 				{}
-				else if (option[i] == 'o')//WIP by castorga
-				{
-					std::cout << "chanName=" << channel->getChannelName() << std::endl;
-					std::cout << "param=" << param << ", size=" << param.size() << std::endl;
-					std::cout << "sign=" << sign << std::endl;
+				else if (option[i] == 'o')
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str());
-				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
 					optionChain << limit_mode(channel, sign, optionChain.str());
 				else
