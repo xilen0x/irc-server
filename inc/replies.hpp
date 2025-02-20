@@ -32,8 +32,7 @@
 // #define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
 // #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
-//RPL_CHANNELMODEIS (324) "<client> <channel> <modestring> <mode arguments>..."
-#define RPL_CHANNELMODEIS(nickname, channelname, modes, arguments) (": 324 " + nickname + " #" + channelname + " " + modes + " " + arguments + CRLF)
+#define RPL_CHANNELMODEIS(nickname, channelname, option, param) (": 324 " + nickname + " #" + channelname + " option: " + option + " param: " + param + CRLF)
 #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
 #define RPL_NOTOPIC(nickname, channelname) (": 331 " + nickname + " #" +channelname + " :No topic is set" + CRLF)

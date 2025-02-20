@@ -134,8 +134,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	//if the option of MODE is empty
 	if (option.empty())
 	{
-		//#define                                    RPL_CHANNELMODEIS(nickname, channelname, modes, arguments) (": 324 " + nickname + " #" + channelname + " " + modes + " " + arguments + CRLF)
-		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, msg.substr(0, 2), ""));
+		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
 		server->sendResp(chaErrMsg, fd);
         return ;
 	}
@@ -171,7 +170,11 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		std::string chain = optionChain.str(); //+i
 		if (chain.empty())
+		{
+			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
+			server->sendResp(chaMsg, fd);
 			return ;
+		}
 		std::string chaMsg = formatIRCMessage(RPL_CHANGEMODE(server->getServerName(), channelName, chain, param));
 		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 	}
