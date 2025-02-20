@@ -44,4 +44,8 @@ git_merge_lin.sh
 
 #docs
 commandsForTests
-250210_heap-use-after-free.md
+250210_heap-use-after-free.md 
+250216_heap-use-after-free.md  
+250215_heap-use-after-free.md  
+250217_heap-use-after-free.md
+250217_irssi_test.md

@@ -41,6 +41,57 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
+std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick)
+{
+	// (void)optionChain;
+
+	std::string strOption;
+	strOption.clear();
+	nick = uppercase(nick);//debug
+	std::cout << "--- changeOperatorPrivilege() - nick=" << nick << std::endl;
+	ch->printChannelVars();//debug:w
+	
+	if (sign == '+')
+	{
+		//chek if nick is in memClients
+		if (!ch->isMem(nick))
+		{
+			std::cout << "NO SOY MIEMBRO" << std::endl;
+			std::cout << "Error: Client with nick " << nick << " not found in channel!" << std::endl;
+			return "";
+		}
+		else
+		{
+			std::cout << "NO VERDAD ESPERO QUE NO" << std::endl;
+			std::cout << "Is in channel!" << std::endl;
+		}
+		//
+		Client *client = server->getClientByNick(nick);//************************************************************segv */TO DEBUG
+		if (!client)
+		{
+    		std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
+    		return "";
+		}
+		ch->addOpe(client);
+		std::cout << "PRIVILEGE ADDED" << std::endl;//debug
+		printChannelsInfo(server);//debug
+		//quitar desdd memClients
+		ch->deleteMem(nick);
+		std::cout << "MEMBER DELETED FROM CHANNEL" << std::endl;//debug
+		printChannelsInfo(server);//debug
+	}
+	else if (sign == '-')
+	{
+		ch->deleteOpe(nick);
+		std::cout << "PRIVILEGE DELETED" << std::endl;
+		printChannelsInfo(server);
+	}
+	else {
+		std::cout << "invalid sign!" << std::endl;
+	}
+	return (strOption);
+}
+
 std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 {
 	std::string strOption;
@@ -142,6 +193,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	{
 		for (size_t i = 0; i < option.size(); i++)
 		{
+			param = sanitizeInput(param);///added by castorga to tried something
 			if (option[i] == '+' || option[i] == '-')//*o
 				sign = option[i];
 			else
@@ -156,7 +208,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{}
 				else if (option[i] == 'o')//WIP by castorga
 				{
-					std::cout << "option[i] aki voy!!!!!!!!!!!!!!!!!!!! = " << option[i] << std::endl;//debug
+					std::cout << "chanName=" << channel->getChannelName() << std::endl;
+					std::cout << "param=" << param << ", size=" << param.size() << std::endl;
+					std::cout << "sign=" << sign << std::endl;
+					optionChain << changeOperatorPrivilege(server, channel, sign, param);
 				}
 				else if (option[i] == 'l')
 				{}
