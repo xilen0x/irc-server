@@ -41,7 +41,7 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
-std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick)
+std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain)
 {
 	// (void)optionChain;
 
@@ -51,7 +51,8 @@ std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std:
 	std::cout << "--- changeOperatorPrivilege() - nick=" << nick << std::endl;
 	ch->printChannelVars();//debug:w
 	
-	if (sign == '+')
+	Client *client = server->getClientByNick(nick);
+	if (sign == '+' && !ch->getModeOption(3))
 	{
 		//chek if nick is in memClients
 		if (!ch->isMem(nick))
@@ -65,8 +66,6 @@ std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std:
 			std::cout << "NO VERDAD ESPERO QUE NO" << std::endl;
 			std::cout << "Is in channel!" << std::endl;
 		}
-		//
-		Client *client = server->getClientByNick(nick);//************************************************************segv */TO DEBUG
 		if (!client)
 		{
     		std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
@@ -78,12 +77,17 @@ std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std:
 		//quitar desdd memClients
 		ch->deleteMem(nick);
 		std::cout << "MEMBER DELETED FROM CHANNEL" << std::endl;//debug
+		ch->setModeOption(3, true);
+		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
 	}
-	else if (sign == '-')
+	else if (sign == '-' && ch->getModeOption(3))
 	{
 		ch->deleteOpe(nick);
 		std::cout << "PRIVILEGE DELETED" << std::endl;
+		ch->addMem(client);
+		ch->setModeOption(3, false);
+		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);
 	}
 	else {
@@ -211,7 +215,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 					std::cout << "chanName=" << channel->getChannelName() << std::endl;
 					std::cout << "param=" << param << ", size=" << param.size() << std::endl;
 					std::cout << "sign=" << sign << std::endl;
-					optionChain << changeOperatorPrivilege(server, channel, sign, param);
+					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str());
 				}
 				else if (option[i] == 'l')
 				{}
