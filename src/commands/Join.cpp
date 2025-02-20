@@ -196,8 +196,11 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	std::istringstream ss(msg);
 	while (ss >> msg)
 		vecStr.push_back(msg);
-	if (vecStr.size() < 2)
+	if (vecStr.size() < 2 || vecStr.size() > 3)
 	{
+		// to fix the SEGV
+		std::string joinMsg = formatIRCMessage(ERR_BADPARAMSFORMAT(server->getClient(fd)->getNick()));
+		server->sendResp(joinMsg, fd);
 		parVec.clear();
 		return false;
 	}
@@ -269,6 +272,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		{
 			std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
 			server->sendResp(joinMsg, fd);
+			return ;
 		}
 
 		if (parVec.size() > 1)
