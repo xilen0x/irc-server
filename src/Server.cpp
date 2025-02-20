@@ -272,6 +272,20 @@ void Server::sendBroadAllInChannel(std::string resp, Channel *ch)
 	}
 }
 
+//Function that sends a PRIVMSG to all clients from a Channel except the sender (noFd).
+void Server::sendBroadOthersInChannel(std::string resp, Channel *ch, int noFd)
+{
+	std::vector<std::string>	allNicks;
+	int							fd;
+
+	allNicks = ch->getNicksInChannel();
+	for ( size_t i = 0; i < allNicks.size(); i++)
+	{
+		fd = getFdClientByNick(allNicks[i]);
+		if (fd != noFd)
+			sendResp(resp, fd);
+	}
+}
 
 //Function that sends a response to all clients in Server
 void Server::sendBroadAll(std::string resp)
@@ -413,6 +427,19 @@ Channel*   	Server::getChannelByChannelName( std::string chName )
 	if (it == _channels.end())  // Si no se encontró el canal
         return (NULL); 
 	return (&(*it));
+}
+
+// apardo-m need for Privmsg
+bool	Server::isInClients( std::string nick )
+{
+	std::vector<Client>::iterator it = this->_clients.begin();
+	while (it != _clients.end() && it->getNick() != nick)
+		it++;
+	if (it != _clients.end())    // found Client
+		return (true);
+	return ( false );
+	
+
 }
 
 //For test proposal

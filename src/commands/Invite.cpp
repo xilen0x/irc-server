@@ -36,7 +36,7 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		//if the input channelname doesn't exist 403
 		if ((vec[2][0] != '#' && vec[2][0] != '&') || !server->getChannelByChanName(channelName))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANNELNOTFOUND(nick, channelName));
+			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(nick, channelName));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
