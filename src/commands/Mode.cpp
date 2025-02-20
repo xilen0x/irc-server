@@ -41,6 +41,61 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
+std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain)
+{
+	// (void)optionChain;
+
+	std::string strOption;
+	strOption.clear();
+	nick = uppercase(nick);//debug
+	std::cout << "--- changeOperatorPrivilege() - nick=" << nick << std::endl;
+	ch->printChannelVars();//debug:w
+	
+	Client *client = server->getClientByNick(nick);
+	if (sign == '+' && !ch->getModeOption(3))
+	{
+		//chek if nick is in memClients
+		if (!ch->isMem(nick))
+		{
+			std::cout << "NO SOY MIEMBRO" << std::endl;
+			std::cout << "Error: Client with nick " << nick << " not found in channel!" << std::endl;
+			return "";
+		}
+		else
+		{
+			std::cout << "NO VERDAD ESPERO QUE NO" << std::endl;
+			std::cout << "Is in channel!" << std::endl;
+		}
+		if (!client)
+		{
+    		std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
+    		return "";
+		}
+		ch->addOpe(client);
+		std::cout << "PRIVILEGE ADDED" << std::endl;//debug
+		printChannelsInfo(server);//debug
+		//quitar desdd memClients
+		ch->deleteMem(nick);
+		std::cout << "MEMBER DELETED FROM CHANNEL" << std::endl;//debug
+		ch->setModeOption(3, true);
+		strOption = modeOption_push(optionChain, sign, 'o');
+		printChannelsInfo(server);//debug
+	}
+	else if (sign == '-' && ch->getModeOption(3))
+	{
+		ch->deleteOpe(nick);
+		std::cout << "PRIVILEGE DELETED" << std::endl;
+		ch->addMem(client);
+		ch->setModeOption(3, false);
+		strOption = modeOption_push(optionChain, sign, 'o');
+		printChannelsInfo(server);
+	}
+	else {
+		std::cout << "invalid sign!" << std::endl;
+	}
+	return (strOption);
+}
+
 std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 {
 	std::string strOption;
@@ -102,6 +157,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
 	msg = trimLeft(msg);
+	msg = trimRight(msg);
 	// #mychannel +i/+i/-i
 	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i")))
 	{
@@ -153,6 +209,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	{
 		for (size_t i = 0; i < option.size(); i++)
 		{
+			// param = sanitizeInput(param);///added by castorga to tried something
 			if (option[i] == '+' || option[i] == '-')//*o
 				sign = option[i];
 			else
@@ -167,7 +224,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{}
 				else if (option[i] == 'o')//WIP by castorga
 				{
-					std::cout << "option[i] aki voy!!!!!!!!!!!!!!!!!!!! = " << option[i] << std::endl;//debug
+					std::cout << "chanName=" << channel->getChannelName() << std::endl;
+					std::cout << "param=" << param << ", size=" << param.size() << std::endl;
+					std::cout << "sign=" << sign << std::endl;
+					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str());
 				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
 					optionChain << limit_mode(channel, sign, optionChain.str());

@@ -196,10 +196,17 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	std::istringstream ss(msg);
 	while (ss >> msg)
 		vecStr.push_back(msg);
-	if (vecStr.size() < 2 || vecStr.size() > 3)
+	if (vecStr.size() < 2)
 	{
-		// to fix the SEGV
-		std::string joinMsg = formatIRCMessage(ERR_BADPARAMSFORMAT(server->getClient(fd)->getNick()));
+		std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), vecStr[0]));
+		server->sendResp(joinMsg, fd);
+		parVec.clear();
+		return false;
+	}
+	else if (vecStr.size() > 3 || (vecStr.size() == 2 && !vecStr[1].empty() && vecStr[1].size() == 1))
+	{
+//		std::string vecStr[1] = trimRight(vecStr[1]);
+		std::string joinMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
 		server->sendResp(joinMsg, fd);
 		parVec.clear();
 		return false;
@@ -252,6 +259,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(server->getClient(fd)->getNick(), parVec[i].first));
 			server->sendResp(chaErrMsg, fd);
 			parVec.erase(parVec.begin() + i--);
+			return false;
 		}
 		else
 			parVec[i].first.erase(parVec[i].first.begin());
@@ -270,8 +278,8 @@ void Join::execute( Server* server, std::string &msg , int fd)
 
 		if (!parseJoin(server, parVec, msg, fd))
 		{
-			std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
-			server->sendResp(joinMsg, fd);
+//			std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
+//			server->sendResp(joinMsg, fd);
 			return ;
 		}
 
