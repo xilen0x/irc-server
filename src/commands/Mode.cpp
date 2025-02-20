@@ -66,7 +66,7 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
 	}
-	else if (sign == '-' && ch->getModeOption(3))//error: luego de mode #3 +o dos, mode #3 +o tres e intentar regresarlos a miembros, no lo hace
+	else if (sign == '-')//error: luego de mode #3 +o dos, mode #3 +o tres e intentar regresarlos a miembros, no lo hace
 	{
 		ch->deleteOpe(nick);
 		std::cout << "PRIVILEGE DELETED" << std::endl;//debug
@@ -74,7 +74,8 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		//agregar a memClients
 		ch->addMem(client);
 		std::cout << "MEMBER ADDED TO CHANNEL" << std::endl;//debug
-		ch->setModeOption(3, false);
+		if (!ch->getModeOption(3))
+			ch->setModeOption(3, false);
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
 	}
