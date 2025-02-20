@@ -31,7 +31,6 @@
 // #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 // #define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
 // #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
-#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_CHANNELMODEIS(nickname, channelname, option, param) (": 324 " + nickname + " #" + channelname + " option: " + option + " param: " + param + CRLF)
 #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
@@ -43,7 +42,6 @@
 #define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
 #define RPL_INVITING(invitingnick, channelname, invitednick) (": 341 " + invitingnick + " " + invitednick + " #" + channelname + " :" + invitingnick + " INVITE " + invitednick + " into #" + channelname + CRLF)
 #define RPL_INFO(nickname) (nickname + " : 371 " + " :can join ONLY ONE channel at a time" + CRLF)
-#define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
 
 // ERRORS
 
@@ -72,10 +70,14 @@
 #define ERR_BADCHANNELKEY(nickname, channelname) (": 475 " + nickname + " " + channelname + RED + " :Cannot join channel (+k)" + CRLF )
 #define ERR_CHANOPRIVSNEEDED(nickname, channelname) (": 482 " + nickname + " #" + channelname + RED + " :You're not a channel operator" RES + CRLF)
 #define ERR_USERNOTINCHANNEL(nickname, channelname) (": 441 " + nickname + " " + channelname + " :They aren't on that channel" + CRLF)
+// ERR_INVALIDMODEPARAM (696)<client> <target chan/user> <mode char> <parameter> :<description>
 
 // PERSONALIZED ERRORS & REPLIES
 #define ERR_SERVERDOWN(nickname) (": ERROR :Closing Link: " + nickname + " (Server shutdown)" + CRLF)
 #define ERR_USERSYNTAXERROR(nickname, command) (": " + nickname + " " + command + " :Syntax error. Usage: " + YEL + "USER <username> 0 * : <realname>" + RES + CRLF)
 #define RPL_KICK(nickname, channelname, user, comment) (": " + nickname + " KICK #" + channelname + " " + user + " :" + comment + CRLF)
+#define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
+#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
 
 #endif
