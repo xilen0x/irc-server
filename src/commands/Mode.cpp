@@ -60,6 +60,17 @@ std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 	return strOption;
 }
 
+std::string Mode::limit_mode(Channel *ch, char sign, std::string optionChain)
+{
+	(void) *ch;
+	(void) sign;
+	(void) optionChain;
+
+	std::cout << "TODO limit_mode() by apardo-m :optionChain=" << optionChain << std::endl;//debug
+	
+	return "";
+}
+
 void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
 	std::istringstream ss(msg);
@@ -158,8 +169,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{
 					std::cout << "option[i] aki voy!!!!!!!!!!!!!!!!!!!! = " << option[i] << std::endl;//debug
 				}
-				else if (option[i] == 'l')
-				{}
+				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
+					optionChain << limit_mode(channel, sign, optionChain.str());
 				else
 				{
 					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
