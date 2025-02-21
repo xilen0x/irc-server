@@ -33,6 +33,9 @@ int parseInput(std::string password, int port)
         std::cerr << "Invalid port number. Must be beetwen 49152 and 65535" << std::endl;
         return (1);
     }
+    // password = trimLeft(password);
+    // password = trimRight(password);
+
     if (std::strlen(password.c_str()) < 4)
     {
         std::cerr << "Password must be at least 4 characters long" << std::endl;

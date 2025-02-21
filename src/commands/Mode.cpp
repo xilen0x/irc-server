@@ -152,7 +152,7 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		ch->setModeOption(3, true);
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
-		status = 1;
+		status = 1;	
 	}
 	else if (sign == '-')
 	{
@@ -298,7 +298,6 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
 					// std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
-					server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
 					optionChain << limit_mode(channel, sign, param);
@@ -312,7 +311,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		std::string chain = optionChain.str(); //+i
 		if (status == -1)
+		{
+			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 			return ;
+		}
 		if (chain.empty())
 		{
 			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
