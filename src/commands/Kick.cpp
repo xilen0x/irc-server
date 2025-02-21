@@ -47,6 +47,7 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 	//----------------------- con sintaxis correcta pero con canal o usuario inexistente -----------------------
 	user = str[1]; // el usuario
 	kickedNick = cl->getNickByUser(str[1]);
+	kickedNick = uppercase(kickedNick);
 	if (!server->getClientByNick(kickedNick)) {
 		server->sendResp(ERR_USERNOTINCHANNEL(cl->getNick(), chName), fd);
 		return (0);
@@ -55,8 +56,22 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 		server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);//482 - You're not channel operator
 		return (0);
 	}
-	kickedNick = uppercase(kickedNick);
-	channel->deleteMem(kickedNick);
+	else if (channel->isOpe(kickedNick)) {
+		channel->deleteOpe(kickedNick);
+	}
+	else {
+		channel->deleteMem(kickedNick);
+	}
+	//----------------------- con sintaxis correcta y canal y usuario existente -----------------------
+	//if is operator delete operator from the channel, if not delete the user
+	// if (channel->isOpe(kickedNick)) {
+	// 	channel->deleteOpe(kickedNick);
+	// }
+	// else {
+	// 	channel->deleteUser(kickedNick);
+	// }
+	
+	// channel->deleteMem(kickedNick);
 	//message to the kicker(operator)
 	server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked"), fd);
 	//message to the kicked
@@ -67,6 +82,7 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 }
 
 // ------------------------ KICK command --------------------------------
+//KICK <channel> <nick>
 void Kick::execute(Server* server, std::string &msg, int fd)
 {
     if (!isAuthenticated(server->getClient(fd), server, fd)) {
