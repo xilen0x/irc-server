@@ -47,7 +47,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		if (!validateNick(msg))
 		{
 			std::cout << "input nick is invalid" << std::endl;////////////////
-			server->sendResp(ERR_ERRONEUSNICK(std::string(msg)), fd);
+			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(msg)), fd);
 			return ;
 		}
 		else

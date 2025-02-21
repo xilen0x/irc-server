@@ -56,7 +56,7 @@
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
 #define ERR_NOTEXTTOSEND(nickname) (": 412 " + nickname + RED + " :No text to send" + RES + CRLF)
 #define ERR_NICKINUSE(nickname) (": 433 " + nickname + YEL + " :Nickname is already in use" + RES + CRLF)
-#define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
+#define ERR_ERRONEUSNICKNAME(nickname) (": 432 " + nickname + RED + " :Erroneus nickname" + RES + CRLF)
 #define ERR_UNKNOWNCOMMAND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + CRLF)
 #define ERR_NOTONCHANNEL(nickname, channelname) (": 442 " + nickname + " #" + channelname + " :You're not on that channel" + CRLF)
 #define ERR_USERONCHANNEL(nickname, channelname) (": 443 " + nickname + " #" + channelname + " :is already on channel" + CRLF)
