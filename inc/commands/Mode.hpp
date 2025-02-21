@@ -15,7 +15,8 @@ class Mode : public ICommand
 		std::string inviteOnly_mode(Channel *ch, char sign, std::string optionChain);
 		std::string modeOption_push(std::string optionChain, char sign, char option);
 		std::string topic_mode(Channel *ch, char sign, std::string optionChain);
-		std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain);
+		// std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain);
+		std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain, int &status);
 };
 
 #endif

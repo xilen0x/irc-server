@@ -42,15 +42,18 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 }
 
 // Function to handle the change of operator privilege(MODE #channel +(-)o nick)
-std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain)
+std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain, int &status)
 {
 	std::string strOption;
+	status = 0;
 	strOption.clear();
 	nick = uppercase(nick);
 	ch->printChannelVars();//debug
 	Client *client = server->getClientByNick(nick);
 	if (!client) {
-    	std::cout << "Error: Client with nick " << nick << " not found!" << std::endl;
+    	std::cout << "[Error]: Client with nick " << nick << " not found!" << std::endl;
+		server->sendResp(ERR_NOSUCHNICK(nick), ch->getfd
+		status = -1;
     	return "";
 	}
 	if (sign == '+')
@@ -64,6 +67,7 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		ch->setModeOption(3, true);
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
+		status = 1;
 	}
 	else if (sign == '-')
 	{
@@ -76,9 +80,11 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		ch->setModeOption(3, false);
 		strOption = modeOption_push(optionChain, sign, 'o');
 		printChannelsInfo(server);//debug
+		status = 1;
 	}
 	else {
-		std::cout << "invalid sign!" << std::endl;
+		std::cout << "[Error]: invalid sign!" << std::endl;
+		status = -1;
 	}
 	return (strOption);
 }
@@ -128,7 +134,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::string 		param;
 	std::stringstream 	optionChain;
 	char				sign = '\0';
-	
+	int 				status;
+
 	std::cout << "Mode command is called!" << std::endl;//debug
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
@@ -197,7 +204,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				else if (option[i] == 'k')
 				{}
 				else if (option[i] == 'o')
-					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str());
+				{
+					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
+					std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
+				}
 				else if (option[i] == 'l')
 				{}
 				else
@@ -209,12 +219,16 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			}
 		}
 		std::string chain = optionChain.str(); //+i
+		if (status == -1)
+		{
+			return ;	
+		}
 		if (chain.empty())
 		{
 			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
 			server->sendResp(chaMsg, fd);
 			return ;
-		}
+		}	
 		std::string chaMsg = formatIRCMessage(RPL_CHANGEMODE(server->getServerName(), channelName, chain, param));
 		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 	}
