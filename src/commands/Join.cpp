@@ -116,7 +116,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		return ;
 	}
 	// if the password of channel input is incorrect
-	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)
+	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)//////////////////////???
 	{
 		if (!isInvited(server, cl, parVec[ipar].first, 0))
 		{

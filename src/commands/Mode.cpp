@@ -41,6 +41,44 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 	return strOption;
 }
 
+bool isValidKey(std::string key)
+{
+	if (key.empty())
+		return false;
+	for (size_t i = 0; i < key.size(); i++)
+	{
+		if (key[i] < 33 || key[i] > 126)
+			return false;
+	}
+	return true;
+}
+
+std::string Mode::key_mode(Channel *ch, char sign, std::string key, std::string optionChain)
+{
+	std::string strOption;
+	strOption.clear();
+	if (!isValidKey(key))
+	{
+		std::cout << "[Error]: Channel Key " << key << " is invalid!" << std::endl;
+    	return NULL;
+	}
+	if (sign == '+' && !ch->getHasChannelKey())
+	{
+		ch->setHasChannelKey(true);
+		ch->setChannelKey(key);
+		ch->setModeOption(2, true);
+		strOption = modeOption_push(optionChain, sign, 'k');
+	}
+	else if (sign == '-' && ch->getHasChannelKey())
+	{
+		ch->setHasChannelKey(false);
+		ch->setChannelKey("");
+		ch->setModeOption(2, false);
+		strOption = modeOption_push(optionChain, sign, 'k');
+	}
+	return strOption;
+}
+
 // Function to handle the change of operator privilege(MODE #channel +(-)o nick)
 std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain, int &status)
 {
@@ -211,7 +249,9 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 					optionChain << topic_mode(channel, sign, optionChain.str());
 				}
 				else if (option[i] == 'k')
-				{}
+				{
+					optionChain << key_mode(channel, sign, param, optionChain.str());
+				}
 				else if (option[i] == 'o')
 				{
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);

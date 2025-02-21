@@ -23,6 +23,7 @@ class Channel
 		std::string		_topic; 			// For Channel
 		bool			_topicRestricted;	// If True only operatos can change _topic
 
+		bool			_hasChannelKey;
 		std::string		_channelKey;//password channel
 
 		bool			_hasUserLimit;
@@ -107,6 +108,8 @@ class Channel
 		void			unsetTopicRestricted( void );
 
 		// _channelKey
+		bool			getHasChannelKey( void ) const;
+		void			setHasChannelKey( bool flag );
 		std::string		getChannelKey( void ) const;
 		void			setChannelKey( std::string key );
 
