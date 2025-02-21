@@ -34,7 +34,7 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 		}
 		else if (str.size() > 2)
 		{
-			std::cout << "TODO : a lot of elements =" << splitedStrVect[0] << std::endl;
+			server->sendResp(FAIL_LOTPARAMS(msg), fd);
 			return;
 		}
 		std::cout << "--- target : " << str[1] << std::endl;

@@ -85,6 +85,7 @@ Quit::~Quit( void ) {};
 
 void Quit::execute( Server* server, std::string &msg , int fd)
 {
+	std::vector<std::string>	str;
 	std::vector<std::string>	splitedStrVect;
 	std::string					nick;
 	std::string					user;
@@ -98,9 +99,14 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	channelsSize = server->getChannelsSize();
 
 	std::cout << "    ----" << std::endl;
-	std::cout << "QUIT  => TODO test bad format" << std::endl;
 	deleteRN(msg);
 	splitedStrVect = splitByDoublePoint(msg);
+	str = split_msg(splitedStrVect[0]);
+	if (str.size() > 2)
+	{
+		server->sendResp(FAIL_LOTPARAMS(msg), fd);
+		return;
+	}
 	server->sendResp(ERR_QUIT_MSG, fd);
 
 	std::cout << "Delete nick client from any channel. Number of Channels : " << channelsSize << std::endl;

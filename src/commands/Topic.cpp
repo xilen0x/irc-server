@@ -38,7 +38,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		}
 		else if (str.size() > 2)
 		{
-			std::cout << "TODO : a lot of elements =" << splitedStrVect[0] << std::endl;
+			server->sendResp(FAIL_LOTPARAMS(msg), fd);
 			return;
 		}
 		//Check str.size  great than 1 char
@@ -56,7 +56,7 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(ERR_NOTONCHANNEL(cl->getNick(), chName), fd);
 			return;
 		}
-		ch->setTopicRestricted();  //  For test 
+	//	ch->setTopicRestricted();  //  For test 
 		if (splitedStrVect.size() == 2)
 		{
 			if (ch->isTopicRestricted() && !ch->isOpe(cl->getNick()))

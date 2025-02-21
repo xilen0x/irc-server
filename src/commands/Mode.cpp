@@ -45,14 +45,12 @@ std::string Mode::inviteOnly_mode(Channel *ch, char sign, std::string optionChai
 std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain, int &status)
 {
 	std::string strOption;
-	status = 0;
 	strOption.clear();
 	nick = uppercase(nick);
 	ch->printChannelVars();//debug
 	Client *client = server->getClientByNick(nick);
 	if (!client) {
     	std::cout << "[Error]: Client with nick " << nick << " not found!" << std::endl;
-		server->sendResp(ERR_NOSUCHNICK(nick), ch->getfd
 		status = -1;
     	return "";
 	}
@@ -108,6 +106,17 @@ std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 	return strOption;
 }
 
+std::string Mode::limit_mode(Channel *ch, char sign, std::string optionChain)
+{
+	(void) *ch;
+	(void) sign;
+	(void) optionChain;
+
+	std::cout << "TODO limit_mode() by apardo-m :optionChain=" << optionChain << std::endl;//debug
+	
+	return "";
+}
+
 void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
 	std::istringstream ss(msg);
@@ -134,8 +143,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::string 		param;
 	std::stringstream 	optionChain;
 	char				sign = '\0';
-	int 				status;
-
+	int 				status = 0;
+	
 	std::cout << "Mode command is called!" << std::endl;//debug
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
@@ -206,10 +215,11 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				else if (option[i] == 'o')
 				{
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-					std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
+					// std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
+					server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 				}
-				else if (option[i] == 'l')
-				{}
+				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
+					optionChain << limit_mode(channel, sign, optionChain.str());
 				else
 				{
 					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
@@ -220,9 +230,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		std::string chain = optionChain.str(); //+i
 		if (status == -1)
-		{
-			return ;	
-		}
+			return ;
 		if (chain.empty())
 		{
 			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));

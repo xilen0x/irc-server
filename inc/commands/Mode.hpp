@@ -7,6 +7,10 @@
 
 class Mode : public ICommand
 {
+	private:
+		std::string limit_mode(Channel *ch, char sign, std::string optionChain);
+				
+
 	public:
 		~Mode( void );
 		// void execute( std::string & , int );
