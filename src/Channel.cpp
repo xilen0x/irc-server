@@ -25,7 +25,7 @@ void	Channel::_printMapKeys(std::map<std::string, Client *> mapVar)
 }
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
-Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _channelKey("")
+Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _hasChannelKey(false), _channelKey("")
 {
 	char cha[5] = {'i', 't', 'k', 'o', 'l'};
 	for (int i = 0; i < 5; i++)
@@ -57,6 +57,7 @@ Channel::Channel( std::string channelName, std::string operatorNick, Client *ope
 	this->_inviteChannel = false;
 	this->_topic = "";
 	this->_topicRestricted = false;
+	this->_hasChannelKey = false;
 	this->_channelKey = "";
 	this->_hasUserLimit = false;
 	this->_userLimitNumber = DEFAULT_LIMIT;
@@ -78,6 +79,7 @@ Channel &Channel::operator=( Channel const &src)
 		this->_topic = src._topic;
 		this->_topicRestricted = src._topicRestricted;
 		this->_channelKey = src._channelKey;
+		this->_hasChannelKey = src._hasChannelKey;
 		this->_hasUserLimit = src._hasUserLimit;
 		this->_userLimitNumber = src._userLimitNumber;
 		this->_modeOptions = src._modeOptions;
@@ -188,9 +190,12 @@ void	Channel::setTopicRestricted( void ) { this->_topicRestricted = true; }
 void	Channel::unsetTopicRestricted( void ) { this->_topicRestricted = false; }
 
 // _channelKey
+bool	Channel::getHasChannelKey( void ) const { return ( this->_hasChannelKey); }
+void	Channel::setHasChannelKey( bool flag ) { this->_hasChannelKey = flag; }
+
 std::string	Channel::getChannelKey( void ) const { return( this->_channelKey); }
 
-void	Channel::setChannelKey( std::string key ) { this->_channelKey = key; }
+void	Channel::setChannelKey( std::string key ) { this->_channelKey = key;}
 
 // _userLimit
 bool	Channel::isUserLimitActived( void ) const { return ( this->_hasUserLimit ); }

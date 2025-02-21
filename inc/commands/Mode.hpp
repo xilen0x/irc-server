@@ -21,6 +21,7 @@ class Mode : public ICommand
 		std::string topic_mode(Channel *ch, char sign, std::string optionChain);
 		// std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain);
 		std::string changeOperatorPrivilege(Server *server, Channel *ch, char sign, std::string nick, std::string optionChain, int &status);
+		std::string key_mode(Channel *ch, char sign, std::string key, std::string optionChain);
 };
 
 #endif
