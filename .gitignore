@@ -41,6 +41,7 @@ git_commit_push.sh
 git_merge_apardo-250125.sh
 git_merge_castorga.sh
 git_merge_lin.sh
+git-script.sh
 
 #docs
 commandsForTests
