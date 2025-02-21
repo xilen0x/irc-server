@@ -1,5 +1,54 @@
-
+#include <cstdlib> 
+#include <limits>
 #include "Mode.hpp"
+
+#define MIN_CLIENTS_IN_CHANNEL 1
+
+/* ------------------- PRIVATE MEMBER FUNCTIONS ------------------*/
+/*
+ * <cstdlib> : std::strtol
+ * <limits>  : std::numeric_limits<int>
+ */
+
+bool    Mode::_isInt( const std::string &str )
+{
+    const char  *stmp;
+    char        *endptr;
+    long        num;
+
+    stmp = str.c_str();
+    num = std::strtol(stmp, &endptr, 10);
+    if (endptr != str && *endptr == '\0' && \
+            num <= std::numeric_limits<int>::max() && \
+            num >= std::numeric_limits<int>::min())
+        return (true);
+    return (false);
+}
+
+
+std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
+{
+	// Limit range : Minimum:1   MaxLimit: 2147483647
+	//	https://modern.ircdocs.horse/#channel-modes
+
+	(void) sign;
+	int	limit;
+	
+	if (_isInt(param))
+	{
+		limit = std::atoi(param.c_str());
+		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= std::numeric_limits<int>::max())
+		{
+			ch->setUserLimitActived();
+			ch->setUserLimitNumber(limit);
+			ch->printChannelVars(); //debug
+		}
+	}
+	else
+		std::cout << "param=" << param << " NO es INT" << std::endl;
+	return "";
+}
+
 
 Mode::~Mode( void ) {};
 
@@ -102,16 +151,6 @@ std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 	return strOption;
 }
 
-std::string Mode::limit_mode(Channel *ch, char sign, std::string optionChain)
-{
-	(void) *ch;
-	(void) sign;
-	(void) optionChain;
-
-	std::cout << "TODO limit_mode() by apardo-m :optionChain=" << optionChain << std::endl;//debug
-	
-	return "";
-}
 
 void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
@@ -159,6 +198,9 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		msg = msg.substr(1); // mychannel +i remove the first # or &
 	std::cout << "mode msg: " << msg << std::endl; //debug
 	getModeArgs(msg, channelName, option, param); // mychannel +i
+	std::cout << "mode msg=" << msg << std::endl; //debug
+	std::cout << "option:" << option << std::endl; //debug
+	std::cout << "param:"  << param << std::endl; //debug
 	Client *cl = server->getClient(fd);
 	std::string nick = cl->getNick();
 	// the channelName doesn't exist 403
@@ -210,7 +252,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				else if (option[i] == 'o')
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str());
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
-					optionChain << limit_mode(channel, sign, optionChain.str());
+					optionChain << limit_mode(channel, sign, param);
 				else
 				{
 					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));

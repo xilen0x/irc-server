@@ -200,10 +200,10 @@ void	Channel::setUserLimitActived( void ) { this->_hasUserLimit = true; }
 void	Channel::unsetUserLimitActived( void ) { this->_hasUserLimit = false; }
 
 // _userLimitNumber
-int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
 //unsigned long	Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
-
-void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
+//void	Channel::setUserLimitNumber( unsigned long limit) { this->_userLimitNumber = limit; }
+int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
+void	Channel::setUserLimitNumber( int limit) { this->_userLimitNumber = limit; }
 
 int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
 

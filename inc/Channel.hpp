@@ -117,8 +117,9 @@ class Channel
 
 		// _userLimitNumber
 //		unsigned long	getUserLimitNumber( void ) const;
+//		void			setUserLimitNumber( unsigned long limit);
 		int				getUserLimitNumber( void ) const;
-		void			setUserLimitNumber( unsigned long limit);
+		void			setUserLimitNumber( int limit);
 
 		int				getClientSum();
 
