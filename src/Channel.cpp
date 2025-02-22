@@ -32,7 +32,6 @@ Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _hasChannelK
 		this->_modeOptions.push_back(std::make_pair(cha[i], false));
 }
 
-
 /*
 // 250212 - Delete this part?????
 Channel::Channel( std::string channelName, std::string operatorNick ) :_channelName( channelName )

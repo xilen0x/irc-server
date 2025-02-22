@@ -31,9 +31,10 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 	// Limit range : Minimum:1   MaxLimit: 2147483647
 	//	https://modern.ircdocs.horse/#channel-modes
 
-	(void) sign;
 	int	limit;
+	std::string strOption;
 	
+	strOption = "";
 	if (_isInt(param))
 	{
 		limit = std::atoi(param.c_str());
@@ -41,14 +42,15 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 		{
 			ch->setUserLimitActived();
 			ch->setUserLimitNumber(limit);
+			ch->setModeOption(4, true);
+			strOption = modeOption_push(param, sign, 'l');
 			ch->printChannelVars(); //debug
 		}
 	}
 	else
 		std::cout << "param=" << param << " NO es INT" << std::endl;
-	return "";
+	return (strOption);
 }
-
 
 Mode::~Mode( void ) {};
 
@@ -300,10 +302,15 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 					// std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
 				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
+				{
 					optionChain << limit_mode(channel, sign, param);
+					if (optionChain.str().empty())
+						server->sendResp(FAIL_NOTINT(param),fd);
+				}
 				else
 				{
-					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
+					//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
+					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, sign + option[i]));
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}

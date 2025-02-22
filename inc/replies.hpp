@@ -83,8 +83,6 @@
 //FAILS
 #define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)
 #define FAIL_BADPARAMSFORMAT(msg) (": FAIL " + msg + " :" + YEL + "Bad Parameters Format!" + RES + CRLF)
-
-//FAILS
-#define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)
+#define FAIL_NOTINT(msg) (": FAIL " + msg + " :" + YEL + "Not positive integer provided!!" + RES + CRLF)
 
 #endif
