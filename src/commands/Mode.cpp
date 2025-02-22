@@ -310,7 +310,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				else
 				{
 					//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
-					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, sign + option[i]));
+					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, sign + option[i])); // sign is need because I undesrtand that  "-l" opition is not used IRC protocol
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}
