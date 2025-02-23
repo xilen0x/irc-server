@@ -39,8 +39,8 @@ void User::execute(Server* server, std::string& msg, int fd)
             return;
         }
         std::string username = params[0];
-        std::string mode = params[1];   // Debe ser "0"
-        std::string unused = params[2]; // Debe ser "*"
+        std::string oldMode = params[1];   // "0"
+        std::string oldHostname = params[2]; // "*"
         std::string realname;
         std::size_t pos = msg.find(" :");
         if (pos != std::string::npos) {
@@ -51,7 +51,7 @@ void User::execute(Server* server, std::string& msg, int fd)
             return;
         }
 /*
-        if (mode != "0" || unused != "*") {
+        if (oldMode != "0" || oldHostname != "*") {
                 server->sendResp(ERR_USERSYNTAXERROR(std::string("*"), "USER"), fd);
             return;
         }

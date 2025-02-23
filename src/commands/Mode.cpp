@@ -281,7 +281,6 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	{
 		for (size_t i = 0; i < option.size(); i++)
 		{
-			// param = sanitizeInput(param);///added by castorga to tried something
 			if (option[i] == '+' || option[i] == '-')//*o
 				sign = option[i];
 			else
@@ -299,7 +298,6 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				else if (option[i] == 'o')
 				{
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-					// std::cout << "Returned string: " << optionChain << ", Status code: " << status << std::endl;//debug
 				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
 				{

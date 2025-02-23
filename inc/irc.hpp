@@ -26,6 +26,7 @@ std::string getCurrentTime();
 std::string formatIRCMessage(const std::string& message);
 int isAuthenticated(Client* client, Server* server, int fd);
 bool checkNickInUse(std::vector<Client> clients, std::string &s);
+bool checkUserInUse(std::vector<Client> clients, std::string &s);
 bool validateNick(std::string &s);
 void deleteRN(std::string &msg);
 int	 parseInput(std::string password, int port);

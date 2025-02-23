@@ -63,21 +63,22 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 		channel->deleteMem(kickedNick);
 	}
 	//----------------------- con sintaxis correcta y canal y usuario existente -----------------------
-	//if is operator delete operator from the channel, if not delete the user
-	// if (channel->isOpe(kickedNick)) {
-	// 	channel->deleteOpe(kickedNick);
-	// }
-	// else {
-	// 	channel->deleteUser(kickedNick);
-	// }
+	if (splitedMsg.size() == 1)
+	{
+		//message to the kicked
+		server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "You have been kicked"), server->getFdClientByNick(kickedNick));
+		
+		// Mensaje para todos en el canal
+		server->sendBroadAllInChannel(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked"), channel);
+	}
+	else
+	{
+		//message to the kicked with reason of the kick
+		server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "You have been kicked :" + splitedMsg[1]), server->getFdClientByNick(kickedNick));
 	
-	// channel->deleteMem(kickedNick);
-	//message to the kicker(operator)
-	server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked"), fd);
-	//message to the kicked
-	server->sendResp(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "You have been kicked"), server->getFdClientByNick(kickedNick));
-	//message to all in the channel
-	server->sendBroadAllInChannel(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked"), channel);
+		//message to all in the channel with the reason of the kick
+		server->sendBroadAllInChannel(RPL_KICK(server->getClient(fd)->getNick(), chName, user, "Has been kicked :" + splitedMsg[1]), channel);
+	}
     return (1);
 }
 
