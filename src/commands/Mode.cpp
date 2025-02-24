@@ -5,6 +5,14 @@
 #define MIN_CLIENTS_IN_CHANNEL 1
 
 /* ------------------- PRIVATE MEMBER FUNCTIONS ------------------*/
+
+std::string	Mode::_intToString( int num )
+{
+	std::ostringstream convert;   // stream used for the conversion
+	convert << num;      // insert the textual representation of 'Number' in the characters in the stream
+	return (convert.str()) ;
+}
+
 /*
  * <cstdlib> : std::strtol
  * <limits>  : std::numeric_limits<int>
@@ -25,10 +33,10 @@ bool    Mode::_isInt( const std::string &str )
     return (false);
 }
 
-
+/*
 std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 {
-	// Limit range : Minimum:1   MaxLimit: 2147483647
+	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
 	//	https://modern.ircdocs.horse/#channel-modes
 
 	int	limit;
@@ -49,6 +57,31 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 	}
 	else
 		std::cout << "param=" << param << " NO es INT" << std::endl;
+	return (strOption);
+}
+*/
+
+std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxLimitUser)
+{
+	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
+	//	https://modern.ircdocs.horse/#channel-modes
+
+	int	limit;
+	std::string strOption;
+	
+	strOption = "";
+	if (_isInt(param))
+	{
+		limit = std::atoi(param.c_str());
+		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= maxLimitUser)
+		{
+			ch->setUserLimitActived();
+			ch->setUserLimitNumber(limit);
+			ch->setModeOption(4, true);
+			strOption = modeOption_push(param, sign, 'l');
+			ch->printChannelVars(); //debug
+		}
+	}
 	return (strOption);
 }
 
@@ -301,9 +334,13 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				}
 				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
 				{
-					optionChain << limit_mode(channel, sign, param);
+					int maxUserLimit = MAX_USER_LIMIT_NUMBER;
+					optionChain << limit_mode(channel, sign, param, maxUserLimit);
 					if (optionChain.str().empty())
-						server->sendResp(FAIL_NOTINT(param),fd);
+					{
+					//	server->sendResp(FAIL_NOTINT(param),fd);
+						server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
+					 }
 				}
 				else
 				{
