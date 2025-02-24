@@ -45,7 +45,7 @@ void Messageprocessing::processMessage(Server* server, std::string message, int 
  	std::vector<std::string> str = split_msg(message);
 	if (str.empty())
 	{
-		std::cout << "[LOG][INFO]Empty message" << RES << std::endl;//debug
+		std::cout << "[LOG][INFO] Empty message" << RES << std::endl;//debug
 		return ;
 	}
 	if (this->_commands.find(uppercase(str[0])) != this->_commands.end())

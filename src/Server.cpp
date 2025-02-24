@@ -25,20 +25,20 @@ void Server::createSocket()
     // Crear el df para el socket
 	_fdServer = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fdServer == -1)
-		throw(std::logic_error("Failed to create socket"));
+		throw(std::logic_error("[LOG][ERROR] Failed to create socket"));
 
     // Configurar la reutilización de direcciones
 	enableReuseAddr = 1;
 	if(setsockopt(_fdServer, SOL_SOCKET, SO_REUSEADDR, &enableReuseAddr, sizeof(enableReuseAddr)) == -1) // configuramos el socket con SO_REUSEADDR para poder reutilizar puertos o ips
-		throw(std::runtime_error("Failed to set option (SO_REUSEADDR) on socket"));
+		throw(std::runtime_error("[LOG][ERROR] Failed to set option (SO_REUSEADDR) on socket"));
 
     // Configurar el socket como no bloqueante
 	if (fcntl(_fdServer, F_SETFL, O_NONBLOCK) == -1)
-		throw(std::runtime_error("Failed to set option (O_NONBLOCK) on socket"));
+		throw(std::runtime_error("[LOG][ERROR] Failed to set option (O_NONBLOCK) on socket"));
 
     // Vincular el socket a la dirección y puerto especificados
     if (bind(_fdServer, reinterpret_cast<struct sockaddr*>(&socketAddress), sizeof(socketAddress)) == -1) {
-        throw std::runtime_error("Failed to bind socket");
+        throw std::runtime_error("[LOG][ERROR] Failed to bind socket");
     }
     // std::cout << "Socket created successfully." << std::endl;
 }
@@ -49,7 +49,7 @@ void Server::listenSocket()
     // Escuchar conexiones entrantes
     if (listen(_fdServer, SOMAXCONN) == -1) // SOMAXCONN: n° máx de conexiones pendientes en la cola de conexiones.
 	{
-        throw std::runtime_error("Failed to listen on socket");
+        throw std::runtime_error("[LOG][ERROR] Failed to listen on socket");
     }
     // std::cout << "Server is now listening for incoming connections." << std::endl;
 }
@@ -64,7 +64,7 @@ void Server::fillPollfd()
     serPoll.events = POLLIN;//Establece los eventos a monitorear en el descriptor de archivo.
     _fdsClients.push_back(serPoll);//Agrega el pollfd al vector de monitoreo.
     std::cout << GRE << "Server successfully connected on port " << _port << "." << RES << std::endl;
-	std::cout << "Waiting for incoming connections..." << std::endl;
+	std::cout << "[LOG][INFO] Waiting for incoming connections..." << std::endl;
 }
 
 // Function to accept a new client connection
@@ -79,12 +79,12 @@ void Server::acceptClient()
         clientAddressSize = sizeof(clientAddress);
         connectionSocket = accept(_fdServer, (struct sockaddr*)&clientAddress, &clientAddressSize);
         if (connectionSocket == -1) {
-            throw std::runtime_error("Failed to accept new client");
+            throw std::runtime_error("[LOG][ERROR] Failed to accept new client");
         }
 
         // Configure the client socket as non-blocking
         if (fcntl(connectionSocket, F_SETFL, O_NONBLOCK) == -1) {
-            throw std::runtime_error("Failed to set option (O_NONBLOCK) on client socket");
+            throw std::runtime_error("[LOG][ERROR] Failed to set option (O_NONBLOCK) on client socket");
         }
 
         // Add the client to the list of monitored FDs
@@ -96,28 +96,28 @@ void Server::acceptClient()
         newClient.setIpClient(inet_ntoa(clientAddress.sin_addr));
         _clients.push_back(newClient);
         _fdsClients.push_back(clientPoll);
-        std::cout << "New client connected\n";
+        std::cout << "[LOG][INFO] New client connected" << std::endl;
 }
 
 // Function to remove a client based on its file descriptor
 void Server::clearClients(int clientSocket, std::string msg)
 {
-        // Find the client in the list of monitored FDs
-        std::vector<struct pollfd>::iterator it = _fdsClients.begin();
-        for (; it != _fdsClients.end(); ++it) {
-            if (it->fd == clientSocket) {
-                break;  // Found the client
-            }
+    (void)msg;
+    // Find the client in the list of monitored FDs
+    std::vector<struct pollfd>::iterator it = _fdsClients.begin();
+    for (; it != _fdsClients.end(); ++it) {
+        if (it->fd == clientSocket) {
+            break;  // Found the client
         }
-
-        // If found, erase the client from the list
-        if (it != _fdsClients.end()) {
-            _fdsClients.erase(it);
-        }
-        
-        // Close the socket of the client
-        close(clientSocket);
-        std::cout << "fd = " << clientSocket << msg << std::endl;
+    }
+    // If found, erase the client from the list
+    if (it != _fdsClients.end()) {
+        _fdsClients.erase(it);
+    }
+   
+    // Close the socket of the client
+    close(clientSocket);
+    std::cout << msg << ":" << clientSocket << std::endl;//debug
 }
 
 // Function to split a string into a vector of strings
@@ -141,10 +141,10 @@ void Server::receiveData(int clientSocket)
 
     bytesRead = recv(clientSocket, buffer, BUFFER_SIZE, 0);
     if (bytesRead == -1) {
-        throw std::runtime_error("Failed to receive data from client");
+        throw std::runtime_error("[LOG][ERROR] Failed to receive data from client");
     }
     else if (bytesRead == 0) {
-        clearClientFromClientsAndChanels(clientSocket, "[LOG][WARNING] Client disconnected1\n");//solve the issue when a client disconnects abruptly & connect again
+        clearClientFromClientsAndChanels(clientSocket, "[LOG][WARNING] Client disconnected");//solve the issue when a client disconnects abruptly & connect again
         return;
     }
 
@@ -172,7 +172,7 @@ void Server::loop()
 {
     while (!Server::_Signal)
     {
-        int pollRet;  // Stores the return value of the poll() function
+        int pollRet;
         int revents;  // Stores the events that occurred in the fd
 
         // Wait for events on the file descriptors
@@ -182,7 +182,7 @@ void Server::loop()
                 // poll() was interrupted by a signal
                 continue;
             }
-            throw std::runtime_error("The function poll() failed");
+            throw std::runtime_error("[LOG][ERROR] The function poll() failed");
         }
 
         // Iterate over the file descriptors to determine the event
@@ -197,8 +197,8 @@ void Server::loop()
             // Handle errors or unexpected disconnections
             if ((revents & POLLERR) == POLLERR || (revents & POLLHUP) == POLLHUP) 
             {
-                std::cout << "Socket error or client disconnection\n";
-                clearClients(_fdsClients[i].fd, "Client disconnected2\n");
+                std::cout << "[LOG][ERROR] Socket error or client disconnection\n";
+                clearClients(_fdsClients[i].fd, "[LOG][WARNING] Client disconnected");
             }
             else if (revents & POLLIN) {  // There is data to read
                 if (_fdsClients[i].fd == _fdServer) {  // New incoming connection
@@ -230,7 +230,7 @@ void Server::   runServer()
 void Server::sendResp(std::string msg, int clientFd) {
     ssize_t bytesSent = send(clientFd, msg.c_str(), msg.length(), 0);
     if (bytesSent == -1) {
-        perror("sendResp failed"); // Muestra el error del sistema
+        perror("[LOG][ERROR] sendResp failed"); // Muestra el error del sistema
     }
 }
 
@@ -299,10 +299,10 @@ void Server::sendBroad(std::string resp, int fd)
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		actualFd = _clients[i].getFdClient();
-		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;
+		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;//debug
 		if (actualFd != fd)
 		{
-			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;
+			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;//debug
 			sendResp(resp, actualFd);
 		}
 	}
@@ -312,14 +312,11 @@ void Server::sendBroad(std::string resp, int fd)
 //Client *Server::getClient(std::vector<Client> clients, int fd)
 Client *Server::getClient(int fd)
 {
-//	for (size_t i = 0; i < clients.size(); i++)
 	std::vector<Client>& clientsRef = getClients();
 	for (size_t i = 0; i < clientsRef.size(); i++)
 	{
-//		if (clients[i].getFdClient() == fd)
 		if (clientsRef[i].getFdClient() == fd)
 			return (&clientsRef[i]);
-//			return (&(clients[i]));
 	}
 	return (NULL);
 }
@@ -344,9 +341,7 @@ std::string	Server::getServerName( void ) const { return (this->_serverName); }
 std::string	Server::getPassword( void ) const { return (this->_password); }
 int 		Server::getPort( void ) const { return (this->_port); };
 int			Server::getFdServer( void ) const { return (this->_fdServer); };
-//std::vector<Channel> Server::getChannels( void ) { return (this->_channels); }
 std::vector<Channel>& Server::getChannels( void ) { return (this->_channels); }
-//std::vector<Client> Server::getClients( void ) { return (this->_clients); }
 std::vector<Client>& Server::getClients( void ) { return (this->_clients); }
 
 size_t	Server::getChannelsSize( void ) { return (this->_channels.size()); }
@@ -458,23 +453,17 @@ Channel*	Server::getChannelsByNumPosInVector(size_t pos)
 
 Server::~Server()
 {
-    std::cout << "Closing connections..." << std::endl;
-    // std::string msg = "Server is closing...!\n";
-
+    std::cout << "[LOG][ERROR] Closing connections..." << std::endl;
     for (size_t i = 0; i < _clients.size(); ++i) {
         int fd = _clients[i].getFdClient();
         if (fd != -1) {
-            if (fcntl(fd, F_GETFD) != -1) { // si el socket aún es válido
-                sendResp(ERR_SERVERDOWN(_clients[i].getNick()), fd);
-            }
+            sendResp(ERR_SERVERDOWN(_clients[i].getNick()), fd);
             close(fd);
         }
     }
-
     if (_fdServer != -1) {
         close(_fdServer);
     }
-
     _fdsClients.clear();
     _clients.clear();
     _channels.clear();

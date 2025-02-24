@@ -60,7 +60,7 @@ void User::execute(Server* server, std::string& msg, int fd)
         realname.erase(std::remove(realname.begin(), realname.end(), '\n'), realname.end());
         client->setUserName(username);
         client->setHasUser();
-        std::cout << YEL << "Correct user format!" << RES << std::endl;  //debug
+        std::cout << "[LOG][INFO] Correct user format!" << std::endl;  //debug
         if (client->getHasNick()) {
             server->sendResp(RPL_WELCOME(server->getServerName(), client->getNick()), fd);  // 001
             server->sendResp(RPL_YOURHOST(server->getServerName()), fd);  // 002

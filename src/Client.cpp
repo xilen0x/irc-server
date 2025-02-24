@@ -4,6 +4,7 @@
 
 // Client::Client() :_fdClient(-1), _ipClient("")
 // {}
+
 Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
 {
 
@@ -34,7 +35,7 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_hasUser = false;
 	this->_hasAuth = false;
 
-	std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;
+	std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;//debug
 }
 
 Client::Client( Client const &src){ *this = src; }
@@ -60,7 +61,7 @@ Client &Client::operator=( Client const &src )
 
 Client::~Client( void )
 {
-	// std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;
+	// std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;//debug
 }
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
