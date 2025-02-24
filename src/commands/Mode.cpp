@@ -312,9 +312,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	}
 	else
 	{
+/*	
 		for (size_t i = 0; i < option.size(); i++)
 		{
-			if (option[i] == '+' || option[i] == '-')//*o
+			if (option[i] == '+' || option[i] == '-')//o
 				sign = option[i];
 			else
 			{
@@ -349,6 +350,38 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}
+			}
+		}
+*/
+		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))
+		{
+			sign = option[0];
+			if (option[1] == 'i')
+				optionChain << inviteOnly_mode(channel, sign, optionChain.str());
+			else if (option[1] == 't')
+			{
+				optionChain << topic_mode(channel, sign, optionChain.str());
+			}
+			else if (option[1] == 'k')
+			{
+				optionChain << key_mode(channel, sign, param, optionChain.str());
+			}
+			else if (option[1] == 'o')
+			{
+				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
+			}
+			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
+			{
+				int maxUserLimit = MAX_USER_LIMIT_NUMBER;
+				optionChain << limit_mode(channel, sign, param, maxUserLimit);
+				if (optionChain.str().empty())
+					server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
+			}
+			else
+			{
+				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+				server->sendResp(chaErrMsg, fd);
+        		return ;
 			}
 		}
 		std::string chain = optionChain.str(); //+i
