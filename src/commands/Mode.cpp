@@ -370,7 +370,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			{
 				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
 			}
-			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
+			else if (option[1] == 'l' && sign == '+')
 			{
 				int maxUserLimit = MAX_USER_LIMIT_NUMBER;
 				optionChain << limit_mode(channel, sign, param, maxUserLimit);
@@ -379,10 +379,15 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			}
 			else
 			{
-				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I understand that "-l" option is not used IRC protocol by apardo-m
 				server->sendResp(chaErrMsg, fd);
         		return ;
 			}
+		}
+		else
+		{
+			std::cout << "TODO : Send Error Message" << std::endl;
+			return;
 		}
 		std::string chain = optionChain.str(); //+i
 		if (status == -1)
