@@ -16,7 +16,6 @@ int main(int argc, char const *argv[])
             signal(SIGINT, Server::signalsHandler);
 	        signal(SIGQUIT, Server::signalsHandler);
             signal(SIGPIPE, SIG_IGN);
-            // std::cout << "|" << password << "|" << std::endl;//debug
             if (!parseInput(password, port))
             {
                 Server server("ircserv", password, port);

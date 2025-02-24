@@ -9,6 +9,7 @@ void Pass::execute(Server* server, std::string &msg, int fd)
     msg = trimLeft(msg);
     msg = msg.substr(4);
     msg = trimLeft(msg);
+    msg = trimRight(msg);
     
     if (!msg.empty() && msg[0] == ':')
         msg = msg.substr(1);

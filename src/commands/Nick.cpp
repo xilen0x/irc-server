@@ -15,7 +15,6 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 	msg = msg.substr(4);
 	msg = trimLeft(msg);
 	std::vector<Client> clients = server->getClients();
-	//	Client *cl = server->getClient(clients, fd);
 	Client *cl = server->getClient(fd);
 	if (cl->getHasPass())
     {

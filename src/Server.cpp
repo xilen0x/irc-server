@@ -3,15 +3,12 @@
 #include "Messageprocessing.hpp"
 #include <cerrno>
 #include <cstdio>
-// #include "replies.hpp"
 
 Server::Server( void ) :_serverName("ircserv"), _password("password"), _port(50000), _fdServer(-1)
 {}
 
 Server::Server(std::string serverName, std::string password, int port) :_serverName(serverName), _password(password), _port(port), _fdServer(-1)
-{
-	// std::cout << "Server() => Set initial values" << std::endl;
-}
+{}
 
 //Function that creates the socket(_fdServer) and configures it.
 void Server::createSocket()
@@ -147,12 +144,12 @@ void Server::receiveData(int clientSocket)
         throw std::runtime_error("Failed to receive data from client");
     }
     else if (bytesRead == 0) {
-        clearClientFromClientsAndChanels(clientSocket, "Client disconnected1\n");//solve the issue when a client disconnects abruptly & connect again
+        clearClientFromClientsAndChanels(clientSocket, "[LOG][WARNING] Client disconnected1\n");//solve the issue when a client disconnects abruptly & connect again
         return;
     }
 
     buffer[bytesRead] = '\0';
-    std::cout << "Received data: " << buffer << std::endl;//debug
+    std::cout << "[LOG][INFO] Data received: " << buffer << std::endl;//debug
     // std::cout << "\nBuffer size: " << strlen(buffer) << std::endl;
     std::string message(buffer);
 
