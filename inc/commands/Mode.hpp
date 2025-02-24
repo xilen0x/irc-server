@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <sstream>
+# include <vector>
 # include "ICommand.hpp"
 
 class Mode : public ICommand
@@ -15,7 +16,8 @@ class Mode : public ICommand
 		~Mode( void );
 		// void execute( std::string & , int );
 		void execute( Server*, std::string &, int );
-		void getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param);
+//		void getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param);
+		bool getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param);
 		std::string inviteOnly_mode(Channel *ch, char sign, std::string optionChain);
 		std::string modeOption_push(std::string optionChain, char sign, char option);
 		std::string topic_mode(Channel *ch, char sign, std::string optionChain);

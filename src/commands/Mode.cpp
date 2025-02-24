@@ -111,7 +111,7 @@ std::string Mode::key_mode(Channel *ch, char sign, std::string key, std::string 
 	if (!isValidKey(key))
 	{
 		std::cout << "[Error]: Channel Key " << key << " is invalid!" << std::endl;
-    	return NULL;
+    	return "InvalidKey";
 	}
 	if (sign == '+' && !ch->getHasChannelKey())
 	{
@@ -119,6 +119,10 @@ std::string Mode::key_mode(Channel *ch, char sign, std::string key, std::string 
 		ch->setChannelKey(key);
 		ch->setModeOption(2, true);
 		strOption = modeOption_push(optionChain, sign, 'k');
+	}
+	else if (sign == '-' && ch->getHasChannelKey() && ch->getChannelKey() != key)
+	{
+		return "NoMatchKey";
 	}
 	else if (sign == '-' && ch->getHasChannelKey())
 	{
@@ -195,7 +199,7 @@ std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 	return strOption;
 }
 
-
+/*
 void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
 	std::istringstream ss(msg);
@@ -204,6 +208,23 @@ void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &o
 	size_t pos = msg.find_first_not_of(channelName + option + " \t\v");
 	if (pos != std::string::npos)
 		param = msg.substr(pos);
+}
+*/
+
+bool Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
+{
+	std::istringstream ss(msg);
+	std::vector<std::string> tokens;
+	std::string token;
+
+	while (ss >> token)
+		tokens.push_back(token);
+	if (tokens.size() < 2 || tokens.size() > 3)
+		return false;
+	channelName = tokens[0];
+	option = tokens[1];
+	param = (tokens.size() == 3) ? tokens[2] : "";
+	return true;
 }
 
 void Mode::execute( Server* server, std::string &msg , int fd)
@@ -215,6 +236,10 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	MODE #mychannel +l 25
 	mode #mychannel +t
 	MODE #mychannel -i
+	MODE #mychannel -o Bob
+	MODE #mychannel -k secret123
+	MODE #mychannel -l
+	mode #mychannel t
 
 	*/
 	std::string 		channelName;
@@ -234,18 +259,35 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
 		return ;
 	}
-	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 || (msg.size() >= 2 && (msg[0] != '#' && msg[0] != '&'))))) {
+	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
 		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
 		std::cout << "input channelname and channel mode option are incorrect!" << std::endl;//debug
+		return ;
+	}
+	else if (!msg.empty() && (msg[0] != '#' && msg[0] != '&'))
+	{
+		server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);
+		std::cout << "input channelname is incorrect!" << std::endl;//debug
 		return ;
 	}
 	else
 		msg = msg.substr(1); // mychannel +i remove the first # or &
 	std::cout << "mode msg: " << msg << std::endl; //debug
-	getModeArgs(msg, channelName, option, param); // mychannel +i
+	if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
+	{
+		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		server->sendResp(modeMsg, fd);
+		return ;
+	}
 	std::cout << "mode msg=" << msg << std::endl; //debug
 	std::cout << "option:" << option << std::endl; //debug
 	std::cout << "param:"  << param << std::endl; //debug
+	if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
+	{
+		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		server->sendResp(modeMsg, fd);
+		return ;
+	}
 	Client *cl = server->getClient(fd);
 	std::string nick = cl->getNick();
 	// the channelName doesn't exist 403
@@ -279,40 +321,55 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	}
 	else
 	{
-		for (size_t i = 0; i < option.size(); i++)
+
+		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
 		{
-			if (option[i] == '+' || option[i] == '-')//*o
-				sign = option[i];
-			else
+			sign = option[0];
+			if (option[1] == 'i')
+				optionChain << inviteOnly_mode(channel, sign, optionChain.str());
+			else if (option[1] == 't')
 			{
-				if (option[i] == 'i')
-					optionChain << inviteOnly_mode(channel, sign, optionChain.str());
-				else if (option[i] == 't')
+				optionChain << topic_mode(channel, sign, optionChain.str());
+			}
+			else if (option[1] == 'k')
+			{
+				std::string restr = key_mode(channel, sign, param, optionChain.str());		
+				if (restr == "InvalidKey") // the set channel key is invalid 525
 				{
-					optionChain << topic_mode(channel, sign, optionChain.str());
-				}
-				else if (option[i] == 'k')
-				{
-					optionChain << key_mode(channel, sign, param, optionChain.str());
-				}
-				else if (option[i] == 'o')
-				{
-					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-				}
-				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
-				{
-					optionChain << limit_mode(channel, sign, param);
-					if (optionChain.str().empty())
-						server->sendResp(FAIL_NOTINT(param),fd);
-				}
-				else
-				{
-					//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
-					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, sign + option[i])); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+					std::string chaErrMsg = formatIRCMessage(ERR_INVALIDKEY(nick, channelName));
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}
+				if (restr == "NoMatchKey")
+				{
+					std::string chaErrMsg = formatIRCMessage(FAIL_NOMATCHCHANNELKEY(msg));
+					server->sendResp(chaErrMsg, fd);
+					return ;
+				}
+				optionChain << restr;
 			}
+			else if (option[1] == 'o')
+			{
+				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
+			}
+			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
+			{
+				optionChain << limit_mode(channel, sign, param);
+				if (optionChain.str().empty())
+					server->sendResp(FAIL_NOTINT(param),fd);
+			}
+			else
+			{
+				//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
+				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+				server->sendResp(chaErrMsg, fd);
+        		return ;
+			}
+		}
+		else
+		{
+			server->sendResp(formatIRCMessage(FAIL_BADOPTIONFORMAT(option)), fd);
+			return ;
 		}
 		std::string chain = optionChain.str(); //+i
 		if (status == -1)
@@ -328,6 +385,5 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}	
 		std::string chaMsg = formatIRCMessage(RPL_CHANGEMODE(server->getServerName(), channelName, chain, param));
 		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
-	}
-	
+	}	
 }

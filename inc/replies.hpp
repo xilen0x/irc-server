@@ -70,6 +70,7 @@
 #define ERR_BADCHANNELKEY(nickname, channelname) (": 475 " + nickname + " #" + channelname + RED + " :Cannot join channel (+k)" + RES + CRLF )
 #define ERR_CHANOPRIVSNEEDED(nickname, channelname) (": 482 " + nickname + " #" + channelname + RED + " :You're not a channel operator" RES + CRLF)
 #define ERR_USERNOTINCHANNEL(nickname, channelname) (": 441 " + nickname + " #" + channelname + " :They aren't on that channel" + CRLF)
+#define ERR_INVALIDKEY(nickname, channelname) (": 525 " + nickname + " #" + channelname + RED + " :Key is not well-formed" + RES + CRLF )
 // ERR_INVALIDMODEPARAM (696)<client> <target chan/user> <mode char> <parameter> :<description>
 
 // PERSONALIZED ERRORS & REPLIES
@@ -84,5 +85,7 @@
 #define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)
 #define FAIL_BADPARAMSFORMAT(msg) (": FAIL " + msg + " :" + YEL + "Bad Parameters Format!" + RES + CRLF)
 #define FAIL_NOTINT(msg) (": FAIL " + msg + " :" + YEL + "Not positive integer provided!!" + RES + CRLF)
+#define FAIL_NOMATCHCHANNELKEY(msg) (": FAIL " + msg + " :" + YEL + "Not match channel key!" + RES + CRLF )
+#define FAIL_BADOPTIONFORMAT(modeoption) (": FAIL " + modeoption + " :" + YEL + "Bad channel mode!" + RES + CRLF)
 
 #endif
