@@ -83,7 +83,7 @@
 
 //FAILS
 #define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)
-#define FAIL_BADPARAMSFORMAT(msg) (": FAIL " + msg + " :" + YEL + "Bad Parameters Format!" + RES + CRLF)
+#define FAIL_BADPARAMSFORMAT(msg) (": FAIL " + msg + " :" + "Bad Parameters Format!" + CRLF)
 #define FAIL_NOTINT(msg) (": FAIL " + msg + " :" + YEL + "Not positive integer provided!!" + RES + CRLF)
 #define FAIL_NOINTORMAXLIMITUSERCHANNEL(msg, limit) (": FAIL " + msg + " :" + YEL + "Not positive integer provided or his limit can´t be set. This Server has MAX LIMIT PER CHANNEL in " + limit + " clients." + RES + CRLF)
 #define FAIL_NOMATCHCHANNELKEY(msg) (": FAIL " + msg + " :" + YEL + "Not match channel key!" + RES + CRLF )
