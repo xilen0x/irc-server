@@ -8,8 +8,10 @@
 class Mode : public ICommand
 {
 	private:
+		std::string	_intToString( int num );
 		bool		_isInt( const std::string &str );
-		std::string	limit_mode(Channel *ch, char sign, std::string param);
+		//std::string	limit_mode(Channel *ch, char sign, std::string param);
+		std::string	limit_mode(Channel *ch, char sign, std::string param, int maxLimitUser);
 
 	public:
 		~Mode( void );
