@@ -1,0 +1,30 @@
+en irssi:
+
+* Cuando el cliente(no operator) tres ejecuta: '/mode #3 +o tres', funciona bien pero no muestra el msg que muestra nc.
+
+* lo mismo con kick : '/kick #3 dos'
+
+* al conectarse de la forma : 
+	irssi -c 127.0.0.1 -p 50000 -w hola -n uno -!
+	se autentica bien al parecer, pero aparece el mensaje : 
+	'11:00 -!- FAIL  +i :Bad Parameters Format!'
+
+* al conectarse de la forma : 
+	irssi -c 127.0.0.1 -p 50000
+	/quote pass hola
+	/quote nick uno
+	/quote carlos 0 * : Carlos Astorga
+
+	se autentica bien al parecer, pero aparece el mensaje(justo despues de ingresar user) :
+	11:03 -!- FAIL  +i :Bad Parameters Format!
+
+*no actualiza el canal al hacer join
+
+* QUIT : Al entrar a irssi y QUIT sale bien.
+		Al estar dentro de un canal y QUIT sale bien.
+
+* JOIN : (sin /quote)Al unirse a un canal por 1a vez, por ejemplo : /join #3 va bien
+	Estando dentro del canal #3 y unirse a otro (/join #test) conecta y se refleja bien.
+
+* JOIN : (con quote) : /quote join #3 , conecta bien pero no limpia pantalla ni refleja el canal en la barra de estado.
+

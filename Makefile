@@ -7,7 +7,7 @@ DEP_DIR = .dep/
 
 # Compilador y FLAGS
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands -g -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc -I./inc/commands -g #-fsanitize=address
 
 # Archivos fuente y cabeceras
 SRC_FILES = src/main.cpp \
