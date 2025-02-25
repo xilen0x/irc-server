@@ -223,15 +223,30 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 		passWor = vecStr[0];
 		vecStr.clear();
 	}
+	size_t numChComma = 0;// count the number of commas in channelName
+	size_t numPaComma = 0;// count the number of commas in passWor
 	for (size_t i = 0; i < channelName.size(); i++)
 	{
 		if (channelName[i] == ',')
 		{
 			parVec.push_back(std::make_pair(buff, ""));
 			buff.clear();
+			numChComma++;
 		}
 		else
 			buff += channelName[i];
+	}
+	for (size_t i = 0; i < passWor.size(); i++)
+	{
+		if (passWor[i] == ',')
+			numPaComma++;
+	}
+	if (numChComma != numPaComma)
+	{
+		std::string joinMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		server->sendResp(joinMsg, fd);
+		parVec.clear();
+		return false;
 	}
 	parVec.push_back(std::make_pair(buff, ""));
 	if (!passWor.empty())

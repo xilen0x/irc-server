@@ -103,7 +103,7 @@ bool isValidKey(std::string key)
 		return false;
 	for (size_t i = 0; i < key.size(); i++)
 	{
-		if (key[i] < 33 || key[i] > 126)
+		if (key[i] < 33 || key[i] > 126 || key[i] == 44)
 			return false;
 	}
 	return true;
@@ -118,7 +118,7 @@ std::string Mode::key_mode(Channel *ch, char sign, std::string key, std::string 
 		std::cout << "[Error]: Channel Key " << key << " is invalid!" << std::endl;
     	return "InvalidKey";
 	}
-	if (sign == '+' && !ch->getHasChannelKey())
+	if (sign == '+' && (!ch->getHasChannelKey() || (ch->getHasChannelKey() && ch->getChannelKey() != key)))
 	{
 		ch->setHasChannelKey(true);
 		ch->setChannelKey(key);
@@ -256,7 +256,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	MODE #mychannel -o Bob
 	MODE #mychannel -k secret123
 	MODE #mychannel -l
-	mode #mychannel t
+	mode #mychannel -t
 
 	*/
 	std::string 		channelName;
@@ -315,6 +315,12 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
 	{
 		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
+		server->sendResp(modeMsg, fd);
+		return ;
+	}
+	if (!param.empty() && (option == "+i" || option == "-i" || option == "+t" || option == "-t" || option == "-l"))
+	{
+		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
 		server->sendResp(modeMsg, fd);
 		return ;
 	}
@@ -406,7 +412,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 			return ;
 		}
-		if (chain.empty())
+		if (chain.empty()) //Sent to a client to inform them of the currently-set modes of a channel: "<client> <channel> <modestring> <mode arguments>..."
 		{
 			std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
 			server->sendResp(chaMsg, fd);
