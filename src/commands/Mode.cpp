@@ -33,34 +33,6 @@ bool    Mode::_isInt( const std::string &str )
     return (false);
 }
 
-/*
-std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
-{
-	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
-	//	https://modern.ircdocs.horse/#channel-modes
-
-	int	limit;
-	std::string strOption;
-	
-	strOption = "";
-	if (_isInt(param))
-	{
-		limit = std::atoi(param.c_str());
-		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= std::numeric_limits<int>::max())
-		{
-			ch->setUserLimitActived();
-			ch->setUserLimitNumber(limit);
-			ch->setModeOption(4, true);
-			strOption = modeOption_push(param, sign, 'l');
-			ch->printChannelVars(); //debug
-		}
-	}
-	else
-		std::cout << "param=" << param << " NO es INT" << std::endl;
-	return (strOption);
-}
-*/
-
 std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxLimitUser)
 {
 	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
@@ -354,80 +326,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	}
 	else
 	{
-/*	
-		for (size_t i = 0; i < option.size(); i++)
-		{
-			if (option[i] == '+' || option[i] == '-')//o
-				sign = option[i];
-			else
-			{
-				optionChain << topic_mode(channel, sign, optionChain.str());
-			}
-			else if (option[1] == 'k')
-			{
-				std::string restr = key_mode(channel, sign, param, optionChain.str());		
-				if (restr == "InvalidKey") // the set channel key is invalid 525
-				{
-					optionChain << topic_mode(channel, sign, optionChain.str());
-				}
-				else if (option[i] == 'k')
-				{
-					optionChain << key_mode(channel, sign, param, optionChain.str());
-				}
-				else if (option[i] == 'o')
-				{
-					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-				}
-				else if (option[i] == 'l' && sign == '+') //WIP by apardo-m
-				{
-					int maxUserLimit = MAX_USER_LIMIT_NUMBER;
-					optionChain << limit_mode(channel, sign, param, maxUserLimit);
-					if (optionChain.str().empty())
-					{
-					//	server->sendResp(FAIL_NOTINT(param),fd);
-						server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
-					 }
-				}
-				else
-				{
-					//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
-					std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, sign + option[i])); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
-					server->sendResp(chaErrMsg, fd);
-        			return ;
-				}
-				if (restr == "NoMatchKey")
-				{
-					std::string chaErrMsg = formatIRCMessage(FAIL_NOMATCHCHANNELKEY(msg));
-					server->sendResp(chaErrMsg, fd);
-					return ;
-				}
-				optionChain << restr;
-			}
-			else if (option[1] == 'o')
-			{
-				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-			}
-			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
-			{
-				optionChain << limit_mode(channel, sign, param);
-				if (optionChain.str().empty())
-					server->sendResp(FAIL_NOTINT(param),fd);
-			}
-			else
-			{
-				//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
-				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
-				server->sendResp(chaErrMsg, fd);
-        		return ;
-			}
-		}
-		else
-		{
-			server->sendResp(formatIRCMessage(FAIL_BADOPTIONFORMAT(option)), fd);
-			return ;
-		}
-*/
-		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))
+		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
 		{
 			sign = option[0];
 			if (option[1] == 'i')
@@ -438,7 +337,20 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			}
 			else if (option[1] == 'k')
 			{
-				optionChain << key_mode(channel, sign, param, optionChain.str());
+				std::string restr = key_mode(channel, sign, param, optionChain.str());		
+				if (restr == "InvalidKey") // the set channel key is invalid 525
+				{
+					std::string chaErrMsg = formatIRCMessage(ERR_INVALIDKEY(nick, channelName));
+					server->sendResp(chaErrMsg, fd);
+        			return ;
+				}
+				if (restr == "NoMatchKey")
+				{
+					std::string chaErrMsg = formatIRCMessage(FAIL_NOMATCHCHANNELKEY(msg));
+					server->sendResp(chaErrMsg, fd);
+					return ;
+				}
+				optionChain << restr;
 			}
 			else if (option[1] == 'o')
 			{
@@ -457,6 +369,11 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				server->sendResp(chaErrMsg, fd);
         		return ;
 			}
+		}
+		else
+		{
+			server->sendResp(formatIRCMessage(FAIL_BADOPTIONFORMAT(option)), fd);
+			return ;
 		}
 		std::string chain = optionChain.str(); //+i
 		if (status == -1)
