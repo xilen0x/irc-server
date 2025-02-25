@@ -113,7 +113,7 @@ std::string Mode::key_mode(Channel *ch, char sign, std::string key, std::string 
 		std::cout << "[Error]: Channel Key " << key << " is invalid!" << std::endl;
     	return "InvalidKey";
 	}
-	if (sign == '+' && !ch->getHasChannelKey())
+	if (sign == '+' && (!ch->getHasChannelKey() || (ch->getHasChannelKey() && ch->getChannelKey() != key)))
 	{
 		ch->setHasChannelKey(true);
 		ch->setChannelKey(key);
