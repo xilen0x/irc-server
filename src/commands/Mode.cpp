@@ -326,8 +326,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	}
 	else
 	{
-
-if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
+		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
 		{
 			sign = option[0];
 			if (option[1] == 'i')
@@ -366,7 +365,6 @@ if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
 			}
 			else
 			{
-				//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
 				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
 				server->sendResp(chaErrMsg, fd);
         		return ;

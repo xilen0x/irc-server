@@ -115,24 +115,6 @@ bool validateNick(std::string &s) {
     return (true);
 }
 
-// bool validateNick(std::string &s)
-// {
-// 	if (s.size() > 9 || s.size() <= 0)
-// 		return (false);
-// 	const std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_[]{}\\|^";
-// 	const std::string prohibited = " &#:@!*\t";
-// 	if (!s.empty() && prohibited.find_first_of(s[0]) != std::string::npos)
-// 		return (false);
-// 	for (size_t i = 1; i < s.size(); i++)
-// 	{
-// 		if (allowedChars.find(s[i]) == std::string::npos)
-// 			return (false);//if the character is not in the allowedChars string
-// 	}
-// 	if (uppercase(s) == "NICKSERV" || uppercase(s) == "CHANSERV")
-// 		return (false);
-// 	return (true);
-// }
-
 //Function that check if the client is authenticated
 int isAuthenticated(Client* client, Server* server, int fd) {
     if (client->getHasAuth()) {
