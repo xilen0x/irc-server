@@ -232,18 +232,6 @@ bool Mode::getModeArgs(std::string msg, std::string &channelName, std::string &o
 	return true;
 }
 
-void removeAnsiCodes(std::string &str) {
-    size_t pos;
-    while ((pos = str.find("\033[")) != std::string::npos) { // "\033[" es equivalente a "\e["
-        size_t end = str.find('m', pos);  // Buscar el final del código ANSI
-        if (end != std::string::npos) {
-            str.erase(pos, end - pos + 1); // Eliminar el código ANSI
-        } else {
-            break; // Evitar bucles infinitos si no hay 'm'
-        }
-    }
-}
-
 void Mode::execute( Server* server, std::string &msg , int fd)
 {
 	/* // the following is the example of the format of channel mode command:
@@ -269,7 +257,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::cout << "Mode command is called!" << std::endl;//debug
 	//si el mensaje, incluido el comando, es igual a 'MODE  +i' 
 	// std::cout << "Message: " << msg << "|" << std::endl;//debug
-	removeAnsiCodes(msg);
+	//removeAnsiCodes(msg);
 	// for (size_t i = 0; i < msg.size(); i++)
 		// std::cout << "i:" << msg[i] << std::endl;
 	msg = trimLeft(msg);
@@ -281,7 +269,13 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	msg = trimRight(msg);
 	// #mychannel +i/+i/-i
 	// std::cout << "Message after trimRight:" << msg << "|" << std::endl;//debug
-	std::cout << (int)msg[0] << "," <<(int)msg[1] << std::endl;//debug
+
+	if (!msg.empty() && msg[0] != '+' && msg[0] != '-')
+	{
+		removeAnsiCodes(msg);
+	}
+
+	//`std::cout << (int)msg[0] << "," <<(int)msg[1] << std::endl;//debug
 	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
 	{
 		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
