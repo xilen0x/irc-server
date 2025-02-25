@@ -98,7 +98,7 @@ bool isValidKey(std::string key)
 		return false;
 	for (size_t i = 0; i < key.size(); i++)
 	{
-		if (key[i] < 33 || key[i] > 126)
+		if (key[i] < 33 || key[i] > 126 || key[i] == 44)
 			return false;
 	}
 	return true;
