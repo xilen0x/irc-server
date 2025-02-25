@@ -298,7 +298,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::cout << "mode msg: " << msg << std::endl; //debug
 	if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
 	{
-		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(modeMsg, fd);
 		return ;
 	}
@@ -307,7 +307,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::cout << "param:"  << param << std::endl; //debug
 	if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
 	{
-		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(modeMsg, fd);
 		return ;
 	}
@@ -316,21 +316,21 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	// the channelName doesn't exist 403
 	if (!server->getChannelByChannelName(channelName))
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(nick, channelName));
+		std::string chaErrMsg = ERR_NOSUCHCHANNEL(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
 	// if the inviting client doesn't in this channel 442
 	if (!server->getChannelByChannelName(channelName)->getCliInChannel(nick))
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_NOTONCHANNEL(nick, channelName));
+		std::string chaErrMsg = ERR_NOTONCHANNEL(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
 	//if the invitor isn't operator of this channel 482
 	if (!server->getChannelByChannelName(channelName)->isOpe(nick))
     {
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
+		std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
@@ -338,7 +338,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	//if the option of MODE is empty
 	if (option.empty())
 	{
-		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
+		std::string chaErrMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
 		server->sendResp(chaErrMsg, fd);
         return ;
 	}
@@ -358,13 +358,13 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				std::string restr = key_mode(channel, sign, param, optionChain.str());		
 				if (restr == "InvalidKey") // the set channel key is invalid 525
 				{
-					std::string chaErrMsg = formatIRCMessage(ERR_INVALIDKEY(nick, channelName));
+					std::string chaErrMsg = ERR_INVALIDKEY(nick, channelName);
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}
 				if (restr == "NoMatchKey")
 				{
-					std::string chaErrMsg = formatIRCMessage(FAIL_NOMATCHCHANNELKEY(msg));
+					std::string chaErrMsg = FAIL_NOMATCHCHANNELKEY(msg);
 					server->sendResp(chaErrMsg, fd);
 					return ;
 				}
@@ -400,14 +400,14 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			}
 			else
 			{
-				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+				std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
 				server->sendResp(chaErrMsg, fd);
         		return ;
 			}
 		}
 		else
 		{
-			server->sendResp(formatIRCMessage(FAIL_BADOPTIONFORMAT(option)), fd);
+			server->sendResp(FAIL_BADOPTIONFORMAT(option), fd);
 			return ;
 		}
 
@@ -419,11 +419,11 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		if (chain.empty())
 		{
-			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
+			std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
 			server->sendResp(chaMsg, fd);
 			return ;
 		}	
-		std::string chaMsg = formatIRCMessage(RPL_CHANGEMODE(server->getServerName(), channelName, chain, param));
+		std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName, chain, param);
 		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 	}	
 }

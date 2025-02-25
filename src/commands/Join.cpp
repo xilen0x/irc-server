@@ -114,7 +114,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		}
 	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));
+		std::string chaErrMsg = ERR_TOOMANYCHANNELS(nick);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
@@ -123,7 +123,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	{
 		if (!isInvited(server, cl, parVec[ipar].first, 0))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, ch->getChannelName()));
+			std::string chaErrMsg = ERR_BADCHANNELKEY(nick, ch->getChannelName());
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
@@ -134,14 +134,14 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	{
 		if (!isInvited(server, cl, parVec[ipar].first, 1))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, ch->getChannelName()));
+			std::string chaErrMsg = ERR_INVITEONLYCHAN(nick, ch->getChannelName());
 				server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 	}
 	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, ch->getChannelName()));
+		std::string chaErrMsg = ERR_CHANNELISFULL(nick, ch->getChannelName());
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
@@ -150,20 +150,20 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	if (ch->getTopic().empty())
 	{
 		std::cout << "processJoin!" << std::endl;///////////////////////
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
+		std::string replyMsg1 = RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName());
 		std::cout << "LLega 1!" << std::endl;///////////////////////
-		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
+		std::string replyMsg2 = RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList());
 		std::cout << "LLega 2!"  << std::endl;///////////////////////
-		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
+		std::string replyMsg3 = RPL_ENDOFNAMES(nick, ch->getChannelName());
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
 		server->sendResp(replyMsg, fd);
 	}
 	else
 	{
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_TOPIC(cl->getNick(), ch->getChannelName(), ch->getTopic()));
-		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
-		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
+		std::string replyMsg1 = RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName());
+		std::string replyMsg2 = RPL_TOPIC(cl->getNick(), ch->getChannelName(), ch->getTopic());
+		std::string replyMsg3 = RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList());
+		std::string replyMsg4 = RPL_ENDOFNAMES(nick, ch->getChannelName());
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
 		server->sendResp(replyMsg, fd);
 	}
@@ -175,7 +175,7 @@ static void handleNonChannel(Server* server, std::vector<std::pair<std::string, 
 	std::string nick = cl->getNick();
 	if (sumChannels(server, nick) >= 10)
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));
+		std::string chaErrMsg = ERR_TOOMANYCHANNELS(nick);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
@@ -185,9 +185,9 @@ static void handleNonChannel(Server* server, std::vector<std::pair<std::string, 
 //	server->getChannels().push_back(newChan);
 	server->addChannel(newChan);
 	std::cout << "handleNonChannel!" << std::endl;///////////////////////////
-	std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), newChan.getChannelName()));
-	std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, newChan.getChannelName(), newChan.getClientsList()));
-	std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, newChan.getChannelName()));
+	std::string replyMsg1 = RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), newChan.getChannelName());
+	std::string replyMsg2 = RPL_NAMREPLY(nick, newChan.getChannelName(), newChan.getClientsList());
+	std::string replyMsg3 = RPL_ENDOFNAMES(nick, newChan.getChannelName());
 	std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
 	server->sendResp(replyMsg, fd);
 }
@@ -201,7 +201,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 		vecStr.push_back(msg);
 	if (vecStr.size() < 2)
 	{
-		std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), vecStr[0]));
+		std::string joinMsg = ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), vecStr[0]);
 		server->sendResp(joinMsg, fd);
 		parVec.clear();
 		return false;
@@ -210,7 +210,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 				(vecStr.size() == 3 && !vecStr[1].empty() && !vecStr[2].empty() && vecStr[1].size() == 1))
 	{
 //		std::string vecStr[1] = trimRight(vecStr[1]);
-		std::string joinMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string joinMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(joinMsg, fd);
 		parVec.clear();
 		return false;
@@ -260,7 +260,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	{
 		if (*(parVec[i].first.begin()) != '#' && *(parVec[i].first.begin()) != '&')
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(server->getClient(fd)->getNick(), parVec[i].first));
+			std::string chaErrMsg = ERR_NOSUCHCHANNEL(server->getClient(fd)->getNick(), parVec[i].first);
 			server->sendResp(chaErrMsg, fd);
 			parVec.erase(parVec.begin() + i--);
 			return false;
@@ -282,14 +282,14 @@ void Join::execute( Server* server, std::string &msg , int fd)
 
 		if (!parseJoin(server, parVec, msg, fd))
 		{
-//			std::string joinMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd)));
+//			std::string joinMsg = ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd));
 //			server->sendResp(joinMsg, fd);
 			return ;
 		}
 
 		if (parVec.size() > 1)
 		{
-			std::string joinMsg = formatIRCMessage(RPL_INFO(server->getClient(fd)->getNick()));
+			std::string joinMsg = RPL_INFO(server->getClient(fd)->getNick());
 			server->sendResp(joinMsg, fd);	
 			return ;
 		}
