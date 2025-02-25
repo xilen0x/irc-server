@@ -206,7 +206,8 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 		parVec.clear();
 		return false;
 	}
-	else if (vecStr.size() > 3 || (vecStr.size() == 2 && !vecStr[1].empty() && vecStr[1].size() == 1))
+	else if (vecStr.size() > 3 || (vecStr.size() == 2 && !vecStr[1].empty() && vecStr[1].size() == 1) ||
+				(vecStr.size() == 3 && !vecStr[1].empty() && !vecStr[2].empty() && vecStr[1].size() == 1))
 	{
 //		std::string vecStr[1] = trimRight(vecStr[1]);
 		std::string joinMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
