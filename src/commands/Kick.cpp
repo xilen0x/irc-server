@@ -95,5 +95,5 @@ void Kick::execute(Server* server, std::string &msg, int fd)
     }
 	printChannelsInfo(server);//debug
 	//log to the console
-    std::cout << YEL << "User " << server->getClient(fd)->getNick() << " has executed KICK command" << RES << std::endl;
+    std::cout << "[LOG][INFO] User " << server->getClient(fd)->getNick() << " has executed KICK command" << std::endl;
 }

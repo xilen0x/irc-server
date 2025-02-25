@@ -11,6 +11,8 @@
 # include "Server.hpp"
 # include "Client.hpp"
 
+# define MAX_USER_LIMIT_NUMBER 100
+
 class Client;
 
 class Channel

@@ -108,7 +108,10 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	std::string nick = cl->getNick();
 	std::cout << "processJoining... nick= " << nick << std::endl;///////////////////
 	if (ch->getCliExceptInv(nick)) // the client has already been in the _memClient(_operators) list of this channel
-		return ;
+		{
+			server->sendResp(ERR_USERONCHANNEL(nick, ch->getChannelName()), fd);///testing!!!!!!
+			return ;
+		}
 	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
 	{
 		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));

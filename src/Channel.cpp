@@ -1,7 +1,6 @@
 
 # include "Channel.hpp"
 
-# define DEFAULT_LIMIT 100
 
 // Private For debugging
 void	Channel::_printVectorStrings(std::vector<std::string> stringVector)
@@ -25,8 +24,16 @@ void	Channel::_printMapKeys(std::map<std::string, Client *> mapVar)
 }
 
 /* ------------------- PUBLIC Constructor/ Destructor FUNCTIONS ------------------*/
-Channel::Channel( void ) : _channelName(""), _inviteChannel(false), _hasChannelKey(false), _channelKey("")
+Channel::Channel( void )
 {
+	this->_channelName = "";
+	this->_inviteChannel = false;
+	this->_topic = "";
+	this->_topicRestricted = false;
+	this->_hasChannelKey = false;
+	this->_channelKey = "";
+	this->_hasUserLimit = false;
+	this->_userLimitNumber = MAX_USER_LIMIT_NUMBER;
 	char cha[5] = {'i', 't', 'k', 'o', 'l'};
 	for (int i = 0; i < 5; i++)
 		this->_modeOptions.push_back(std::make_pair(cha[i], false));
@@ -59,7 +66,7 @@ Channel::Channel( std::string channelName, std::string operatorNick, Client *ope
 	this->_hasChannelKey = false;
 	this->_channelKey = "";
 	this->_hasUserLimit = false;
-	this->_userLimitNumber = DEFAULT_LIMIT;
+	this->_userLimitNumber = MAX_USER_LIMIT_NUMBER;
 //	this->_operators.push_back(operatorNick);  // 250212 - Delete ????? 
 	this->_operator[operatorNick] = operatorClient;
 	char cha[5] = {'i', 't', 'k', 'o', 'l'};

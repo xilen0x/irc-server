@@ -5,6 +5,14 @@
 #define MIN_CLIENTS_IN_CHANNEL 1
 
 /* ------------------- PRIVATE MEMBER FUNCTIONS ------------------*/
+
+std::string	Mode::_intToString( int num )
+{
+	std::ostringstream convert;   // stream used for the conversion
+	convert << num;      // insert the textual representation of 'Number' in the characters in the stream
+	return (convert.str()) ;
+}
+
 /*
  * <cstdlib> : std::strtol
  * <limits>  : std::numeric_limits<int>
@@ -25,10 +33,9 @@ bool    Mode::_isInt( const std::string &str )
     return (false);
 }
 
-
-std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
+std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxLimitUser)
 {
-	// Limit range : Minimum:1   MaxLimit: 2147483647
+	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
 	//	https://modern.ircdocs.horse/#channel-modes
 
 	int	limit;
@@ -38,7 +45,7 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 	if (_isInt(param))
 	{
 		limit = std::atoi(param.c_str());
-		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= std::numeric_limits<int>::max())
+		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= maxLimitUser)
 		{
 			ch->setUserLimitActived();
 			ch->setUserLimitNumber(limit);
@@ -47,8 +54,6 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param)
 			ch->printChannelVars(); //debug
 		}
 	}
-	else
-		std::cout << "param=" << param << " NO es INT" << std::endl;
 	return (strOption);
 }
 
@@ -227,6 +232,18 @@ bool Mode::getModeArgs(std::string msg, std::string &channelName, std::string &o
 	return true;
 }
 
+void removeAnsiCodes(std::string &str) {
+    size_t pos;
+    while ((pos = str.find("\033[")) != std::string::npos) { // "\033[" es equivalente a "\e["
+        size_t end = str.find('m', pos);  // Buscar el final del código ANSI
+        if (end != std::string::npos) {
+            str.erase(pos, end - pos + 1); // Eliminar el código ANSI
+        } else {
+            break; // Evitar bucles infinitos si no hay 'm'
+        }
+    }
+}
+
 void Mode::execute( Server* server, std::string &msg , int fd)
 {
 	/* // the following is the example of the format of channel mode command:
@@ -248,15 +265,28 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::stringstream 	optionChain;
 	char				sign = '\0';
 	int 				status = 0;
-	
+
 	std::cout << "Mode command is called!" << std::endl;//debug
+	//si el mensaje, incluido el comando, es igual a 'MODE  +i' 
+	// std::cout << "Message: " << msg << "|" << std::endl;//debug
+	removeAnsiCodes(msg);
+	// for (size_t i = 0; i < msg.size(); i++)
+		// std::cout << "i:" << msg[i] << std::endl;
 	msg = trimLeft(msg);
 	msg = msg.substr(4);
+	// std::cout << "Message before         :" << msg << "|" << std::endl;//debug
+	// std::cout << "SIZE:" << msg.size() << std::endl;//debug
 	msg = trimLeft(msg);
+	// std::cout << "Message after          :" << msg << "|" << std::endl;//debug
 	msg = trimRight(msg);
 	// #mychannel +i/+i/-i
-	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) {
+	// std::cout << "Message after trimRight:" << msg << "|" << std::endl;//debug
+	std::cout << (int)msg[0] << "," <<(int)msg[1] << std::endl;//debug
+	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
+	{
 		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
+	// if (msg == "MODE  +i" || "WHOIS ")
+	// 	return ;
 		return ;
 	}
 	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
@@ -266,7 +296,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	}
 	else if (!msg.empty() && (msg[0] != '#' && msg[0] != '&'))
 	{
-		server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);
+		server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);//aqui entra de forma automatica irssi
 		std::cout << "input channelname is incorrect!" << std::endl;//debug
 		return ;
 	}
@@ -275,7 +305,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::cout << "mode msg: " << msg << std::endl; //debug
 	if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
 	{
-		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(modeMsg, fd);
 		return ;
 	}
@@ -284,7 +314,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	std::cout << "param:"  << param << std::endl; //debug
 	if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
 	{
-		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(modeMsg, fd);
 		return ;
 	}
@@ -299,21 +329,21 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	// the channelName doesn't exist 403
 	if (!server->getChannelByChannelName(channelName))
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(nick, channelName));
+		std::string chaErrMsg = ERR_NOSUCHCHANNEL(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
 	// if the inviting client doesn't in this channel 442
 	if (!server->getChannelByChannelName(channelName)->getCliInChannel(nick))
 	{
-		std::string chaErrMsg = formatIRCMessage(ERR_NOTONCHANNEL(nick, channelName));
+		std::string chaErrMsg = ERR_NOTONCHANNEL(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
 	//if the invitor isn't operator of this channel 482
 	if (!server->getChannelByChannelName(channelName)->isOpe(nick))
     {
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
+		std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
@@ -321,13 +351,12 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	//if the option of MODE is empty
 	if (option.empty())
 	{
-		std::string chaErrMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
+		std::string chaErrMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
 		server->sendResp(chaErrMsg, fd);
         return ;
 	}
 	else
 	{
-
 		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
 		{
 			sign = option[0];
@@ -342,13 +371,13 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				std::string restr = key_mode(channel, sign, param, optionChain.str());		
 				if (restr == "InvalidKey") // the set channel key is invalid 525
 				{
-					std::string chaErrMsg = formatIRCMessage(ERR_INVALIDKEY(nick, channelName));
+					std::string chaErrMsg = ERR_INVALIDKEY(nick, channelName);
 					server->sendResp(chaErrMsg, fd);
         			return ;
 				}
 				if (restr == "NoMatchKey")
 				{
-					std::string chaErrMsg = formatIRCMessage(FAIL_NOMATCHCHANNELKEY(msg));
+					std::string chaErrMsg = FAIL_NOMATCHCHANNELKEY(msg);
 					server->sendResp(chaErrMsg, fd);
 					return ;
 				}
@@ -360,21 +389,21 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			}
 			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
 			{
-				optionChain << limit_mode(channel, sign, param);
+				int maxUserLimit = MAX_USER_LIMIT_NUMBER;
+				optionChain << limit_mode(channel, sign, param, maxUserLimit);
 				if (optionChain.str().empty())
-					server->sendResp(FAIL_NOTINT(param),fd);
+					server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
 			}
 			else
 			{
-				//std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option[i]));
-				std::string chaErrMsg = formatIRCMessage(ERR_UNKNOWNMODE(nick, channelName, option)); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+				std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
 				server->sendResp(chaErrMsg, fd);
         		return ;
 			}
 		}
 		else
 		{
-			server->sendResp(formatIRCMessage(FAIL_BADOPTIONFORMAT(option)), fd);
+			server->sendResp(FAIL_BADOPTIONFORMAT(option), fd);
 			return ;
 		}
 		std::string chain = optionChain.str(); //+i
@@ -385,11 +414,11 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		if (chain.empty()) //Sent to a client to inform them of the currently-set modes of a channel: "<client> <channel> <modestring> <mode arguments>..."
 		{
-			std::string chaMsg = formatIRCMessage(RPL_CHANNELMODEIS(nick, channelName, option, param));
+			std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
 			server->sendResp(chaMsg, fd);
 			return ;
 		}	
-		std::string chaMsg = formatIRCMessage(RPL_CHANGEMODE(server->getServerName(), channelName, chain, param));
+		std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName, chain, param);
 		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 	}	
 }
