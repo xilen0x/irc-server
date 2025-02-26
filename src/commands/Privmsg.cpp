@@ -6,9 +6,6 @@ Privmsg::~Privmsg( void ) {};
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
 
-//PRIVMSG  <target>{,<target>} <text to be sent>
-//	target can be client or Channel
-
 void Privmsg::execute( Server* server, std::string &msg , int fd)
 {
 	std::vector<std::string>	str;
@@ -20,7 +17,6 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 
 	if (isAuthenticated(server->getClient(fd), server, fd))
 	{
-		std::cout << "    ----" << std::endl;
 		cl = server->getClientByFD(fd);
 		nick = cl->getNick();
 		deleteRN(msg);
@@ -36,8 +32,6 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(FAIL_LOTPARAMS(msg), fd);
 			return;
 		}
-		std::cout << "--- target : " << str[1] << std::endl;
-		//channel
 		if ((str[1][0] == '#' || str[1][0] == '&'))
 		{
 			str[1] = str[1].substr(1);
@@ -59,7 +53,6 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 			}
 			server->sendBroadOthersInChannel(MSG_PRIVMSG_TO_CHANNEL(cl->getNick(), str[1], splitedStrVect[1]), ch, fd);
 		}
-		// nick
 		else
 		{
 			str[1] = uppercase(str[1]);
@@ -75,6 +68,5 @@ void Privmsg::execute( Server* server, std::string &msg , int fd)
 			}
 			server->sendResp(MSG_PRIVMSG_TO_NICK(cl->getNick(), str[1], splitedStrVect[1]), server->getFdClientByNick(str[1]));
 		}
-		std::cout << "    ----\n" << std::endl;
 	}
 }

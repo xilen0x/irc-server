@@ -36,80 +36,15 @@ static bool isInvited(Server* server, Client *cl, std::string channelName, int f
 	return false;
 }
 
-/*
-// 250207 revisar por que no queda persistente
-static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
-{
-//	std::vector<Channel> channels = server->getChannels();
-	Channel *ch = server->getChannelsByNumPosInVector(jchan);
-	Client *cl = server->getClient(fd);
-	std::string nick = cl->getNick();
-	if (ch->getCliInChannel(nick)) // the client has already been in this channel
-		return ;
-	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
-	{
-		std::string chaErrMsg = formatIRCMessage(ERR_TOOMANYCHANNELS(nick));
-		server->sendResp(chaErrMsg, fd);
-		return ;
-	}
-	// if the password of channel input is incorrect
-	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)
-	{
-		if (!isInvited(cl, parVec[ipar].first, 0))
-		{
-			std::string chaErrMsg = formatIRCMessage(ERR_BADCHANNELKEY(nick, ch->getChannelName()));
-			server->sendResp(chaErrMsg, fd);
-			return ;
-		}
-	}
-	//if the channel is in only-invited mode
-	if (ch->isInviteChannel())
-	{
-		if (!isInvited(cl, parVec[ipar].first, 1))
-		{
-			std::string chaErrMsg = formatIRCMessage(ERR_INVITEONLYCHAN(nick, ch->getChannelName()));
-			server->sendResp(chaErrMsg, fd);
-			return ;
-		}
-	}
-	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
-	{
-		std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(nick, ch->getChannelName()));
-		server->sendResp(chaErrMsg, fd);
-		return ;
-	}
-	ch->addMem(cl);
-	if (ch->getTopic().empty())
-	{
-		std::cout << "processJoin!" << std::endl;///////////////////////
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
-		std::string replyMsg3 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
-		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
-		server->sendResp(replyMsg, fd);
-	}
-	else
-	{
-		std::string replyMsg1 = formatIRCMessage(RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName()));
-		std::string replyMsg2 = formatIRCMessage(RPL_TOPICIS(cl->getNick(), ch->getChannelName(), ch->getTopic()));
-		std::string replyMsg3 = formatIRCMessage(RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList()));
-		std::string replyMsg4 = formatIRCMessage(RPL_ENDOFNAMES(nick, ch->getChannelName()));
-		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3 + replyMsg4;
-		server->sendResp(replyMsg, fd);
-	}
-}
-*/
 
-// 250210 Done by apardo-m
 static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
 {
 	Channel	*ch = server->getChannelsByNumPosInVector(jchan);
 	Client *cl = server->getClient(fd);
 	std::string nick = cl->getNick();
-	std::cout << "processJoining... nick= " << nick << std::endl;///////////////////
 	if (ch->getCliExceptInv(nick)) // the client has already been in the _memClient(_operators) list of this channel
 		{
-			server->sendResp(ERR_USERONCHANNEL(nick, ch->getChannelName()), fd);///testing!!!!!!
+			server->sendResp(ERR_USERONCHANNEL(nick, ch->getChannelName()), fd);//debug
 			return ;
 		}
 	if (sumChannels(server, nick) >= 10) // the client cannot join more than 10 channels
@@ -119,7 +54,7 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		return ;
 	}
 	// if the password of channel input is incorrect
-	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)//////////////////////???
+	if (!ch->getChannelKey().empty() && ch->getChannelKey() != parVec[ipar].second)
 	{
 		if (!isInvited(server, cl, parVec[ipar].first, 0))
 		{
@@ -128,7 +63,6 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 			return ;
 		}
 	}
-	std::cout << "check isInviteChannel " << std::endl;///////////////////
 	//if the channel is in only-invited mode
 	if (ch->isInviteChannel())
 	{
@@ -140,7 +74,6 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 		}
 	}
 	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber() && !ch->isInv(nick))
-//	if (ch->getUserLimitNumber() && ch->getOperAndMemSum() >= ch->getUserLimitNumber())
 	{
 		std::string chaErrMsg = ERR_CHANNELISFULL(nick, ch->getChannelName());
 		server->sendResp(chaErrMsg, fd);
@@ -151,11 +84,8 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 	server->getChannelByChannelName(channelName)->deleteInv(nick);
 	if (ch->getTopic().empty())
 	{
-		std::cout << "processJoin!" << std::endl;///////////////////////
 		std::string replyMsg1 = RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), ch->getChannelName());
-		std::cout << "LLega 1!" << std::endl;///////////////////////
 		std::string replyMsg2 = RPL_NAMREPLY(nick, ch->getChannelName(), ch->getClientsList());
-		std::cout << "LLega 2!"  << std::endl;///////////////////////
 		std::string replyMsg3 = RPL_ENDOFNAMES(nick, ch->getChannelName());
 		std::string replyMsg = replyMsg1 + replyMsg2 + replyMsg3;
 		server->sendResp(replyMsg, fd);
@@ -184,9 +114,7 @@ static void handleNonChannel(Server* server, std::vector<std::pair<std::string, 
 	Channel newChan;
 	newChan.setChannelName(parVec[ipar].first);
 	newChan.addOpe(cl);
-//	server->getChannels().push_back(newChan);
 	server->addChannel(newChan);
-	std::cout << "handleNonChannel!" << std::endl;///////////////////////////
 	std::string replyMsg1 = RPL_JOINMSG(cl->getNick() + "!" + cl->getUserName(), cl->getIpClient(), newChan.getChannelName());
 	std::string replyMsg2 = RPL_NAMREPLY(nick, newChan.getChannelName(), newChan.getClientsList());
 	std::string replyMsg3 = RPL_ENDOFNAMES(nick, newChan.getChannelName());
@@ -211,7 +139,6 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	else if (vecStr.size() > 3 || (vecStr.size() == 2 && !vecStr[1].empty() && vecStr[1].size() == 1) ||
 				(vecStr.size() == 3 && !vecStr[1].empty() && !vecStr[2].empty() && vecStr[1].size() == 1))
 	{
-//		std::string vecStr[1] = trimRight(vecStr[1]);
 		std::string joinMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(joinMsg, fd);
 		parVec.clear();
@@ -298,12 +225,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		std::string cmd = msg.substr(0, 4);
 
 		if (!parseJoin(server, parVec, msg, fd))
-		{
-//			std::string joinMsg = ERR_NEEDMOREPARAMS(server->getClient(fd)->getNick(), std::string(cmd));
-//			server->sendResp(joinMsg, fd);
 			return ;
-		}
-
 		if (parVec.size() > 1)
 		{
 			std::string joinMsg = RPL_INFO(server->getClient(fd)->getNick());
@@ -322,24 +244,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 		}
 		if (!f)
 			handleNonChannel(server, parVec, 0, fd);
-/*
-		for (size_t i = 0; i < parVec.size(); i++)
-		{
-			bool f = false;
-			for (size_t j = 0; j < server->getChannels().size(); j++)
-			{
-				if (server->getChannels()[j].getChannelName() == parVec[i].first)
-				{
-					processJoin(server, parVec, i, j, fd);
-					f = true;
-					break ;
-				}
-			}
-			if (!f)
-				handleNonChannel(server, parVec, i, fd);
-		}
-*/
 	}
 
-	printChannelsInfo(server); // apardo-m for test
+	printChannelsInfo(server); //debug
 }

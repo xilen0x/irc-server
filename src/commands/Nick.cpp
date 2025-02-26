@@ -29,7 +29,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		msg.erase(std::remove(msg.begin(), msg.end(), '\r'), msg.end());
     	msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
     	msg = trimRight(msg);
-		if (checkNickInUse(clients, msg) && cl->getNick() != msg)  //250212 checkNickInUse can be a public function on Server class
+		if (checkNickInUse(clients, msg) && cl->getNick() != msg)
 		{
 			if (cl->getNick().empty())
 				cl->setNick("*");
@@ -45,7 +45,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		}
 		if (!validateNick(msg))
 		{
-			std::cout << "input nick is invalid" << std::endl;////////////////
+			std::cout << "input nick is invalid" << std::endl;
 			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(msg)), fd);
 			return ;
 		}
@@ -53,27 +53,11 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		{
 			if (cl && cl->getHasNick() && cl->getHasAuth())
 			{
+				Channel	*ch;
 				std::string preNick = cl->getNick();
 				cl->setNick(msg);
-				std::cout << "change global nick into: " << cl->getNick() << std::endl;////////////////
-
-				// std::vector<Channel> channels = server->getChannels();
-				// for (size_t i = 0; i < channels.size(); i++)
-/*	250212 by apardo-m		
-				for (size_t i = 0; i < server->getChannelsSize(); i++)
-				{
-					Client *clt = server->getChannelsByNumPosInVector(i)->getCliInChannel(preNick);
-					if (clt)
-					{
-						clt->setNick(msg);
-						std::cout << "change nick in channel into: " << clt->getNick() << std::endl;
-					}
-				}
-*/
-			 	std::cout << "channels size =" << server->getChannels().size() << ", " << server->getChannelsSize() << std::endl;
-				
-// Start 250212 by apardo-m
-				Channel	*ch;
+				std::cout << "change global nick into: " << cl->getNick() << std::endl;
+			 	std::cout << "channels size =" << server->getChannels().size() << ", " << server->getChannelsSize() << std::endl;				
 				for (size_t i = 0; i < server->getChannelsSize(); i++)
 				{
 					ch = server->getChannelsByNumPosInVector(i);
@@ -99,7 +83,6 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 						std::cout << "-- not found (" << preNick << ")" << std::endl;
 					ch->printChannelVars();
 				}
-// End 250212 by apardo-m
 				if (!preNick.empty() && preNick != msg)
 				{
 					if (preNick == "*" && !cl->getUserName().empty())

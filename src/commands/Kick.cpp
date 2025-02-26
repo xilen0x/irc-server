@@ -23,14 +23,14 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
     if (!msg.empty() && msg[0] == ':')
         msg = msg.substr(1);
     if (msg.empty()) {
-        server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "KICK sin argumentos"), fd);  // 461 - editar mensaje luego
+        server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "KICK"), fd);
         return (0);
     }    
     deleteRN(msg);
 	splitedMsg = splitByDoublePoint(msg);
 	str = split_msg(splitedMsg[0]);
     if (str.size() < 2) {
-        server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "KICK con argumentos insuficientes"), fd);  // 461 - editar mensaje luego
+        server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "KICK"), fd);
         return (0);
     }
     chName = str[0]; // el canal
@@ -45,7 +45,7 @@ int kickParsingIsCorrect(std::string &msg, Server* server, int fd)
 		return (0);
 	}
 	//----------------------- con sintaxis correcta pero con canal o usuario inexistente -----------------------
-	user = str[1]; // el usuario
+	user = str[1];
 	kickedNick = cl->getNickByUser(str[1]);
 	kickedNick = uppercase(kickedNick);
 	if (!server->getClientByNick(kickedNick)) {
@@ -94,6 +94,5 @@ void Kick::execute(Server* server, std::string &msg, int fd)
         return;
     }
 	printChannelsInfo(server);//debug
-	//log to the console
-    std::cout << "[LOG][INFO] User " << server->getClient(fd)->getNick() << " has executed KICK command" << std::endl;
+    std::cout << "[LOG][INFO] User " << server->getClient(fd)->getNick() << " has executed KICK command" << std::endl;//debug
 }

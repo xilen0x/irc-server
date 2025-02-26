@@ -18,10 +18,6 @@ std::string	Mode::_intToString( int num )
 	return (convert.str()) ;
 }
 
-/*
- * <cstdlib> : std::strtol
- * <limits>  : std::numeric_limits<int>
- */
 
 bool    Mode::_isInt( const std::string &str )
 {
@@ -40,9 +36,6 @@ bool    Mode::_isInt( const std::string &str )
 
 std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxLimitUser)
 {
-	// Limit range : Minimum:1   MaxLimit: MAX_USER_LIMIT_NUMBER   (definided for our server)
-	//	https://modern.ircdocs.horse/#channel-modes
-
 	int	limit;
 	std::string strOption;
 	
@@ -176,7 +169,6 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		ch->addOpe(client);
 		std::cout << "PRIVILEGE ADDED" << std::endl;//debug
 		printChannelsInfo(server);//debug
-		//quitar desdd memClients
 		ch->deleteMem(nick);
 		std::cout << "MEMBER DELETED FROM CHANNEL" << std::endl;//debug
 		ch->setModeOption(3, true);
@@ -189,7 +181,6 @@ std::string Mode::changeOperatorPrivilege(Server *server, Channel *ch, char sign
 		ch->deleteOpe(nick);
 		std::cout << "PRIVILEGE DELETED" << std::endl;//debug
 		printChannelsInfo(server);//debug
-		//agregar a memClients
 		ch->addMem(client);
 		std::cout << "MEMBER ADDED TO CHANNEL" << std::endl;//debug
 		ch->setModeOption(3, false);
@@ -223,18 +214,6 @@ std::string Mode::topic_mode(Channel *ch, char sign, std::string optionChain)
 	return strOption;
 }
 
-/*
-void Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
-{
-	std::istringstream ss(msg);
-	ss >> channelName;
-	ss >> option;
-	size_t pos = msg.find_first_not_of(channelName + option + " \t\v");
-	if (pos != std::string::npos)
-		param = msg.substr(pos);
-}
-*/
-
 bool Mode::getModeArgs(std::string msg, std::string &channelName, std::string &option, std::string &param)
 {
 	std::istringstream ss(msg);
@@ -251,9 +230,8 @@ bool Mode::getModeArgs(std::string msg, std::string &channelName, std::string &o
 	return true;
 }
 
-void Mode::execute( Server* server, std::string &msg , int fd)
-{
-	/* // the following is the example of the format of channel mode command:
+// the following is the example of the format of channel mode command:
+/*
 	MODE #mychannel +i
 	MODE #mychannel +o Bob / MODE #mychannel -o Bob
 	MODE #mychannel +k secret123
@@ -264,7 +242,9 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	MODE #mychannel -k secret123
 	MODE #mychannel -l
 	mode #mychannel -t
-	*/
+*/
+void Mode::execute( Server* server, std::string &msg , int fd)
+{
 
 	std::string 		channelName;
 	std::string 		option;
@@ -273,29 +253,15 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	char				sign = '\0';
 	int 				status = 0;
 
-	std::cout << "Mode command is called!" << std::endl;//debug
-	//si el mensaje, incluido el comando, es igual a 'MODE  +i' 
-	// std::cout << "Message: " << msg << "|" << std::endl;//debug
-	//removeAnsiCodes(msg);
-	// for (size_t i = 0; i < msg.size(); i++)
-		// std::cout << "i:" << msg[i] << std::endl;
-
 	if (isAuthenticated(server->getClient(fd), server, fd))
 	{
 		msg = trimLeft(msg);
 		msg = msg.substr(4);
-		// std::cout << "Message before         :" << msg << "|" << std::endl;//debug
-		// std::cout << "SIZE:" << msg.size() << std::endl;//debug
 		msg = trimLeft(msg);
-		// std::cout << "Message after          :" << msg << "|" << std::endl;//debug
 		msg = trimRight(msg);
-		// #mychannel +i/+i/-i
-		// std::cout << "Message after trimRight:" << msg << "|" << std::endl;//debug
 		if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
 		{
 			std::cout << "it's not channel mode but user mode!" << std::endl;//debug
-		// if (msg == "MODE  +i" || "WHOIS ")
-		// 	return ;
 			return ;
 		}
 		else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
@@ -310,7 +276,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			return ;
 		}
 		else
-			msg = msg.substr(1); // mychannel +i remove the first # or &
+			msg = msg.substr(1);
 		std::cout << "mode msg: " << msg << std::endl; //debug
 		if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
 		{
@@ -318,9 +284,6 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(modeMsg, fd);
 			return ;
 		}
-		std::cout << "mode msg=" << msg << std::endl; //debug
-		std::cout << "option:" << option << std::endl; //debug
-		std::cout << "param:"  << param << std::endl; //debug
 		if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
 		{
 			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
@@ -366,7 +329,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		else
 		{
-			if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
+			if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))
 			{
 				sign = option[0];
 				if (option[1] == 'i')
@@ -396,14 +359,14 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				{
 					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
 				}
-				else if (option[1] == 'l' ) //WIP by apardo-m
+				else if (option[1] == 'l' )
 				{
 					int maxUserLimit = MAX_USER_LIMIT_NUMBER;
 
 					std::string restr = limit_mode(channel, sign, param, maxUserLimit);
 					if (restr == NO_IN_CHANNEL_LIMITS)
 					{
-						server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
+						server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);
 						return ;
 					}
 					if (restr == ERR_PARAM)
@@ -422,7 +385,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				}
 				else
 				{
-					std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+					std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option);
 					server->sendResp(chaErrMsg, fd);
 					return ;
 				}
@@ -432,22 +395,12 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				server->sendResp(FAIL_BADOPTIONFORMAT(option), fd);
 				return ;
 			}
-			std::string chain = optionChain.str(); //+i
+			std::string chain = optionChain.str();
 			if (status == -1)
 			{
 				server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 				return ;
 			}
-			/*
-			if (chain.empty()) //Sent to a client to inform them of the currently-set modes of a channel: "<client> <channel> <modestring> <mode arguments>..."
-			{
-				std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
-				server->sendResp(chaMsg, fd);
-				return ;
-			}
-			*/
-		
-			//std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName, chain, param);
 			std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName);
 			server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 		

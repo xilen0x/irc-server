@@ -30,7 +30,6 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 		deleteRN(msg);
 		splitedStrVect = splitByDoublePoint(msg);
 		str = split_msg(splitedStrVect[0]);
-//		if (str.size() != 2)
 		if (str.size() == 1)
 		{
 			server->sendResp(ERR_NEEDMOREPARAMS(cl->getNick(), "TOPIC"), fd);  // 461  
@@ -56,12 +55,10 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			server->sendResp(ERR_NOTONCHANNEL(cl->getNick(), chName), fd);
 			return;
 		}
-	//	ch->setTopicRestricted();  //  For test 
 		if (splitedStrVect.size() == 2)
 		{
 			if (ch->isTopicRestricted() && !ch->isOpe(cl->getNick()))
 			{
-				std::cout << "TODO : rigth evaluation for topicResticted" << std::endl;
 				server->sendResp(ERR_CHANOPRIVSNEEDED(cl->getNick(), chName), fd);
 				return;
 			}
@@ -71,7 +68,6 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			else
 				ch->setTopic(topic);
 			server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
-//			server->sendBroadAll(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic));
 			server->sendBroadAllInChannel(MSG_TOPIC_BROAD_ALL(cl->getNick(), chName, topic), ch);
 		}
 		else
@@ -82,7 +78,6 @@ void Topic::execute( Server* server, std::string &msg , int fd)
 			else
 				server->sendResp(RPL_TOPIC(cl->getNick(), chName, topic),fd);
 		}
-		std::cout << "    ----" << std::endl;
 	}
 }
 // Tras enviar RPL_TOPIC , No se implementa RPL_TOPICWHOTIME (en https://modern.ircdocs.horse/#topic-message indica  SHOULD y en https://datatracker.ietf.org/doc/html/rfc2812 no lo comentan.

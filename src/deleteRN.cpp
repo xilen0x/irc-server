@@ -23,23 +23,3 @@ void deleteRN(std::string &msg)
     msg.clear();
     msg = tmpString;
 }
-
-/*
-int main ()
-{
-  std::vector<std::string> splitedMessage;
-  
-  std::string msg1="PRIVMSG apm :Message 1\r\n";
-  std::string msg2="PRIVMSG apm :Message 2\r";
-  std::string msg3="PRIVMSG apm :Message 3\n";
- 
-  deleteRN(msg1);
-  deleteRN(msg2);
-  deleteRN(msg3);
-  
-  std::cout << msg1 << std::endl;
-  std::cout << msg2 << std::endl;
-  std::cout << msg3 << std::endl;
-  return 0;
-}
-*/

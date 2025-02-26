@@ -27,10 +27,6 @@
 #define RPL_WELCOME(server, nickname) ":" + server + " 001 " + WHI + " :Welcome to the IRC Network, " + nickname + "!" + RES + "\r\n"
 #define RPL_YOURHOST(server) ":" + server + " 002 " + " :Your host is " + server + ", running version 1.0" + "\r\n"
 #define RPL_CREATED(server) ":" + server + " 003 " + " :This server was created on " + __DATE__ + " at " + __TIME__ + "\r\n"
-// #define RPL_UMODEIS(hostname, channelname, mode, user)  ":" + hostname + " MODE #" + channelname + " " + mode + " " + user + CRLF
-// #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
-// #define RPL_CHANNELMODES(nickname, channelname, modes) ": 324 " + nickname + " #" + channelname + " " + modes + CRLF
-// #define RPL_CHANGEMODE(hostname, channelname, mode, arguments) (":" + hostname + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_CHANNELMODEIS(nickname, channelname, option, param) (": 324 " + nickname + " #" + channelname + " option: " + option + " param: " + param + CRLF)
 #define RPL_CREATIONTIME(nickname, channelname, creationtime) ": 329 " + nickname + " #" + channelname + " " + creationtime + CRLF
 #define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + CRLF)
@@ -45,13 +41,7 @@
 
 // ERRORS
 
-// #define ERR_NEEDMODEPARM(channelname, mode) (": 696 #" + channelname + " * You must specify a parameter for the key mode. " + mode + CRLF)
-// #define ERR_INVALIDMODEPARM(channelname, mode) ": 696 #" + channelname + " Invalid mode parameter. " + mode + CRLF
-// #define ERR_KEYSET(channelname) ": 467 #" + channelname + " Channel key already set. " + CRLF
-// #define ERR_UNKNOWNMODE(nickname, channelname, mode) ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + CRLF
-// #define ERR_NONICKNAME(nickname) (": 431 " + nickname + " :No nickname given" + CRLF )
 #define ERR_NOSUCHNICK(nickname) (": 401 " + nickname + " :No such nick/channel" + CRLF )
-//#define ERR_CHANNELNOTFOUND(nickname, channelname) (": 403 " + nickname + " #" + channelname + " :No such channel" + CRLF)
 #define ERR_NOSUCHCHANNEL(nickname, channelname) (": 403 " + nickname + " #" + channelname + " :No such channel" + CRLF)
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
 #define ERR_NOTEXTTOSEND(nickname) (": 412 " + nickname + RED + " :No text to send" + RES + CRLF)
@@ -62,7 +52,7 @@
 #define ERR_USERONCHANNEL(nickname, channelname) (": 443 " + nickname + " #" + channelname + " :is already on channel" + CRLF)
 #define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + YEL + " :You have not registered!" + RES + CRLF)
 #define ERR_NEEDMOREPARAMS(nickname, command) ": 461 " + nickname  + " " + command + YEL + " :Not enough parameters" + RES + CRLF
-#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )//( need PASS and NICK )
+#define ERR_ALREADYREGISTERED(nickname) (": 462 " + nickname + YEL + " :You may not reregister" + RES + CRLF )
 #define ERR_PASSWDMISMATCH(nickname) ": 464 " + nickname + RED + " :Password incorrect" + RES + CRLF
 #define ERR_CHANNELISFULL(nickname, channelname) (": 471 " + nickname + " #" + channelname + RED + " :Cannot join channel (+l)" + RES + CRLF )
 #define ERR_UNKNOWNMODE(nickname, channelname, mode) ": 472 " + nickname + " #" + channelname + " " + mode + " :is not a recognised channel mode" + CRLF
@@ -71,16 +61,13 @@
 #define ERR_CHANOPRIVSNEEDED(nickname, channelname) (": 482 " + nickname + " #" + channelname + RED + " :You're not a channel operator" RES + CRLF)
 #define ERR_USERNOTINCHANNEL(nickname, channelname) (": 441 " + nickname + " #" + channelname + " :They aren't on that channel" + CRLF)
 #define ERR_INVALIDKEY(nickname, channelname) (": 525 " + nickname + " #" + channelname + RED + " :Key is not well-formed" + RES + CRLF )
-// ERR_INVALIDMODEPARAM (696)<client> <target chan/user> <mode char> <parameter> :<description>
 
 // PERSONALIZED ERRORS & REPLIES
 #define ERR_SERVERDOWN(nickname) (": ERROR :Closing Link: " + nickname + " (Server shutdown)" + CRLF)
 #define ERR_USERSYNTAXERROR(nickname, command) (": " + nickname + " " + command + " :Syntax error. Usage: " + YEL + "USER <username> 0 * : <realname>" + RES + CRLF)
 #define RPL_KICK(nickname, channelname, user, comment) (": " + nickname + " KICK #" + channelname + " " + user + " :" + comment + CRLF)
 #define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
-//#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
 #define RPL_CHANGEMODE(server, channelname) (":" + server + " MODE #" + channelname + CRLF)
-//#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
 
 //FAILS
 #define FAIL_LOTPARAMS(msg) (": FAIL " + msg + " :" + YEL + "A Lot of Params!!" + RES + CRLF)

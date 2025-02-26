@@ -23,9 +23,6 @@ std::string formatIRCMessage(const std::string& message)
     return timestamp + " -!- " + message;
 }
 
-// Parse the input arguments
-//https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Dynamic.2C_private_or_ephemeral_ports
-
 int parseInput(std::string password, int port)
 {
     if (port < 49152 || port > 65535)
@@ -33,9 +30,6 @@ int parseInput(std::string password, int port)
         std::cerr << "Invalid port number. Must be beetwen 49152 and 65535" << std::endl;
         return (1);
     }
-    // password = trimLeft(password);
-    // password = trimRight(password);
-
     if (std::strlen(password.c_str()) < 4)
     {
         std::cerr << "Password must be at least 4 characters long" << std::endl;
@@ -84,7 +78,7 @@ std::string uppercase(std::string &s)
 	return (s);
 }
 
-//250212 checkNickInUse can be a public function on Server class
+//checkNickInUse can be a public function on Server class
 bool checkNickInUse(std::vector<Client> clients, std::string &s)
 {
 	for (size_t i = 0; i < clients.size(); i++)
@@ -140,16 +134,15 @@ int isAuthenticated(Client* client, Server* server, int fd) {
     return (1);
 }
 
-// by apardo-m  
 void	printChannelsInfo(Server *server)
 {
 	Channel *channel;
 
-	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;
+	std::cout << "========= Start Channels info === Channel Number = " << server->getChannels().size() << std::endl;//debug
 	for (size_t i = 0; i < server->getChannels().size(); i++)
 	{
 		channel = server->getChannelsByNumPosInVector(i);
 		channel->printChannelVars();
 	}   
-	std::cout << "========= End Channels info =======\n" << std::endl;
+	std::cout << "========= End Channels info =======\n" << std::endl;//debug
 }

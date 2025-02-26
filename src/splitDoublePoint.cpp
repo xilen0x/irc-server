@@ -23,18 +23,3 @@ std::vector<std::string> splitByDoublePoint(const std::string & msg)
   
   return(result);
 }
-
-/*
-int main ()
-{
-  std::vector<std::string> splitedMessage;
-  
-  std::string msg="PRIVMSG apm :This is the message";
-
-  splitedMessage = splitByDoublePoint(msg);
-  std::cout << splitedMessage[0] << std::endl;
-  std::cout << splitedMessage[1] << std::endl;
-
-  return 0;
-}
-*/

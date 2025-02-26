@@ -9,8 +9,6 @@ class ICommand
 	public:
 		virtual	~ICommand( void ) {};
 
-//		virtual void execute( void ) = 0;
-		// virtual void execute( std::string &, int ) = 0;
 		virtual void execute( Server*, std::string &, int ) = 0;
 };
 

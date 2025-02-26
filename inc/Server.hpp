@@ -44,14 +44,12 @@ class Server
 		std::string	getPassword( void ) const;
 		int 		getPort( void ) const;
 		int			getFdServer( void ) const;
-//		std::vector<Channel> getChannels( void );
 		std::vector<Channel>& getChannels( void );
-//		std::vector<Client> getClients( void );
 		std::vector<Client>& getClients( void );
 		Client 		*getClient(int fd);
 		Client		*getClientByNick(std::string &nick);
 
-		Channel		*getChannelByChanName(std::string channelName); // by Linnnnnnnnn
+		Channel		*getChannelByChanName(std::string channelName);
 
 		size_t		getChannelsSize( void );
 
@@ -69,20 +67,15 @@ class Server
 		void sendBroadOthersInChannel(std::string resp, Channel *ch, int fd);
 
 		static void signalsHandler(int signal);
-// apardo-m need to be public
-//		void clearClients(int fd, std::string msg);
 
-// apardo-m need for QUIT
 		void	clearClientFromClientsAndChanels( int fd, std::string msg);
 		void	deleteEmptyChannels( void );
-// apardo-m need for Topic
 		bool	isInChannels( std::string chName);
 		Channel	*getChannelByChannelName( std::string chName );
 		int		getFdClientByNick( std::string nick );
-// apardo-m need for Privmsg
 		bool	isInClients( std::string nick );
 			
-//For test proposal
+		//For test proposal
 		Client	*getClientByFD(int fd);
 		Channel	*getChannelsByNumPosInVector(size_t pos);
 
@@ -90,6 +83,3 @@ class Server
 };
 
 #endif
-
-
-//get

@@ -9,7 +9,6 @@ class Pass : public ICommand
 	public:
 		~Pass( void );
 
-		// void execute( std::string & , int );
 		void execute( Server*, std::string &, int );
 };
 

@@ -1,35 +1,23 @@
 #include <sstream>
-
 #include "Client.hpp"
 
-// Client::Client() :_fdClient(-1), _ipClient("")
-// {}
 
 Client::Client() : _hasPass(false), _hasNick(false), _hasUser(false), _hasAuth(false) 
 {
 
-// 250207   Ver si estas 5 lineas se han de cambiar
 	this->_nick = "*";
 	this->_userName = "*User";  
 	this->_realName = "*Real";
-
 	this->_bufferInMessage = "";
-	// this->_bufferOutResponse = "";
 	this->_fdClient = -1;
-
-//	std::cout << "Client() => Set default values" << std::endl;
 }
 
 Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient)
 {
-	//Comment to LIN and CARLOS
 	this->_nick = "*";
 	this->_userName = "*User";  
 	this->_realName = "*Real";
-
 	this->_bufferInMessage = "";
-	// this->_bufferOutResponse = "";
-
 	this->_hasPass = false;
 	this->_hasNick = false;
 	this->_hasUser = false;
@@ -50,7 +38,6 @@ Client &Client::operator=( Client const &src )
 		this->_userName = src._userName;
 		this->_realName = src._realName;
 		this->_bufferInMessage = src._bufferInMessage;
-		// this->_bufferOutResponse = src._bufferOutResponse;
 		this->_hasPass = src._hasPass;
 		this->_hasNick = src._hasNick;
 		this->_hasUser = src._hasUser;
@@ -59,21 +46,15 @@ Client &Client::operator=( Client const &src )
 	return (*this);
 }
 
-Client::~Client( void )
-{
-	// std::cout << "~Client() => TODO (_fdClient= \"" << this->_fdClient << "\")" << std::endl;//debug
-}
+Client::~Client( void ) {}
 
 int		Client::getFdClient( void ) const { return (this->_fdClient	); }
 
 void	Client::setFdClient( int fd )
 { 
-	this->_fdClient = fd; 
-
-//TODO Delete the next lines
 	std::ostringstream	str1;
 
-
+	this->_fdClient = fd; 
 	str1 << fd;
 	this->_nick = this->_nick + str1.str();   
 }
@@ -105,10 +86,6 @@ std::string Client::getRealName( void ) const { return ( this->_realName ); }
 std::string	Client::getBufferInMessage( void ) const { return ( this->_bufferInMessage ); }
 
 void	Client::setBufferInMessage( std::string inMessage ) { this->_bufferInMessage = inMessage; }
-	
-// std::string	Client::getBufferOutResponse( void ) const { return ( this->_bufferOutResponse ); }
-
-// void	Client::setBufferOutResponse( std::string outResponse ) { this->_bufferOutResponse = outResponse; }
 
 bool	Client::getHasPass( void ) const { return ( this->_hasPass ); }
 		
@@ -175,7 +152,7 @@ std::string Client::extractCommand() {
     return (command);
 }
 
-// For debugging
+// debug
 void	Client::printClientVars( void )
 {
 	std::cout << "----- CLIENT DATA  (start)-----" << std::endl;
@@ -184,10 +161,7 @@ void	Client::printClientVars( void )
 	std::cout << "_nick = " << this->_nick << std::endl;
 	std::cout << "_userName = " << this->_userName << std::endl;
     std::cout << "_realName = " << this->_realName << std::endl;
-
     std::cout << "_bufferInMessage = " << this->_bufferInMessage << std::endl;
-    // std::cout << "_bufferOutResponse = " << this->_bufferOutResponse << std::endl;
-
     std::cout << "_hasPass = " << this->_hasPass << std::endl;
     std::cout << "_hasNick = " << this->_hasNick << std::endl;
     std::cout << "_hasUser = " << this->_hasNick << std::endl;

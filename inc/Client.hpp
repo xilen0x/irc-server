@@ -25,8 +25,6 @@ class Client
 
 		std::vector<std::string> _inviteChannels; // the channels list that invite the client
 							   
-//	tipo lista  _channelsOperator;
-//	tipo lista  _channelsList;
 
 	public:
 		Client( void );

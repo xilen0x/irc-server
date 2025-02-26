@@ -10,16 +10,10 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 {
 	if (isAuthenticated(server->getClient(fd), server, fd))
 	{
-		/*
-		std::cout << "    ----" << std::endl;
-		std::cout << "INVITE  => TODO wit message " << msg << std::endl;
-		std::cout << "    ----" << std::endl;
-		*/
 		msg = trimLeft(msg);
 		std::vector<std::string>vec = split_msg(msg);
 		Client *cl = server->getClient(fd);
 		std::string nick = cl->getNick();
-		// wrong parameters 461
 		if (vec.size() < 3)
 		{
 			std::string chaErrMsg = ERR_NEEDMOREPARAMS(nick, uppercase(vec[0]));
@@ -92,6 +86,6 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		std::string chaInvitedMsg = MSG_INVITED(nick, server->getClientByFD(fd)->getUserName(), vec[1], channelName);
 		server->sendResp(chaInvitedMsg, server->getClientByNick(vec[1])->getFdClient());
 
-		printChannelsInfo(server); // linnnnnnnnn for test
+		printChannelsInfo(server); //debug
 	}
 }
