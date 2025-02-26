@@ -44,6 +44,18 @@ int parseInput(std::string password, int port)
     return (0);
 }
 
+void removeAnsiCodes(std::string &str) {
+    size_t pos;
+    while ((pos = str.find("\033[")) != std::string::npos) { // "\033[" es equivalente a "\e["
+        size_t end = str.find('m', pos);  // Buscar el final del código ANSI
+        if (end != std::string::npos) {
+            str.erase(pos, end - pos + 1); // Eliminar el código ANSI
+        } else {
+            break; // Evitar bucles infinitos si no hay 'm'
+        }
+    }
+}
+
 std::string trimRight(std::string &str)
 {
     size_t pos = str.find_last_not_of(" \t\v\r\n");//find the last character that is not a white space
