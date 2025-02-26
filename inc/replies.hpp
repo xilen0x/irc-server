@@ -88,5 +88,7 @@
 #define FAIL_NOINTORMAXLIMITUSERCHANNEL(msg, limit) (": FAIL " + msg + " :" + YEL + "Not positive integer provided or his limit can´t be set. This Server has MAX LIMIT PER CHANNEL in " + limit + " clients." + RES + CRLF)
 #define FAIL_NOMATCHCHANNELKEY(msg) (": FAIL " + msg + " :" + YEL + "Not match channel key!" + RES + CRLF )
 #define FAIL_BADOPTIONFORMAT(modeoption) (": FAIL " + modeoption + " :" + YEL + "Bad channel mode!" + RES + CRLF)
+#define FAIL_NOPARAMNEED(msg) (": FAIL "+ msg + " :" + YEL + "No parameter needed!" + RES + CRLF)
+#define FAIL_PARAM(msg) (": FAIL "+ msg + " :" + YEL + "Bad parameters!" + RES + CRLF)
 
 #endif

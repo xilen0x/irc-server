@@ -4,6 +4,11 @@
 
 #define MIN_CLIENTS_IN_CHANNEL 1
 
+#define NO_IN_CHANNEL_LIMITS "NoInChannelLimits"
+#define ERR_PARAM "ErrParam"
+#define	ERR_PARAM_NO_NEED "ErrParamNoNeed"
+
+
 /* ------------------- PRIVATE MEMBER FUNCTIONS ------------------*/
 
 std::string	Mode::_intToString( int num )
@@ -41,8 +46,8 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxL
 	int	limit;
 	std::string strOption;
 	
-	strOption = "";
-	if (_isInt(param))
+	strOption.clear();
+	if ( sign == '+' && _isInt(param))
 	{
 		limit = std::atoi(param.c_str());
 		if (limit >= MIN_CLIENTS_IN_CHANNEL && limit <= maxLimitUser)
@@ -51,9 +56,22 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxL
 			ch->setUserLimitNumber(limit);
 			ch->setModeOption(4, true);
 			strOption = modeOption_push(param, sign, 'l');
-			ch->printChannelVars(); //debug
 		}
+		else
+			strOption = NO_IN_CHANNEL_LIMITS;
 	}
+	else if ( sign == '-' && param.empty())
+	{
+			ch->unsetUserLimitActived();
+			ch->setModeOption(4, false);
+			strOption = modeOption_push(param, sign, 'l');
+	}
+	else if (sign == '+' && !_isInt(param)) 
+		strOption = ERR_PARAM;
+	else
+		strOption = ERR_PARAM_NO_NEED;
+	ch->printChannelVars(); //debug
+
 	return (strOption);
 }
 
@@ -245,8 +263,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	MODE #mychannel -k secret123
 	MODE #mychannel -l
 	mode #mychannel -t
-
 	*/
+
 	std::string 		channelName;
 	std::string 		option;
 	std::string 		param;
@@ -362,12 +380,29 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 			{
 				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
 			}
-			else if (option[1] == 'l' && sign == '+') //WIP by apardo-m
+			else if (option[1] == 'l' ) //WIP by apardo-m
 			{
 				int maxUserLimit = MAX_USER_LIMIT_NUMBER;
-				optionChain << limit_mode(channel, sign, param, maxUserLimit);
-				if (optionChain.str().empty())
+
+				std::string restr = limit_mode(channel, sign, param, maxUserLimit);
+				if (restr == NO_IN_CHANNEL_LIMITS)
+				{
 					server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
+					return ;
+				}
+				if (restr == ERR_PARAM)
+				{
+					msg = "MODE " + msg;
+					server->sendResp(FAIL_PARAM( msg),fd);
+					return;
+				}
+				if (restr == ERR_PARAM_NO_NEED)
+				{
+					msg = "MODE " + msg;
+					server->sendResp(FAIL_NOPARAMNEED(msg),fd);
+					return;
+				}
+				optionChain << restr;
 			}
 			else
 			{
