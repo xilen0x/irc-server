@@ -47,5 +47,6 @@ std::string trimLeft(std::string &str);
 std::string uppercase(std::string &s);
 void printChannelsInfo(Server *server);
 std::string sanitizeInput(const std::string& msg);
+void removeAnsiCodes(std::string &str);
 
 #endif

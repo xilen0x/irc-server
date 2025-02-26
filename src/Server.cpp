@@ -162,6 +162,10 @@ void Server::receiveData(int clientSocket)
     // Process the message
     while (client->hasCompleteCommand()) {
         std::string command = client->extractCommand();
+        if (!command.empty() && command[0] != '+' && command[0] != '-')
+	    {
+		    removeAnsiCodes(command);
+	    }
         messageProcessing.processMessage(this, command, clientSocket);
     }
 }
