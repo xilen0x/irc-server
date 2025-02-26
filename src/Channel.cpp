@@ -217,6 +217,8 @@ int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber)
 void	Channel::setUserLimitNumber( int limit) { this->_userLimitNumber = limit; }
 
 int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
+// By apardo-m to 
+int		Channel::getOperAndMemSum( void ) { return (this->_operator.size() + this->_memClients.size()); }
 
 /*
 std::string 	Channel::getClientsList()

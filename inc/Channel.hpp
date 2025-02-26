@@ -127,6 +127,7 @@ class Channel
 		void			setUserLimitNumber( int limit);
 
 		int				getClientSum();
+		int				getOperAndMemSum( void );
 
 /*
 // 250212 - Delete this part?????

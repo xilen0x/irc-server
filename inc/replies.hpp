@@ -78,7 +78,8 @@
 #define ERR_USERSYNTAXERROR(nickname, command) (": " + nickname + " " + command + " :Syntax error. Usage: " + YEL + "USER <username> 0 * : <realname>" + RES + CRLF)
 #define RPL_KICK(nickname, channelname, user, comment) (": " + nickname + " KICK #" + channelname + " " + user + " :" + comment + CRLF)
 #define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
-#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+//#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+#define RPL_CHANGEMODE(server, channelname) (":" + server + " MODE #" + channelname + CRLF)
 //#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
 
 //FAILS
@@ -88,5 +89,7 @@
 #define FAIL_NOINTORMAXLIMITUSERCHANNEL(msg, limit) (": FAIL " + msg + " :" + YEL + "Not positive integer provided or his limit can´t be set. This Server has MAX LIMIT PER CHANNEL in " + limit + " clients." + RES + CRLF)
 #define FAIL_NOMATCHCHANNELKEY(msg) (": FAIL " + msg + " :" + YEL + "Not match channel key!" + RES + CRLF )
 #define FAIL_BADOPTIONFORMAT(modeoption) (": FAIL " + modeoption + " :" + YEL + "Bad channel mode!" + RES + CRLF)
+#define FAIL_NOPARAMNEED(msg) (": FAIL "+ msg + " :" + YEL + "No parameter needed!" + RES + CRLF)
+#define FAIL_PARAM(msg) (": FAIL "+ msg + " :" + YEL + "Bad parameters!" + RES + CRLF)
 
 #endif
