@@ -35,10 +35,10 @@ message
 ## KICK - Eject a client from the channel
 ```
 #From the main room:
-    
 /KICK #channel nick
 
-
+#From a channel:
+/KICK nick
 ```
 ## INVITE - Invite a client to a channel
 ```
