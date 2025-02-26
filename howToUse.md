@@ -66,7 +66,11 @@ message
 ```
 ### MODE o: Give/take channel operator privilege
 ```
+#From the main room:
+/mode #3 +o tres
 
+#From a channel:
+/mode +o dos
 ```
 ### MODE l: Set/remove the user limit to channel
 ```
