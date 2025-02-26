@@ -139,7 +139,8 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 			return ;
 		}
 	}
-	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
+	//if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
+	if (ch->getUserLimitNumber() && ch->getOperAndMemSum() >= ch->getUserLimitNumber())
 	{
 		std::string chaErrMsg = ERR_CHANNELISFULL(nick, ch->getChannelName());
 		server->sendResp(chaErrMsg, fd);
