@@ -5,7 +5,7 @@ irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
 ```
 ## Update the nickname
 ```
-
+/NICK newNickname
 ```
 ## Join into a channel
 ``` 
@@ -18,14 +18,26 @@ esc+RIGHTARROW
 
 ## Send private messages
 ```
+#From the main room:
+
+
+#From a channel:
 
 ```
-## Send public messages(broadcast)
+## Send public messages (broadcast to everyone in a channel)
 ```
+#From the main room:
+/QUOTE PRIVMSG #channel : message
 
+#From a channel:
+message
 ```
 ## KICK - Eject a client from the channel
 ```
+#From the main room:
+    
+/KICK #channel nick
+
 
 ```
 ## INVITE - Invite a client to a channel
