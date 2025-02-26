@@ -78,7 +78,8 @@
 #define ERR_USERSYNTAXERROR(nickname, command) (": " + nickname + " " + command + " :Syntax error. Usage: " + YEL + "USER <username> 0 * : <realname>" + RES + CRLF)
 #define RPL_KICK(nickname, channelname, user, comment) (": " + nickname + " KICK #" + channelname + " " + user + " :" + comment + CRLF)
 #define RPL_INVITEINFO(nickname) (nickname + " :can invite ONY ONE client in ONLY ONE channel at a time" + CRLF)
-#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+//#define RPL_CHANGEMODE(server, channelname, mode, arguments) (":" + server + " MODE #" + channelname + " " + mode + " " + arguments + CRLF)
+#define RPL_CHANGEMODE(server, channelname) (":" + server + " MODE #" + channelname + CRLF)
 //#define ERR_BADPARAMSFORMAT(nickname) (nickname + " : ERROR : Bad Parameters Format!" + CRLF)
 
 //FAILS

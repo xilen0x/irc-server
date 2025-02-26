@@ -109,11 +109,11 @@ join #channelName
 ```
 ## KICK - Eject a client from the channel
 ```
-
+kick #channelName nickName
 ```
 ## INVITE - Invite a client to a channel
 ```
-
+invite nickname #channelName
 ```
 ## TOPIC - Change or view the channel topic
 ```
@@ -125,21 +125,22 @@ join #channelName
 ```
 ### MODE i: Set/remove Invite-only channel
 ```
-
+mode #channelName +i(/-i)
 ```
 ### MODE t: Set/remove the restrictions of the TOPIC command to channel operators
 ```
-
+mode #channelName +t(/-t)
 ```
 ### MODE k: Set/remove the channel key (password)
 ```
-
+mode #channelName +k(/-k) channelKey
 ```
 ### MODE o: Give/take channel operator privilege
 ```
-
+mode #channelName +o(/-o) nickName
 ```
 ### MODE l: Set/remove the user limit to channel
 ```
-
+mode #channelName +l 25
+mode #channelName -l
 ```

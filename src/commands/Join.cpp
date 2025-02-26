@@ -139,15 +139,16 @@ static void	processJoin(Server* server, std::vector<std::pair<std::string, std::
 			return ;
 		}
 	}
-	//if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber())
-	if (ch->getUserLimitNumber() && ch->getOperAndMemSum() >= ch->getUserLimitNumber())
+	if (ch->getUserLimitNumber() && ch->getClientSum() >= ch->getUserLimitNumber() && !ch->isInv(nick))
+//	if (ch->getUserLimitNumber() && ch->getOperAndMemSum() >= ch->getUserLimitNumber())
 	{
 		std::string chaErrMsg = ERR_CHANNELISFULL(nick, ch->getChannelName());
 		server->sendResp(chaErrMsg, fd);
 		return ;
 	}
 	ch->addMem(cl);
-
+	std::string channelName = ch->getChannelName();
+	server->getChannelByChannelName(channelName)->deleteInv(nick);
 	if (ch->getTopic().empty())
 	{
 		std::cout << "processJoin!" << std::endl;///////////////////////

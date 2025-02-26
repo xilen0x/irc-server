@@ -63,6 +63,7 @@ std::string Mode::limit_mode(Channel *ch, char sign, std::string param, int maxL
 	else if ( sign == '-' && param.empty())
 	{
 			ch->unsetUserLimitActived();
+			ch->setUserLimitNumber(MAX_USER_LIMIT_NUMBER);
 			ch->setModeOption(4, false);
 			strOption = modeOption_push(param, sign, 'l');
 	}
@@ -273,162 +274,183 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 	int 				status = 0;
 
 	std::cout << "Mode command is called!" << std::endl;//debug
-	msg = trimLeft(msg);
-	msg = msg.substr(4);
-	msg = trimLeft(msg);
-	msg = trimRight(msg);
-	if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
-	{
-		std::cout << "it's not channel mode but user mode!" << std::endl;//debug
-		return ;
-	}
-	else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
-		server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
-		std::cout << "input channelname and channel mode option are incorrect!" << std::endl;//debug
-		return ;
-	}
-	else if (!msg.empty() && (msg[0] != '#' && msg[0] != '&'))
-	{
-		server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);//aqui entra de forma automatica irssi
-		std::cout << "input channelname is incorrect!" << std::endl;//debug
-		return ;
-	}
-	else
-		msg = msg.substr(1); // mychannel +i remove the first # or &
-	std::cout << "mode msg: " << msg << std::endl; //debug
-	if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
-	{
-		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
-		server->sendResp(modeMsg, fd);
-		return ;
-	}
-	std::cout << "mode msg=" << msg << std::endl; //debug
-	std::cout << "option:" << option << std::endl; //debug
-	std::cout << "param:"  << param << std::endl; //debug
-	if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
-	{
-		std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
-		server->sendResp(modeMsg, fd);
-		return ;
-	}
-	if (!param.empty() && (option == "+i" || option == "-i" || option == "+t" || option == "-t" || option == "-l"))
-	{
-		std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
-		server->sendResp(modeMsg, fd);
-		return ;
-	}
-	Client *cl = server->getClient(fd);
-	std::string nick = cl->getNick();
-	// the channelName doesn't exist 403
-	if (!server->getChannelByChannelName(channelName))
-	{
-		std::string chaErrMsg = ERR_NOSUCHCHANNEL(nick, channelName);
-		server->sendResp(chaErrMsg, fd);
-		return ;
-	}
-	// if the inviting client doesn't in this channel 442
-	if (!server->getChannelByChannelName(channelName)->getCliInChannel(nick))
-	{
-		std::string chaErrMsg = ERR_NOTONCHANNEL(nick, channelName);
-		server->sendResp(chaErrMsg, fd);
-		return ;
-	}
-	//if the invitor isn't operator of this channel 482
-	if (!server->getChannelByChannelName(channelName)->isOpe(nick))
-    {
-		std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
-		server->sendResp(chaErrMsg, fd);
-		return ;
-	}
-	Channel *channel = server->getChannelByChannelName(channelName);
-	//if the option of MODE is empty
-	if (option.empty())
-	{
-		std::string chaErrMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
-		server->sendResp(chaErrMsg, fd);
-        return ;
-	}
-	else
-	{
-		if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
-		{
-			sign = option[0];
-			if (option[1] == 'i')
-				optionChain << inviteOnly_mode(channel, sign, optionChain.str());
-			else if (option[1] == 't')
-			{
-				optionChain << topic_mode(channel, sign, optionChain.str());
-			}
-			else if (option[1] == 'k')
-			{
-				std::string restr = key_mode(channel, sign, param, optionChain.str());		
-				if (restr == "InvalidKey") // the set channel key is invalid 525
-				{
-					std::string chaErrMsg = ERR_INVALIDKEY(nick, channelName);
-					server->sendResp(chaErrMsg, fd);
-        			return ;
-				}
-				if (restr == "NoMatchKey")
-				{
-					std::string chaErrMsg = FAIL_NOMATCHCHANNELKEY(msg);
-					server->sendResp(chaErrMsg, fd);
-					return ;
-				}
-				optionChain << restr;
-			}
-			else if (option[1] == 'o')
-			{
-				optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
-			}
-			else if (option[1] == 'l' ) //WIP by apardo-m
-			{
-				int maxUserLimit = MAX_USER_LIMIT_NUMBER;
+	//si el mensaje, incluido el comando, es igual a 'MODE  +i' 
+	// std::cout << "Message: " << msg << "|" << std::endl;//debug
+	//removeAnsiCodes(msg);
+	// for (size_t i = 0; i < msg.size(); i++)
+		// std::cout << "i:" << msg[i] << std::endl;
 
-				std::string restr = limit_mode(channel, sign, param, maxUserLimit);
-				if (restr == NO_IN_CHANNEL_LIMITS)
-				{
-					server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
-					return ;
-				}
-				if (restr == ERR_PARAM)
-				{
-					msg = "MODE " + msg;
-					server->sendResp(FAIL_PARAM( msg),fd);
-					return;
-				}
-				if (restr == ERR_PARAM_NO_NEED)
-				{
-					msg = "MODE " + msg;
-					server->sendResp(FAIL_NOPARAMNEED(msg),fd);
-					return;
-				}
-				optionChain << restr;
-			}
-			else
-			{
-				std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
-				server->sendResp(chaErrMsg, fd);
-        		return ;
-			}
+	if (isAuthenticated(server->getClient(fd), server, fd))
+	{
+		msg = trimLeft(msg);
+		msg = msg.substr(4);
+		// std::cout << "Message before         :" << msg << "|" << std::endl;//debug
+		// std::cout << "SIZE:" << msg.size() << std::endl;//debug
+		msg = trimLeft(msg);
+		// std::cout << "Message after          :" << msg << "|" << std::endl;//debug
+		msg = trimRight(msg);
+		// #mychannel +i/+i/-i
+		// std::cout << "Message after trimRight:" << msg << "|" << std::endl;//debug
+		if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
+		{
+			std::cout << "it's not channel mode but user mode!" << std::endl;//debug
+		// if (msg == "MODE  +i" || "WHOIS ")
+		// 	return ;
+			return ;
+		}
+		else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
+			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
+			std::cout << "input channelname and channel mode option are incorrect!" << std::endl;//debug
+			return ;
+		}
+		else if (!msg.empty() && (msg[0] != '#' && msg[0] != '&'))
+		{
+			server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);//aqui entra de forma automatica irssi
+			std::cout << "input channelname is incorrect!" << std::endl;//debug
+			return ;
+		}
+		else
+			msg = msg.substr(1); // mychannel +i remove the first # or &
+		std::cout << "mode msg: " << msg << std::endl; //debug
+		if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
+		{
+			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
+			server->sendResp(modeMsg, fd);
+			return ;
+		}
+		std::cout << "mode msg=" << msg << std::endl; //debug
+		std::cout << "option:" << option << std::endl; //debug
+		std::cout << "param:"  << param << std::endl; //debug
+		if (param == "" && (option == "+k" || option == "-k" || option == "+o" || option == "-o" || option == "+l"))
+		{
+			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
+			server->sendResp(modeMsg, fd);
+			return ;
+		}
+		if (!param.empty() && (option == "+i" || option == "-i" || option == "+t" || option == "-t" || option == "-l"))
+		{
+			std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+			server->sendResp(modeMsg, fd);
+			return ;
+		}
+		Client *cl = server->getClient(fd);
+		std::string nick = cl->getNick();
+		// the channelName doesn't exist 403
+		if (!server->getChannelByChannelName(channelName))
+		{
+			std::string chaErrMsg = ERR_NOSUCHCHANNEL(nick, channelName);
+			server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		// if the inviting client doesn't in this channel 442
+		if (!server->getChannelByChannelName(channelName)->getCliInChannel(nick))
+		{
+			std::string chaErrMsg = ERR_NOTONCHANNEL(nick, channelName);
+			server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		//if the invitor isn't operator of this channel 482
+		if (!server->getChannelByChannelName(channelName)->isOpe(nick))
+		{
+			std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
+			server->sendResp(chaErrMsg, fd);
+			return ;
+		}
+		Channel *channel = server->getChannelByChannelName(channelName);
+		//if the option of MODE is empty
+		if (option.empty())
+		{
+			std::string chaErrMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
+			server->sendResp(chaErrMsg, fd);
+			return ;
 		}
 		else
 		{
-			server->sendResp(FAIL_BADOPTIONFORMAT(option), fd);
-			return ;
+			if (option.size() == 2 && (option[0] == '+' || option[0] == '-'))//*o
+			{
+				sign = option[0];
+				if (option[1] == 'i')
+					optionChain << inviteOnly_mode(channel, sign, optionChain.str());
+				else if (option[1] == 't')
+				{
+					optionChain << topic_mode(channel, sign, optionChain.str());
+				}
+				else if (option[1] == 'k')
+				{
+					std::string restr = key_mode(channel, sign, param, optionChain.str());		
+					if (restr == "InvalidKey") // the set channel key is invalid 525
+					{
+						std::string chaErrMsg = ERR_INVALIDKEY(nick, channelName);
+						server->sendResp(chaErrMsg, fd);
+						return ;
+					}
+					if (restr == "NoMatchKey")
+					{
+						std::string chaErrMsg = FAIL_NOMATCHCHANNELKEY(msg);
+						server->sendResp(chaErrMsg, fd);
+						return ;
+					}
+					optionChain << restr;
+				}
+				else if (option[1] == 'o')
+				{
+					optionChain << changeOperatorPrivilege(server, channel, sign, param, optionChain.str(), status);
+				}
+				else if (option[1] == 'l' ) //WIP by apardo-m
+				{
+					int maxUserLimit = MAX_USER_LIMIT_NUMBER;
+
+					std::string restr = limit_mode(channel, sign, param, maxUserLimit);
+					if (restr == NO_IN_CHANNEL_LIMITS)
+					{
+						server->sendResp(FAIL_NOINTORMAXLIMITUSERCHANNEL(param, _intToString(MAX_USER_LIMIT_NUMBER)),fd);  //Used to avoid compilation error
+						return ;
+					}
+					if (restr == ERR_PARAM)
+					{
+						msg = "MODE " + msg;
+						server->sendResp(FAIL_PARAM( msg),fd);
+						return;
+					}
+					if (restr == ERR_PARAM_NO_NEED)
+					{
+						msg = "MODE " + msg;
+						server->sendResp(FAIL_NOPARAMNEED(msg),fd);
+						return;
+					}
+					optionChain << restr;
+				}
+				else
+				{
+					std::string chaErrMsg = ERR_UNKNOWNMODE(nick, channelName, option); // sign is need because I undesrtand that  "-l" option is not used IRC protocol by apardo-m
+					server->sendResp(chaErrMsg, fd);
+					return ;
+				}
+			}
+			else
+			{
+				server->sendResp(FAIL_BADOPTIONFORMAT(option), fd);
+				return ;
+			}
+			std::string chain = optionChain.str(); //+i
+			if (status == -1)
+			{
+				server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
+				return ;
+			}
+			/*
+			if (chain.empty()) //Sent to a client to inform them of the currently-set modes of a channel: "<client> <channel> <modestring> <mode arguments>..."
+			{
+				std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
+				server->sendResp(chaMsg, fd);
+				return ;
+			}
+			*/
+		
+			//std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName, chain, param);
+			std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName);
+			server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
+		
 		}
-		std::string chain = optionChain.str(); //+i
-		if (status == -1)
-		{
-			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
-			return ;
-		}
-		if (chain.empty()) //Sent to a client to inform them of the currently-set modes of a channel: "<client> <channel> <modestring> <mode arguments>..."
-		{
-			std::string chaMsg = RPL_CHANNELMODEIS(nick, channelName, option, param);
-			server->sendResp(chaMsg, fd);
-			return ;
-		}	
-		std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName, chain, param);
-		server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
-	}	
+	}
 }

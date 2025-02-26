@@ -22,13 +22,13 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		// wrong parameters 461
 		if (vec.size() < 3)
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_NEEDMOREPARAMS(nick, uppercase(vec[0])));
+			std::string chaErrMsg = ERR_NEEDMOREPARAMS(nick, uppercase(vec[0]));
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		if (vec.size() > 3)
 		{
-			std::string chaMsg = formatIRCMessage(RPL_INVITEINFO(nick));
+			std::string chaMsg = RPL_INVITEINFO(nick);
 			server->sendResp(chaMsg, fd);
 			return ;
 		}
@@ -36,28 +36,28 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		//if the input channelname doesn't exist 403
 		if ((vec[2][0] != '#' && vec[2][0] != '&') || !server->getChannelByChanName(channelName))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHCHANNEL(nick, channelName));
+			std::string chaErrMsg = ERR_NOSUCHCHANNEL(nick, channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		// if the inviting client doesn't in this channel 442
 		if (!server->getChannelByChanName(channelName)->getCliInChannel(nick))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_NOTONCHANNEL(nick, channelName));
+			std::string chaErrMsg = ERR_NOTONCHANNEL(nick, channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		//if the nickname of invited client doesn't exist 401
 		if (!server->getClientByNick(vec[1]))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_NOSUCHNICK(vec[1]));
+			std::string chaErrMsg = ERR_NOSUCHNICK(vec[1]);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		//if the invited client is already in this channel 443
 		if (server->getChannelByChanName(channelName)->getCliInChannel(vec[1]))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_USERONCHANNEL(vec[1], channelName));
+			std::string chaErrMsg = ERR_USERONCHANNEL(vec[1], channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
@@ -65,13 +65,13 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 		if (server->getChannelByChanName(channelName)->isInviteChannel() && \
 									!server->getChannelByChanName(channelName)->isOpe(nick))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
+			std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		else if (!server->getChannelByChanName(channelName)->isOpe(nick))
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANOPRIVSNEEDED(nick, channelName));
+			std::string chaErrMsg = ERR_CHANOPRIVSNEEDED(nick, channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
@@ -80,16 +80,16 @@ void Invite::execute( Server* server, std::string &msg , int fd)
 					server->getChannelByChanName(channelName)->getClientSum() \
 					>= server->getChannelByChanName(channelName)->getUserLimitNumber())
 		{
-			std::string chaErrMsg = formatIRCMessage(ERR_CHANNELISFULL(vec[1], channelName));
+			std::string chaErrMsg = ERR_CHANNELISFULL(vec[1], channelName);
 			server->sendResp(chaErrMsg, fd);
 			return ;
 		}
 		// Add new nick into the channel inviting-list 341
 		server->getClientByNick(vec[1])->addInviteChannel(channelName);
 		server->getChannelByChanName(channelName)->addInv(server->getClientByNick(vec[1]));
-		std::string chaInvMsg = formatIRCMessage(RPL_INVITING(nick, channelName, vec[1]));
+		std::string chaInvMsg = RPL_INVITING(nick, channelName, vec[1]);
 		server->sendResp(chaInvMsg, fd);
-		std::string chaInvitedMsg = formatIRCMessage(MSG_INVITED(nick, server->getClientByFD(fd)->getUserName(), vec[1], channelName));
+		std::string chaInvitedMsg = MSG_INVITED(nick, server->getClientByFD(fd)->getUserName(), vec[1], channelName);
 		server->sendResp(chaInvitedMsg, server->getClientByNick(vec[1])->getFdClient());
 
 		printChannelsInfo(server); // linnnnnnnnn for test
