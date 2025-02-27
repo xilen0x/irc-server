@@ -371,13 +371,13 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 					}
 					if (restr == ERR_PARAM)
 					{
-						msg = "MODE " + msg;
-						server->sendResp(FAIL_PARAM( msg),fd);
+						msg = "MODE #" + msg;
+						server->sendResp(FAIL_PARAM(msg),fd);
 						return;
 					}
 					if (restr == ERR_PARAM_NO_NEED)
 					{
-						msg = "MODE " + msg;
+						msg = "MODE #" + msg;
 						server->sendResp(FAIL_NOPARAMNEED(msg),fd);
 						return;
 					}

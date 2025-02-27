@@ -16,7 +16,9 @@ irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
 esc+RIGHTARROW
 ```
 
-## Send private messages
+## Send private messages 
+
+### to any client
 ```
 #From the main room:
 
@@ -24,7 +26,8 @@ esc+RIGHTARROW
 #From a channel:
 
 ```
-## Send public messages (broadcast to everyone in a channel)
+
+### to a channel  (broadcast to everyone in a channel)
 ```
 #From the main room:
 /QUOTE PRIVMSG #channel : message
@@ -92,24 +95,32 @@ user nickname 0 * : Full Name
 
 ## Update the nickname
 ```
-
+nick NewNickname
 ```
 ## Join into a channel
 ``` 
 join #channelName
 ```
 ## Leaving a channel (without leaving it)
+
+> apardo-m  Creo que en **nc** no existe esta posibilidad por que no hay cambios de pantalla
+
 ```
 
 ```
 
 ## Send private messages
-```
+
+### to any client
 
 ```
-## Send public messages(broadcast)
+privmsg nickname :message
 ```
 
+### to a channel  (broadcast to everyone in a channel)
+
+```
+privmsg #channel :message
 ```
 ## KICK - Eject a client from the channel
 ```
@@ -120,17 +131,20 @@ kick #channelName nickName
 invite nickname #channelName
 ```
 ## TOPIC - Change or view the channel topic
-```
 
-```
+- View actual topic : `topic #channel`
+- Change topic : `topic #channel :newTopic`
+- Empty topic: `topic #channel :`
+
 ## MODE Change the channel’s mode:
-```
 
-```
+There are 5 modes: i, t, k, o, l
+
 ### MODE i: Set/remove Invite-only channel
 ```
 mode #channelName +i(/-i)
 ```
+
 ### MODE t: Set/remove the restrictions of the TOPIC command to channel operators
 ```
 mode #channelName +t(/-t)
@@ -139,12 +153,18 @@ mode #channelName +t(/-t)
 ```
 mode #channelName +k(/-k) channelKey
 ```
-### MODE o: Give/take channel operator privilege
+### MODE o: Give/remove channel operator privilege
+
+> Si solo hay un operador y se hace un autoremove como operador, el canal queda sin operador. Ningun miembro puede usar *MODE*.
+
 ```
 mode #channelName +o(/-o) nickName
 ```
 ### MODE l: Set/remove the user limit to channel
+
+> En el server se ha definido un valor máximo de 100 clientes por canal. El operador puede activar un limite entre 1 y 100.
+
 ```
-mode #channelName +l 25
+mode #channelName +l numLimit   
 mode #channelName -l
 ```
