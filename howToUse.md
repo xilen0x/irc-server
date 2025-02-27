@@ -10,6 +10,8 @@ irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
 ## Join into a channel
 ``` 
 /join #channelName
+
+/quote join #channelName
 ```
 ## Leaving a channel (without leaving it)
 ```
@@ -21,10 +23,10 @@ esc+RIGHTARROW
 ### to any client
 ```
 #From the main room:
-
+/QUOTE PRIVMSG nickname : message
 
 #From a channel:
-
+/QUOTE PRIVMSG nickname : message
 ```
 
 ### to a channel  (broadcast to everyone in a channel)
@@ -34,6 +36,8 @@ esc+RIGHTARROW
 
 #From a channel:
 message
+
+/QUOTE PRIVMSG #otherChannel : message
 ```
 ## KICK - Eject a client from the channel
 ```
@@ -45,23 +49,47 @@ message
 ```
 ## INVITE - Invite a client to a channel
 ```
+#From the main room:
+/INVITE nickname #channel
 
+#From a channel:
+/INVITE nickname
 ```
 ## TOPIC - Change or view the channel topic
-```
 
-```
+### From the main room:
+
+- View actual topic : `/topic #channel`
+- View actual topic : `/quote topic #channel`
+- Change topic : `/topic #channel newTopic`   
+- Change topic : `/quote topic #channel :newTopic`
+- Empty topic: `/quote topic #channel :`
+
+Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el **topic** no aparecen en la *main room* sino en el *channel*
+
+### From a channel:
+
+- View actual topic : `/topic`
+- Change topic : `/topic newTopic`
+- Empty topic: `/quote topic #channel :`
+
 ## MODE Change the channel’s mode:
-```
 
-```
 ### MODE i: Set/remove Invite-only channel
 ```
+#From the main room:
+/mode #channelName +i(/-i)
 
+#From a channel:
+/mode +i(/-i)
 ```
 ### MODE t: Set/remove the restrictions of the TOPIC command to channel operators
 ```
+#From the main room:
+/mode #channelName +t(/-t)
 
+#From a channel:
+/mode +t(/-t)
 ```
 ### MODE k: Set/remove the channel key (password)
 ```
