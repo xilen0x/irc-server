@@ -277,7 +277,6 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		else
 			msg = msg.substr(1);
-		std::cout << "mode msg: " << msg << std::endl; //debug
 		if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
 		{
 			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);

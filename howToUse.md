@@ -93,19 +93,31 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 ```
 ### MODE k: Set/remove the channel key (password)
 ```
+#From the main room:
+/mode #channelName +k(/-k) channelKey
 
+#From a channel:
+/mode +k(/-k) channelKey
 ```
 ### MODE o: Give/take channel operator privilege
 ```
 #From the main room:
 /mode #3 +o tres
+/mode #3 -o tres
 
 #From a channel:
 /mode +o dos
+/mode -o dos
 ```
 ### MODE l: Set/remove the user limit to channel
 ```
+#From the main room:
+/mode #channelName +l numLimit   
+/mode #channelName -l
 
+#From a channel:
+/mode +l numLimit   
+/mode -l
 ```
 <br>
 
