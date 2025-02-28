@@ -24,6 +24,9 @@ irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
 ## Leaving a channel (without leaving it)
 ```
 esc+RIGHTARROW
+
+Ctrl+n   pasar a la siguiente sala
+Ctrl+p	pasar sala anterior
 ```
 
 ## Send private messages 
@@ -33,8 +36,10 @@ esc+RIGHTARROW
 #OPTION 1: From the main room
 /QUOTE PRIVMSG nickname : message
 
-#OPTION 2: From a channel
+#OPTION 2: From a channel room
+
 /QUOTE PRIVMSG nickname : message
+
 ```
 
 ### to a channel  (broadcast to everyone in a channel)
@@ -46,13 +51,16 @@ esc+RIGHTARROW
 message
 
 /QUOTE PRIVMSG #otherChannel : message
+
+## cuando se esta en una sala se puede enviar mensaje sin formato IRC  a todos los del canal
+message            
 ```
 ## KICK - Eject a client from the channel
 ```
 #From the main room:
 /KICK #channel nick
 
-#From a channel:
+#From a channel room:
 /KICK nick
 ```
 ## INVITE - Invite a client to a channel
@@ -60,7 +68,7 @@ message
 #From the main room:
 /INVITE nickname #channel
 
-#From a channel:
+#From a channel room:
 /INVITE nickname
 ```
 ## TOPIC - Change or view the channel topic
@@ -68,18 +76,16 @@ message
 ### From the main room:
 
 - View actual topic : `/topic #channel`
-- View actual topic : `/quote topic #channel`
 - Change topic : `/topic #channel newTopic`   
-- Change topic : `/quote topic #channel :newTopic`
-- Empty topic: `/quote topic #channel :`
+- Empty topic: `/quote topic #channel :`   Se necesita **quote** para que lo deje *empty*
 
-Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el **topic** no aparecen en la *main room* sino en el *channel*
+Si se entra a un *channel room* y luego se vuelve a la *main room*, los mensajes el **topic** no aparecen en la *main room* sino en el *channel room*
 
-### From a channel:
+### From a channel room:
 
 - View actual topic : `/topic`
 - Change topic : `/topic newTopic`
-- Empty topic: `/quote topic #channel :`
+- Empty topic: `/quote topic #channel :` Se necesita **quote** para que lo deje *empty*
 
 ## MODE Change the channel’s mode:
 
@@ -88,7 +94,7 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 #From the main room:
 /mode #channelName +i(/-i)
 
-#From a channel:
+#From a channel room:
 /mode +i(/-i)
 ```
 ### MODE t: Set/remove the restrictions of the TOPIC command to channel operators
@@ -96,7 +102,7 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 #From the main room:
 /mode #channelName +t(/-t)
 
-#From a channel:
+#From a channel room:
 /mode +t(/-t)
 ```
 ### MODE k: Set/remove the channel key (password)
@@ -104,18 +110,16 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 #From the main room:
 /mode #channelName +k(/-k) channelKey
 
-#From a channel:
+#From a channel room:
 /mode +k(/-k) channelKey
 ```
 ### MODE o: Give/take channel operator privilege
 ```
 #From the main room:
-/mode #3 +o tres
-/mode #3 -o tres
+/mode #channel +o(/-o) nickname
 
-#From a channel:
-/mode +o dos
-/mode -o dos
+#From a channel room:
+/mode +o(/-o) nickname
 ```
 ### MODE l: Set/remove the user limit to channel
 ```
@@ -124,8 +128,8 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 /mode #channelName -l
 
 #From a channel:
-/mode +l numLimit   
-/mode -l
+/mode #channelName +l numLimit   
+/mode #channel -l
 ```
 <br>
 

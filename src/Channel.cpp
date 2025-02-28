@@ -316,6 +316,7 @@ void	Channel::printChannelVars( void )
 	std::cout << "_inviteChannel = " << this->_inviteChannel << std::endl;
 	std::cout << "_topic = " << this->_topic << std::endl;
 	std::cout << "_topicRestricted = " << this->_topicRestricted << std::endl;
+	std::cout << "_hasChannelKey = " << this->_hasChannelKey << std::endl;
 	std::cout << "_channelKey = " << this->_channelKey << std::endl;
 	std::cout << "_hasUserLimit = " << this->_hasUserLimit << std::endl;
 	std::cout << "_userLimitNumber = " << this->_userLimitNumber << std::endl;
