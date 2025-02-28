@@ -279,8 +279,7 @@ void	Channel::addInv(Client *client)
 		
 void	Channel::deleteInv(std::string &nick)
 {
-	if (!this->_deleteInMap(this->_invClients, nick))
-		std::cout << nick << "[LOG][WARN] is NOT in _invClients map. CAN'T DELETE IT!!!" << std::endl;//debug
+	this->_deleteInMap(this->_invClients, nick);
 }
 
 bool	Channel::isOpe(std::string nick)
