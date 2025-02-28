@@ -261,23 +261,23 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		msg = trimRight(msg);
 		if (!msg.empty() && (msg.size() >= 2 && (msg.substr(0, 2) == "+i" || msg.substr(0, 2) == "-i"))) 
 		{
-			std::cout << "it's not channel mode but user mode!" << std::endl;//debug
+			// std::cout << "it's not channel mode but user mode!" << std::endl;//debug
 			return ;
 		}
 		else if (msg.empty() || (!msg.empty() && (msg.size() < 2 && (msg[0] == '#' || msg[0] == '&')))) {
 			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "MODE"), fd);
-			std::cout << "input channelname and channel mode option are incorrect!" << std::endl;//debug
+			std::cout << "[LOG][ERROR] input channelname and channel mode option are incorrect!" << std::endl;//debug
 			return ;
 		}
 		else if (!msg.empty() && (msg[0] != '#' && msg[0] != '&'))
 		{
 			server->sendResp(FAIL_BADPARAMSFORMAT(msg), fd);//aqui entra de forma automatica irssi
-			std::cout << "input channelname is incorrect!" << std::endl;//debug
+			std::cout << "[LOG][ERROR] input channelname is incorrect!" << std::endl;//debug
 			return ;
 		}
 		else
 			msg = msg.substr(1);
-		std::cout << "mode msg: " << msg << std::endl; //debug
+		// std::cout << "mode msg: " << msg << std::endl; //debug
 		if (!getModeArgs(msg, channelName, option, param)) // mychannel +i / mychannel +k password
 		{
 			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
@@ -292,7 +292,7 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 		}
 		if (!param.empty() && (option == "+i" || option == "-i" || option == "+t" || option == "-t" || option == "-l"))
 		{
-			std::string modeMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+			std::string modeMsg = FAIL_BADPARAMSFORMAT(msg);
 			server->sendResp(modeMsg, fd);
 			return ;
 		}

@@ -23,7 +23,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		if (msg.empty())
 		{
 			server->sendResp(ERR_NEEDMOREPARAMS(std::string("*"), "NICK"), fd);
-			std::cout << "input nick is empty, new nick is *" << std::endl;//debug
+			std::cout << "[LOG][INFO] input nick is empty, new nick is *" << std::endl;//debug
 			return ;
 		}
 		msg.erase(std::remove(msg.begin(), msg.end(), '\r'), msg.end());
@@ -33,19 +33,19 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 		{
 			if (cl->getNick().empty())
 				cl->setNick("*");
-			std::cout << "input nick is in use, different from old one" << std::endl;//debug
+			std::cout << "[LOG][WARN] input nick is in use, different from old one" << std::endl;//debug
 			server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);
 			return ;
 		}
 		else if (checkNickInUse(clients, msg) && cl->getNick() == msg)
 		{
-			std::cout << "[LOG] [WARNING] Nickname is already in use!" << std::endl;//debug
+			std::cout << "[LOG][WARN] Nickname is already in use!" << std::endl;//debug
 			server->sendResp(ERR_NICKINUSE(std::string(msg)), fd);//433
 			return ;
 		}
 		if (!validateNick(msg))
 		{
-			std::cout << "input nick is invalid" << std::endl;
+			std::cout << "[LOG][WARN] input nick is invalid" << std::endl;
 			server->sendResp(ERR_ERRONEUSNICKNAME(std::string(msg)), fd);
 			return ;
 		}
@@ -56,8 +56,8 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 				Channel	*ch;
 				std::string preNick = cl->getNick();
 				cl->setNick(msg);
-				std::cout << "change global nick into: " << cl->getNick() << std::endl;
-			 	std::cout << "channels size =" << server->getChannels().size() << ", " << server->getChannelsSize() << std::endl;				
+				// std::cout << "change global nick into: " << cl->getNick() << std::endl;//debug
+			 	// std::cout << "channels size =" << server->getChannels().size() << ", " << server->getChannelsSize() << std::endl;//debug				
 				for (size_t i = 0; i < server->getChannelsSize(); i++)
 				{
 					ch = server->getChannelsByNumPosInVector(i);
@@ -80,7 +80,7 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 						ch->addInv(cl);
 					}
 					else
-						std::cout << "-- not found (" << preNick << ")" << std::endl;
+						std::cout << "-- not found (" << preNick << ")" << std::endl;//debug
 					ch->printChannelVars();
 				}
 				if (!preNick.empty() && preNick != msg)
@@ -111,10 +111,10 @@ void Nick::execute( Server* server, std::string &msg , int fd)
 			else if (cl->getHasNick())
 			{
 				server->sendResp(ERR_NOTREGISTERED(std::string("*")), fd);//451
-				std::cout << "[LOG] [WARNING] Client " << cl->getNick() << " has set a nickname but is not authenticated." << std::endl;
+				std::cout << "[LOG][WARN] Client " << cl->getNick() << " has set a nickname but is not authenticated." << std::endl;
 			}
 			else//debug
-				std::cout << "cl is empty or getHasNick() is not empty" << std::endl;//debug
+				std::cout << "[LOG][INFO] cl is empty or getHasNick() is not empty" << std::endl;//debug
 		}
 	}
 	else

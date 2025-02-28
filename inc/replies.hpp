@@ -7,7 +7,6 @@
 # define SP " "
 
 // COMMANDS
-
 # define PONG(token) ("PONG 127.0.0.1 " + token + CRLF)
 
 // MESSAGES SERVER TO CLIENT
@@ -23,7 +22,6 @@
 #define ERR_KICK_MSG ": ERROR :You have been KICKED\r\n"
 
 // REPLIES
-
 #define RPL_WELCOME(server, nickname) ":" + server + " 001 " + WHI + " :Welcome to the IRC Network, " + nickname + "!" + RES + "\r\n"
 #define RPL_YOURHOST(server) ":" + server + " 002 " + " :Your host is " + server + ", running version 1.0" + "\r\n"
 #define RPL_CREATED(server) ":" + server + " 003 " + " :This server was created on " + __DATE__ + " at " + __TIME__ + "\r\n"
@@ -40,7 +38,6 @@
 #define RPL_INFO(nickname) (nickname + " : 371 " + " :can join ONLY ONE channel at a time" + CRLF)
 
 // ERRORS
-
 #define ERR_NOSUCHNICK(nickname) (": 401 " + nickname + " :No such nick/channel" + CRLF )
 #define ERR_NOSUCHCHANNEL(nickname, channelname) (": 403 " + nickname + " #" + channelname + " :No such channel" + CRLF)
 #define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + RED + " :You have joined too many channels" + RES + CRLF)
