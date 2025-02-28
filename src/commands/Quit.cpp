@@ -12,7 +12,7 @@ void Quit::_selectMemberAsOperator( Server* server, Channel* actualChannel)
 			std::string	nick;
 			Client		*cl;
 
-			std::cout << " Set a member as operator" << std::endl;//debug
+			std::cout << "[LOG][INFO] Set a member as operator" << std::endl;//debug
 			nick = actualChannel->getFirstMemNick();
 			cl = server->getClientByNick(nick);
 			actualChannel->addOpe(cl);
@@ -20,7 +20,7 @@ void Quit::_selectMemberAsOperator( Server* server, Channel* actualChannel)
 			actualChannel->printChannelVars();
 			server->sendResp(MSG_QUIT_CHANGE_OPERATOR(nick, actualChannel->getChannelName()), cl->getFdClient());
 			cl = actualChannel->getFirstOpe();
-			std::cout << "---- Test access new operator : " << cl->getNick() << std::endl;//debug
+			std::cout << "[LOG][INFO] access new operator : " << cl->getNick() << std::endl;//debug
 			cl->printClientVars();
 		}
 	}
@@ -56,10 +56,10 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 	}
 	server->sendResp(ERR_QUIT_MSG, fd);
 
-	std::cout << "Delete nick client from any channel. Number of Channels : " << channelsSize << std::endl;//debug
+	// std::cout << "Delete nick client from any channel. Number of Channels : " << channelsSize << std::endl;//debug
 	for( size_t i = 0; i < channelsSize; i++)
 	{
-		std::cout << " - Start Channel number : " << i << std::endl;//debug
+		// std::cout << " - Start Channel number : " << i << std::endl;//debug
 		actualChannel = server->getChannelsByNumPosInVector(i);
 		if (actualChannel->isOpe(nick) || actualChannel->isMem(nick))
 		{
@@ -72,20 +72,20 @@ void Quit::execute( Server* server, std::string &msg , int fd)
 				actualChannel->deleteOpe(nick);
 				if (actualChannel->sizeOpe() == 0)
 					_selectMemberAsOperator( server, actualChannel);
-				std::cout << " Deleted as operator " << std::endl;//debug
+				std::cout << "[LOG][WARN] Deleted as operator " << std::endl;//debug
 				actualChannel->printChannelVars();
 			}
 			else if (actualChannel->isMem(nick))
 			{
 				actualChannel->deleteMem(nick);
-				std::cout << " Deleted as member" << std::endl;//debug
+				std::cout << "[LOG][WARN] Deleted as member" << std::endl;//debug
 				actualChannel->printChannelVars();
 			}
 		}
 		else
-			std::cout << nick << " no found in Channel[" << i << "] = " << actualChannel->getChannelName() << std::endl;//debug
-		std::cout << " - End Channel number : " << i << std::endl;//debug
+			std::cout << nick << "[LOG][WARN] no found in Channel[" << i << "] = " << actualChannel->getChannelName() << std::endl;//debug
+		// std::cout << " - End Channel number : " << i << std::endl;//debug
 	}
 	server->deleteEmptyChannels();	
-	server->clearClientFromClientsAndChanels(fd, " client has QUIT from server !!!");
+	server->clearClientFromClientsAndChanels(fd, "[LOG][INFO] client has QUIT from server !!!");
 }

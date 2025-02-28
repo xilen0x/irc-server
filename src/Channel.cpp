@@ -41,7 +41,7 @@ Channel::Channel( void )
 
 Channel::Channel( std::string channelName, std::string operatorNick, Client *operatorClient) :_channelName( channelName )
 {
-	std::cout << "Channel => Object Map created" << std::endl;
+	// std::cout << "Channel => Object Map created" << std::endl;
 
 	this->_inviteChannel = false;
 	this->_topic = "";
@@ -89,7 +89,6 @@ Channel::~Channel( void )
 /* ------------------- PUBLIC MEMBER FUNCTIONS ------------------*/
 
 std::string	Channel::getChannelName( void ) const { return ( this->_channelName); }
-
 void Channel::setChannelName(std::string channelName) { this->_channelName = channelName; }
 
 Client*	Channel::getCliInChannel(std::string &nick)
@@ -125,42 +124,32 @@ Client*	Channel::getCliExceptInv(std::string &nick)
 void	Channel::setModeOption(size_t index, bool option){this->_modeOptions[index].second = option;}
 bool	Channel::getModeOption(size_t index){return this->_modeOptions[index].second;}
 bool	Channel::isInviteChannel( void ) const { return (this->_inviteChannel); }
-
 void	Channel::setInviteChannel ( void ) { this->_inviteChannel = true; }
-
 void	Channel::unsetInviteChannel ( void ){ this->_inviteChannel = false; }
 
 // _topic
 std::string	Channel::getTopic( void ) const { return ( this->_topic); } 
-
 void	Channel::setTopic( std::string topic ) { this->_topic = topic; }
 
 // _topicRestricted
 bool	Channel::isTopicRestricted( void ) const { return ( this->_topicRestricted); }
-
 void	Channel::setTopicRestricted( void ) { this->_topicRestricted = true; }
-
 void	Channel::unsetTopicRestricted( void ) { this->_topicRestricted = false; }
 
 // _channelKey
 bool	Channel::getHasChannelKey( void ) const { return ( this->_hasChannelKey); }
 void	Channel::setHasChannelKey( bool flag ) { this->_hasChannelKey = flag; }
-
 std::string	Channel::getChannelKey( void ) const { return( this->_channelKey); }
-
 void	Channel::setChannelKey( std::string key ) { this->_channelKey = key;}
 
 // _userLimit
 bool	Channel::isUserLimitActived( void ) const { return ( this->_hasUserLimit ); }
-
 void	Channel::setUserLimitActived( void ) { this->_hasUserLimit = true; }
-
 void	Channel::unsetUserLimitActived( void ) { this->_hasUserLimit = false; }
 
 // _userLimitNumber
 int		Channel::getUserLimitNumber( void ) const { return (this->_userLimitNumber); }
 void	Channel::setUserLimitNumber( int limit) { this->_userLimitNumber = limit; }
-
 int		Channel::getClientSum() { return (this->_operator.size() + this->_memClients.size() + this->_invClients.size()); }
 int		Channel::getOperAndMemSum( void ) { return (this->_operator.size() + this->_memClients.size()); }
 
@@ -194,14 +183,14 @@ void 	Channel::addOpe(Client *client)
 	{
 		std::string nick = client->getNick();
 		if (!this->_addInMap(this->_operator, nick, client))
-			std::cout << nick << " is already in _operator map. CAN'T ADD!!!" << std::endl;//debug
+			std::cout << nick << "[LOG][WARN] is already in _operator map. CAN'T ADD!!!" << std::endl;//debug
 	}
 }
 
 void 	Channel::deleteOpe(std::string &nick)
 {
 	if (!this->_deleteInMap(this->_operator, nick))
-		std::cout << nick << " is NOT in _operator map. CAN'T DELETE IT!!!" << std::endl;//debug
+		std::cout << nick << "[LOG][WARN] is NOT in _operator map. CAN'T DELETE IT!!!" << std::endl;//debug
 }
 
 void	Channel::addMem(Client *client)
@@ -210,16 +199,16 @@ void	Channel::addMem(Client *client)
 	{
 		std::string nick = client->getNick();
 		if (!this->_addInMap(this->_memClients, nick, client))
-			std::cout << nick << " is already in _memClients map. CAN'T ADD!!!" << std::endl;//debug
+			std::cout << nick << "[LOG][WARN] is already in _memClients map. CAN'T ADD!!!" << std::endl;//debug
 		else
-			std::cout << nick << " has been added in _memClients map! " << std::endl;//debug
+			std::cout << nick << "[LOG][INFO] has been added in _memClients map! " << std::endl;//debug
 	}
 }
 
 void	Channel::deleteMem(std::string &nick)//uppercase
 {
 	if (!this->_deleteInMap(this->_memClients, nick))
-		std::cout << nick << " is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;//debug
+		std::cout << nick << "[LOG][WARN] is NOT in _memClients map. CAN'T DELETE IT!!!" << std::endl;//debug
 }
 
 std::string	Channel::getFirstMemNick( void ) { return (this->_memClients.begin()->first); }
@@ -256,7 +245,7 @@ int	Channel::getFdOperatorByPosInOperators(size_t pos)
 			it++;
 		return ( it->second->getFdClient() );
 	}
-	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _operator.size()=" << _operator.size() << std::endl;//debug
+	// std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _operator.size()=" << _operator.size() << std::endl;//debug
 	return (-1);
 }
 
@@ -272,7 +261,7 @@ int	Channel::getFdMemberByPosInMemClients(size_t pos)
 			it++;
 		return ( it->second->getFdClient());
 	}
-	std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _memClients.size()=" << _memClients.size() << std::endl;//debug
+	// std::cout << "!!!!!!NOT IN limits : Pos = " << pos << " , _memClients.size()=" << _memClients.size() << std::endl;//debug
 	return (-1);
 }
 
@@ -282,16 +271,16 @@ void	Channel::addInv(Client *client)
 	{
 		std::string nick = client->getNick();
 		if (!this->_addInMap(this->_invClients, nick, client))
-			std::cout << nick << " is in already _invClients map. CAN'T ADD!!!" << std::endl;//debug
+			std::cout << nick << "[LOG][WARN] is in already _invClients map. CAN'T ADD!!!" << std::endl;//debug
 		else
-			std::cout << nick << " has been added in _invClients map! " << std::endl;//debug
+			std::cout << nick << "[LOG][INFO] has been added in _invClients map! " << std::endl;//debug
 	}
 }
 		
 void	Channel::deleteInv(std::string &nick)
 {
 	if (!this->_deleteInMap(this->_invClients, nick))
-		std::cout << nick << " is NOT in _invClients map. CAN'T DELETE IT!!!" << std::endl;//debug
+		std::cout << nick << "[LOG][WARN] is NOT in _invClients map. CAN'T DELETE IT!!!" << std::endl;//debug
 }
 
 bool	Channel::isOpe(std::string nick)

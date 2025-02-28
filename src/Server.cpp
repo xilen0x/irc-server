@@ -146,7 +146,7 @@ void Server::receiveData(int clientSocket)
         return;
     }
     buffer[bytesRead] = '\0';
-    std::cout << "[LOG][INFO] Data received: " << buffer << std::endl;//debug
+    std::cout << "[LOG][INFO] Data received: " << buffer << RES << std::endl;//debug
     std::string message(buffer);
 
     Client* client = getClient(clientSocket);//Get the client from the client list
@@ -198,7 +198,7 @@ void Server::loop()
             if ((revents & POLLERR) == POLLERR || (revents & POLLHUP) == POLLHUP) 
             {
                 std::cout << "[LOG][ERROR] Socket error or client disconnection\n"; //debug
-                clearClients(_fdsClients[i].fd, "[LOG][WARNING] Client disconnected");
+                clearClients(_fdsClients[i].fd, "[LOG][WARN] Client disconnected");
             }
             else if (revents & POLLIN) {  // There is data to read
                 if (_fdsClients[i].fd == _fdServer) {  // New incoming connection

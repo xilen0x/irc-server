@@ -36,7 +36,6 @@ static bool isInvited(Server* server, Client *cl, std::string channelName, int f
 	return false;
 }
 
-
 static void	processJoin(Server* server, std::vector<std::pair<std::string, std::string> >parVec, int ipar, int jchan, int fd)
 {
 	Channel	*ch = server->getChannelsByNumPosInVector(jchan);
@@ -172,7 +171,7 @@ bool Join::parseJoin(Server* server, std::vector<std::pair<std::string, std::str
 	}
 	if (numChComma != numPaComma)
 	{
-		std::string joinMsg = formatIRCMessage(FAIL_BADPARAMSFORMAT(msg));
+		std::string joinMsg = FAIL_BADPARAMSFORMAT(msg);
 		server->sendResp(joinMsg, fd);
 		parVec.clear();
 		return false;
@@ -219,7 +218,7 @@ void Join::execute( Server* server, std::string &msg , int fd)
 {
 	if (isAuthenticated(server->getClient(fd), server, fd))
 	{
-		std::cout << "JOIN processing..." << std::endl;
+		// std::cout << "JOIN processing..." << std::endl;
 		std::vector<std::pair<std::string, std::string> > parVec;
 		msg = trimLeft(msg);
 		std::string cmd = msg.substr(0, 4);

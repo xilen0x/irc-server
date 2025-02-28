@@ -1,17 +1,25 @@
-# How to Use irc-server with IRSSI
+# ▉▉▉ How to Use irc-server with IRSSI ▉▉▉
 ## Connection & Authentication
+The range of accepted ports are: 49152–65535
 ```
 irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
 ```
 ## Update the nickname
 ```
+#OPTION 1:
 /NICK newNickname
+
+#OPTION 2:
+/QUOTE NICK newNickname
 ```
 ## Join into a channel
+> NOTE: You must to choose one method only.
 ``` 
-/join #channelName
+#OPTION 1: From the main room and entering the channel:
+/JOIN #channelName
 
-/quote join #channelName
+#OPTION 2: From the main room and without leaving it:
+/QUOTE JOIN #channelName
 ```
 ## Leaving a channel (without leaving it)
 ```
@@ -22,10 +30,10 @@ esc+RIGHTARROW
 
 ### to any client
 ```
-#From the main room:
+#OPTION 1: From the main room
 /QUOTE PRIVMSG nickname : message
 
-#From a channel:
+#OPTION 2: From a channel
 /QUOTE PRIVMSG nickname : message
 ```
 
@@ -121,7 +129,7 @@ Si se entra a un *channel* y luego se vuelve a la *main room*, los mensajes el *
 ```
 <br>
 
-# How to Use irc-server with netcat (nc)
+# ▉▉▉ How to Use irc-server with netcat (nc) ▉▉▉
 ## Connection
 ```
 nc -C localhost 50000
@@ -137,16 +145,9 @@ user nickname 0 * : Full Name
 ```
 nick NewNickname
 ```
-## Join into a channel
+## JOIN into a channel
 ``` 
-join #channelName
-```
-## Leaving a channel (without leaving it)
-
-> apardo-m  Creo que en **nc** no existe esta posibilidad por que no hay cambios de pantalla
-
-```
-
+JOIN #channelName
 ```
 
 ## Send private messages

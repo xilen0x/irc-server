@@ -23,7 +23,7 @@ Client::Client(int fd, std::string ipClient) : _fdClient(fd), _ipClient(ipClient
 	this->_hasUser = false;
 	this->_hasAuth = false;
 
-	std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;//debug
+	// std::cout << "Client(fp, ipClient) => Set initial values" << std::endl;//debug
 }
 
 Client::Client( Client const &src){ *this = src; }
