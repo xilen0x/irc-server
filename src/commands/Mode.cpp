@@ -401,7 +401,8 @@ void Mode::execute( Server* server, std::string &msg , int fd)
 				server->sendResp(ERR_ERRONEUSNICKNAME(std::string(param)), fd);
 				return ;
 			}
-			std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName);
+		//	std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName);
+			std::string chaMsg = RPL_CHANGEMODE(server->getServerName(), channelName + " "  + option);
 			server->sendBroadAllInChannel(chaMsg, server->getChannelByChannelName(channelName));
 		
 		}
