@@ -15,13 +15,19 @@ void Quit::_selectMemberAsOperator( Server* server, Channel* actualChannel)
 			std::cout << "[LOG][INFO] Set a member as operator" << std::endl;//debug
 			nick = actualChannel->getFirstMemNick();
 			cl = server->getClientByNick(nick);
+			if (!cl)
+		   	{
+				std::cerr << "[LOG][ERROR] No client found with nick: " << nick << std::endl;
+				actualChannel->deleteMem(nick);
+				return;
+			}
 			actualChannel->addOpe(cl);
 			actualChannel->deleteMem(nick);
-			actualChannel->printChannelVars();
+			actualChannel->printChannelVars(); //debug
 			server->sendResp(MSG_QUIT_CHANGE_OPERATOR(nick, actualChannel->getChannelName()), cl->getFdClient());
 			cl = actualChannel->getFirstOpe();
 			std::cout << "[LOG][INFO] access new operator : " << cl->getNick() << std::endl;//debug
-			cl->printClientVars();
+			cl->printClientVars(); //debug
 		}
 	}
 }

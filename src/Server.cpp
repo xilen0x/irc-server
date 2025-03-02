@@ -353,7 +353,12 @@ void		Server::deleteClient( int fd )
 		it++;
 	// If found, erase the client from the list
 	if (it != _clients.end())
-            _clients.erase(it);
+	{
+		_clients.erase(it);
+		std::cout << "--- Delete Client fd=" << fd << ", nick=" << it->getNick() << std::endl;
+	}
+	else
+		std::cout << "-----No found fd=" << fd << std::endl;
 }
 
 void		Server::deleteChannel( std::string chName )
