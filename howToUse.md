@@ -131,6 +131,23 @@ Si se entra a un *channel room* y luego se vuelve a la *main room*, los mensajes
 /mode #channelName +l numLimit   
 /mode #channel -l
 ```
+
+## Send file
+
+It's better to have all files to send in a folder . Exmaple : `/home/apardo-m/origen`
+
+On client UNO:
+
+```
+/DCC SEND DOS origen/FileName
+```
+
+On Client DOS (the file is saved in folder `/home/apardo-m` )
+
+```
+/DCC GET UNO FileName
+```
+
 <br>
 
 # ▉▉▉ How to Use irc-server with netcat (nc) ▉▉▉
