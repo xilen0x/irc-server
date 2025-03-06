@@ -286,10 +286,10 @@ void Server::sendBroad(std::string resp, int fd)
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		actualFd = _clients[i].getFdClient();
-		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;//debug
+//		std::cout << " i,fd = " << actualFd << ", " << fd << std::endl;//debug
 		if (actualFd != fd)
 		{
-			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;//debug
+//			std::cout << "  send  i,fd = " << actualFd << ", " << fd << std::endl;//debug
 			sendResp(resp, actualFd);
 		}
 	}
@@ -354,8 +354,8 @@ void		Server::deleteClient( int fd )
 	// If found, erase the client from the list
 	if (it != _clients.end())
 	{
-		_clients.erase(it);
 		std::cout << "--- Delete Client fd=" << fd << ", nick=" << it->getNick() << std::endl;
+		_clients.erase(it);
 	}
 	else
 		std::cout << "-----No found fd=" << fd << std::endl;
