@@ -3,49 +3,6 @@
 
 /* ------------------- PRIVATE FUNCTIONS ------------------*/
 
-// void Quit::_selectMemberAsOperator(Server* server, Channel* actualChannel)
-// {
-//     if (!actualChannel)
-//     {
-//         std::cerr << "[LOG][ERROR] Channel is NULL in _selectMemberAsOperator!" << std::endl;//debug
-//         return;
-//     }
-//     if (actualChannel->sizeOpe() == 0)
-//     {
-//         if (actualChannel->sizeMem() != 0)
-//         {
-//             std::string nick = actualChannel->getFirstMemNick();
-//             Client *cl = server->getClientByNick(nick);
-//             if (!cl) {
-//                 std::cerr << "[LOG][ERROR] No client found with nick: " << nick << std::endl;
-//                 return;
-//             }
-//             std::cout << "[LOG][INFO] Set a member as operator: " << nick << std::endl;
-//             actualChannel->addOpe(cl);
-//             if (!actualChannel->isOpe(nick)) {
-//                 std::cerr << "[LOG][ERROR] Failed to add client as operator: " << nick << std::endl;
-//                 return;
-//             }
-//             actualChannel->deleteMem(nick);
-//             actualChannel->printChannelVars();
-//             int fd = cl->getFdClient();
-//             if (fd < 0) {
-//                 std::cerr << "[LOG][ERROR] Invalid file descriptor for client: " << nick << std::endl;
-//                 return;
-//             }
-//             server->sendResp(MSG_QUIT_CHANGE_OPERATOR(nick, actualChannel->getChannelName()), fd);
-//             cl = actualChannel->getFirstOpe();
-//             if (!cl) {
-//                 std::cerr << "[LOG][ERROR] No operator found after assignment!" << std::endl;
-//                 return;
-//             }
-//             std::cout << "[LOG][INFO] Accessing new operator: " << cl->getNick() << std::endl;
-//             cl->printClientVars();
-//         }
-//     }
-// }
-
-
 void Quit::_selectMemberAsOperator( Server* server, Channel* actualChannel)
 {
 	if (actualChannel->sizeOpe() == 0)
