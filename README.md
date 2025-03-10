@@ -79,4 +79,9 @@ every other client that joined the channel.
     · o: Give/take channel operator privilege
     · l: Set/remove the user limit to channel
 
-• Of course, you are expected to write a clean code.
+# Read more
+
+[About IRC‐Server](https://github.com/xilen0x/irc-server/wiki/About-IRC%E2%80%90Server)
+
+[Usage of Commands](https://github.com/xilen0x/irc-server/wiki/Usage-of-Commands)
+
