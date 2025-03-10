@@ -1,85 +1,99 @@
-# irc-server
-## IRC Internet Relay Chat
+# IRC Server (Internet Relay Chat)
 
-Internet Relay Chat or IRC is a text-based communication protocol on the Internet.
-It offers real-time messaging that can be either public or private. Users can exchange
-direct messages and join group channels.
+## Description
 
-IRC clients connect to IRC servers in order to join channels. IRC servers are connected
-together to form a network.
+The IRC Server project is part of the 42 School educational program, aimed at providing students with a deep understanding of network protocols and the development of chat servers. This project involves implementing an IRC server based on the RFC 1459 protocol, allowing students to handle multiple simultaneous connections and apply advanced network programming concepts.
 
-## External functs.
-Everything in C++ 98.
-socket, close, setsockopt, getsockname,
-getprotobyname, gethostbyname, getaddrinfo,
-freeaddrinfo, bind, connect, listen, accept, htons,
-htonl, ntohs, ntohl, inet_addr, inet_ntoa, send,
-recv, signal, sigaction, lseek, fstat, fcntl, poll
-(or equivalent)
+![screenshot](https://github.com/xilen0x/xilen0x/blob/master/images_x_repos/ourIRCServer.png?raw=true)
 
-You have to develop an IRC server in C++ 98.
+## Objectives
 
-You mustn’t develop a client.
+Understand the functionality of the IRC protocol and its implementation in a server.
 
-You mustn’t handle server-to-server communication.
+Learn how to manage sockets and I/O multiplexing using select.
 
-```Your executable will be run as follows:
-./ircserv <port> <password>
+Develop skills in network programming and concurrency management.
+
+Improve error handling and security in servers.
+
+## Languages & Technologies
+
+C++98
+
+TCP/IP Sockets
+
+I/O Multiplexing (select)
+
+IRC Protocol (RFC 1459)
+
+Makefile
+
+## Features
+
+Server based on TCP/IP sockets.
+
+Support for multiple simultaneous connections.
+
+Compatible with traditional IRC clients.
+
+Implementation of key IRC protocol commands:
+
+/NICK - Change user nickname.
+
+/USER - Identify the user on the server.
+
+/JOIN - Join a channel.
+
+/PRIVMSG - Send private messages.
+
+/KICK - Remove users from a channel.
+
+/MODE - Modify user and channel modes.
+
+/TOPIC - Set the channel topic.
+
+/QUIT - Disconnect from the server.
+
+## Installation & Execution
+
+Clone this repository:
+
 ```
-• port: The port number on which your IRC server will be listening to for incoming
-IRC connections.
+git clone https://github.com/xilen0x/irc-server.git
+cd irc-server
+```
+Compile the project:
 
-• password: The connection password. It will be needed by any IRC client that tries
-to connect to your server.
-Even if poll() is mentionned in the subject and the evaluation scale,
-you can use any equivalent such as select(), kqueue(), or epoll().
+```
+make
+```
+Run the server with the required parameters:
 
-## Requirements
-• The server must be capable of handling multiple clients at the same time and never
-hang.
+```./ircserv <port> <password>```
 
-• Forking is not allowed. All I/O operations must be non-blocking.
+In another terminal, connect using an IRC client such as irssi.
 
-• Only 1 poll() (or equivalent) can be used for handling all these operations (read,
-write, but also listen, and so forth).
-Because you have to use non-blocking file descriptors, it is
-possible to use read/recv or write/send functions with no poll()
-(or equivalent), and your server wouldn’t be blocking.
-But it would consume more system resources.
-Thus, if you try to read/recv or write/send in any file descriptor
-without using poll() (or equivalent), your grade will be 0.
+/server localhost <port> -p <password>
+```
+irssi -c 127.0.0.1 -p 50000 -w password -n nickname -!
+```
+## Programming Area
 
-• Several IRC clients exist. You have to choose one of them as a reference. Your
-reference client will be used during the evaluation process.
+Network Programming
 
-• Your reference client must be able to connect to your server without encountering
-any error.
+Systems and Servers
 
-• Communication between client and server has to be done via TCP/IP (v4 or v6).
+Concurrency Management
 
-• Using your reference client with your server must be similar to using it with any
-official IRC server. However, you only have to implement the following features:
-    
-    ◦ You must be able to authenticate, set a nickname, a username, join a channel,
-send and receive private messages using your reference client.
+Security and Error Handling
 
-    ◦ All the messages sent from one client to a channel have to be forwarded to
-every other client that joined the channel.
-    
-    ◦ You must have operators and regular users.
+## Authors
 
-    ◦ Then, you have to implement the commands that are specific to channel operators:
-    ∗ KICK - Eject a client from the channel
-    ∗ INVITE - Invite a client to a channel
-    ∗ TOPIC - Change or view the channel topic
-    ∗ MODE - Change the channel’s mode:
-    · i: Set/remove Invite-only channel
-    · t: Set/remove the restrictions of the TOPIC command to channel operators
-    · k: Set/remove the channel key (password)
-    · o: Give/take channel operator privilege
-    · l: Set/remove the user limit to channel
+- [albertpardo](https://github.com/albertpardo)
+- [Hazeliny](https://github.com/Hazeliny)
+- [xilen0x](https://github.com/xilen0x)
 
-# Read more
+## Resources
 
 [About IRC‐Server](https://github.com/xilen0x/irc-server/wiki/About-IRC%E2%80%90Server)
 
