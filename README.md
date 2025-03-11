@@ -2,7 +2,7 @@
 
 ## Description
 
-The IRC Server project is part of the 42 School educational program, aimed at providing students with a deep understanding of network protocols and the development of chat servers. This project involves implementing an IRC server based on the RFC 1459 protocol, allowing students to handle multiple simultaneous connections and apply advanced network programming concepts.
+This project involves implementing an IRC server based on the RFC 1459 protocol, allowing students to handle multiple simultaneous connections and apply advanced network programming concepts.
 
 ![screenshot](https://github.com/xilen0x/xilen0x/blob/master/images_x_repos/ourIRCServer.png?raw=true)
 
@@ -10,7 +10,7 @@ The IRC Server project is part of the 42 School educational program, aimed at pr
 
 Understand the functionality of the IRC protocol and its implementation in a server.
 
-Learn how to manage sockets and I/O multiplexing using select.
+Learn how to manage sockets and I/O conections.
 
 Develop skills in network programming and concurrency management.
 
@@ -22,7 +22,7 @@ C++98
 
 TCP/IP Sockets
 
-I/O Multiplexing (select)
+I/O connections.
 
 IRC Protocol (RFC 1459)
 
@@ -53,6 +53,8 @@ Implementation of key IRC protocol commands:
 /TOPIC - Set the channel topic.
 
 /QUIT - Disconnect from the server.
+
+/PASS - to connect to the server.
 
 ## Installation & Execution
 
